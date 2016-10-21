@@ -1,0 +1,540 @@
+ui_print(" ");
+
+ui_print("************************************");
+ui_print("*	SkyHigh Kernel                ");
+ui_print("*	Exynos7420 TW 6.0.1 device    ");
+ui_print("*	by UpInTheAir                 ");
+ui_print("************************************");
+
+# MOUNT
+ui_print(" ");
+ui_print("Mounting System & Data...");
+run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/USERDATA", "/data");
+
+# DETECT
+ui_print(" ");
+ui_print("@ Compatible Device Detection :");
+package_extract_dir("defaults", "/tmp");
+set_perm(0, 0, 0755, "/tmp/defaults.sh");
+run_program("/tmp/defaults.sh", "DETECT");
+
+if file_getprop("/system/device.prop","device.type") == "compatible" then
+	ui_print("@  SUPPORTED Device Detected == CONTINUE !!");
+
+	if file_getprop("/tmp/aroma-data/flash.prop","selected") == "1" then
+
+		## START DEFAULT MODE
+		if file_getprop("/tmp/aroma-data/install.prop","selected.1") == "1" then
+
+		set_progress(0.1);
+
+			ui_print(" ");
+			ui_print("Setting SkyHigh kernel defaults...");
+
+			# CLEAR SYNAPSE
+			delete("/data/dalvik-cache/arm64/data@app@com.af.synapse@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-1@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-2@base.apk@classes.dex");
+			delete("/data/dalvik-cache/profiles/com.af.synapse");
+			delete_recursive("/data/data/com.af.synapse");
+
+		set_progress(0.15);
+
+			# FLASH KERNEL
+			ui_print(" ");
+			ui_print("Extracting Kernel files...");
+			package_extract_file("boot.img", "/dev/block/platform/15570000.ufs/by-name/BOOT");
+
+		set_progress(0.25);
+
+			# DEFAULTS
+			delete("/system/SkyHigh.prop");
+
+			# SELINUX PERMISSIVE
+			run_program("/tmp/defaults.sh", "PERMISSIVE");
+
+			# KNOX
+			delete_recursive("/system/app/SecurityLogAgent");
+			delete_recursive("/data/app/com.samsung.android.securitylogagent");
+			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
+			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
+
+			# BINDSYSTEMXBIN
+			run_program("/tmp/defaults.sh", "BIND");
+
+			# INVISIBLE CPUSETS
+			run_program("/tmp/defaults.sh", "INVISIBLE");
+
+			# LAZYTIME MOUNT
+			run_program("/tmp/defaults.sh", "LAZYTIME");
+
+			# INIT.D
+			delete_recursive("/system/etc/init.d");
+
+			# BUILD.PROP
+			run_program("/tmp/defaults.sh", "BUILD_PROP");
+
+			# INTERACTIVE
+			run_program("/tmp/defaults.sh", "INTERACTIVE");
+
+			# ROW
+			run_program("/tmp/defaults.sh", "ROW");
+
+			# CRONTAB
+			run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
+
+			# RESET CRONTAB TASKS
+			delete_recursive("/data/crontab");
+
+		set_progress(0.35);
+
+			# SYNAPSE LAYOUT
+			delete_recursive("/data/aroma");
+			package_extract_dir("aroma", "/data/aroma");
+
+		endif;
+
+		## END DEFAULT MODE
+
+		## START CUSTOM MODE
+		if file_getprop("/tmp/aroma-data/install.prop","selected.1") == "2" then
+
+		set_progress(0.1);
+
+			# CLEAR SYNAPSE
+			ui_print(" ");
+			ui_print("Clear Synapse data for clean install...");
+			delete("/data/dalvik-cache/arm64/data@app@com.af.synapse@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-1@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-2@base.apk@classes.dex");
+			delete("/data/dalvik-cache/profiles/com.af.synapse");
+			delete_recursive("/data/data/com.af.synapse");
+
+		set_progress(0.15);
+
+			# FLASH KERNEL
+			ui_print(" ");
+			ui_print("Extracting Kernel files...");
+			package_extract_file("boot.img", "/dev/block/platform/15570000.ufs/by-name/BOOT");
+
+		set_progress(0.25);
+
+			# DEFAULTS
+			ui_print(" ");
+			ui_print("@ USER selected Synapse & Kernel defaults :");
+			delete("/system/SkyHigh.prop");
+
+			# SELINUX PERMISSIVE
+			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "1" then
+				ui_print("@  Setting SELinux Permissive");
+				run_program("/tmp/defaults.sh", "PERMISSIVE");
+			endif;
+
+			# SELINUX ENFORCING
+			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "2" then
+				ui_print("@  Setting SELinux Enforcing");
+				run_program("/tmp/defaults.sh", "ENFORCING");
+			endif;
+
+			# KNOX
+			if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "1" then
+				ui_print("@  Removing SecurityLogAgent.apk");
+				delete_recursive("/system/app/SecurityLogAgent");
+				delete_recursive("/data/app/com.samsung.android.securitylogagent");
+				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
+				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
+			endif;
+
+			# BINDSYSTEMXBIN
+			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "1" then
+				ui_print("@  Setting BINDSYSTEMXBIN");
+				run_program("/tmp/defaults.sh", "BIND");
+			endif;
+			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "0" then
+				ui_print("@  Removing BINDSYSTEMXBIN");
+				delete("/data/.supersu");
+			endif;
+
+			# INVISIBLE CPUSETS
+			if file_getprop("/tmp/aroma-data/invisible.prop","item.1.1") == "1" then
+				ui_print("@  Enabling Invisible CPUSETS");
+				run_program("/tmp/defaults.sh", "INVISIBLE");
+			endif;
+			if file_getprop("/tmp/aroma-data/invisible.prop","item.1.1") == "0" then
+				ui_print("@  Disabling Invisible CPUSETS");
+				delete("/data/.SkyHigh/invisible_cpuset");
+			endif;
+
+			# LAZYTIME MOUNT
+			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "1" then
+				ui_print("@  Enabling Lazytime Mount");
+				run_program("/tmp/defaults.sh", "LAZYTIME");
+			endif;
+			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "0" then
+				ui_print("@  Disabling Lazytime Mount");
+				delete("/data/.SkyHigh/lazytime_mount");
+			endif;
+
+			# INIT.D
+			if file_getprop("/tmp/aroma-data/placebo.prop","item.1.1") == "1" then
+				ui_print("@  Removing init.d Scripts");
+				delete_recursive("/system/etc/init.d");
+			endif;
+
+			# BUILD.PROP
+			if file_getprop("/tmp/aroma-data/placebo.prop","item.2.1") == "1" then
+				ui_print("@  Removing build.prop Placebo");
+				run_program("/tmp/defaults.sh", "BUILD_PROP");
+			endif;
+
+			set_progress(0.30);
+
+			# INTERACTIVE
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "1" then
+				ui_print("@  Setting Interactive Governor");
+				run_program("/tmp/defaults.sh", "INTERACTIVE");
+			endif;
+
+			# KTOONSERVATIVE
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "2" then
+				ui_print("@  Setting Ktoonservative Governor");
+				run_program("/tmp/defaults.sh", "KTOONSERVATIVE");
+			endif;
+
+			# PERFORMANCE
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "3" then
+				ui_print("@  Setting Performance Governor");
+				run_program("/tmp/defaults.sh", "PERFORMANCE");
+			endif;
+
+			# ROW
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
+				ui_print("@  Setting ROW Scheduler");
+				run_program("/tmp/defaults.sh", "ROW");
+			endif;
+
+			# CFQ
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "2" then
+				ui_print("@  Setting CFQ Scheduler");
+				run_program("/tmp/defaults.sh", "CFQ");
+			endif;
+
+			# FIOPS
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "3" then
+				ui_print("@  Setting FIOPS Scheduler");
+				run_program("/tmp/defaults.sh", "FIOPS");
+			endif;
+
+			# NOOP
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "4" then
+				ui_print("@  Setting NOOP Scheduler");
+				run_program("/tmp/defaults.sh", "NOOP");
+			endif;
+
+			# BFQ
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "5" then
+				ui_print("@  Setting BFQ Scheduler");
+				run_program("/tmp/defaults.sh", "BFQ");
+			endif;
+
+			# SIOPLUS
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "6" then
+				ui_print("@  Setting SIOPLUS Scheduler");
+				run_program("/tmp/defaults.sh", "SIOPLUS");
+			endif;
+
+			# DEADLINE
+#			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "7" then
+#				ui_print("@  Setting DEADLINE Scheduler");
+#				run_program("/tmp/defaults.sh", "DEADLINE");
+#			endif;
+
+			# CORTEX
+			if file_getprop("/tmp/aroma-data/default.prop","item.1.1") == "1" then
+				ui_print("@  Enabling CortexBrain");
+				run_program("/tmp/defaults.sh", "CORTEX_ENABLED");
+			endif;
+
+			# CRONTAB
+			if file_getprop("/tmp/aroma-data/default.prop","item.2.1") == "1" then
+				ui_print("@  Enabling Crontab");
+				run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
+			endif;
+
+			# RESET CRONTAB TASKS
+			delete_recursive("/data/crontab");
+
+		set_progress(0.35);
+
+			# SYNAPSE LAYOUT
+			ui_print(" ");
+			ui_print("@ Removal of selected Synapse sections :");
+			delete_recursive("/data/aroma");
+			package_extract_dir("aroma", "/data/aroma");
+
+			# A57 CPU
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.1") == "1" then
+				ui_print("@  Removing A57 CPU");
+				delete("/data/aroma/A57");
+			endif;
+
+			# A57 VOLT
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.2") == "1" then
+				ui_print("@  Removing A57 Volt");
+				delete("/data/aroma/A57_volt");
+			endif;
+
+			# A53 CPU
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.3") == "1" then
+				ui_print("@  Removing A53 CPU");
+				delete("/data/aroma/A53");
+			endif;
+
+			# A53 VOLT
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.4") == "1" then
+				ui_print("@  Removing A53 Volt");
+				delete("/data/aroma/A53_volt");
+			endif;
+
+			# CPU GOV
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.5") == "1" then
+				ui_print("@  Removing CPU Gov");
+				delete("/data/aroma/cpu_gov");
+			endif;
+
+			# A57 GOV
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.6") == "1" then
+				ui_print("@  Removing A57 Gov");
+				delete("/data/aroma/A57_gov");
+			endif;
+
+			# A53 GOV
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.7") == "1" then
+				ui_print("@  Removing A53 Gov");
+				delete("/data/aroma/A53_gov");
+			endif;
+
+			# MULTICORE
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.8") == "1" then
+				ui_print("@  Removing Multicore");
+				delete("/data/aroma/hmp");
+			endif;
+
+			# CPU STATS
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.9") == "1" then
+				ui_print("@  Removing CPU Stats");
+				delete("/data/aroma/cpu_stats");
+			endif;
+
+			# BOOST
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.10") == "1" then
+				ui_print("@  Removing Boost");
+				delete("/data/aroma/boost");
+			endif;
+
+			# GPU
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.11") == "1" then
+				ui_print("@  Removing GPU");
+				delete("/data/aroma/gpu");
+			endif;
+
+			# GPU VOLT
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.12") == "1" then
+				ui_print("@  Removing GPU Volt");
+				delete("/data/aroma/gpu_volt");
+			endif;
+
+			# THERMAL
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.13") == "1" then
+				ui_print("@  Removing Thermal");
+				delete("/data/aroma/tmu");
+			endif;
+
+			# BUS
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.14") == "1" then
+				ui_print("@  Removing Bus");
+				delete("/data/aroma/bus");
+			endif;
+
+			# IO
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.15") == "1" then
+				ui_print("@  Removing IO");
+				delete("/data/aroma/io");
+			endif;
+
+			# MEMORY
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.16") == "1" then
+				ui_print("@  Removing Memory");
+				delete("/data/aroma/memory");
+			endif;
+
+			# ADVANCED
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.17") == "1" then
+				ui_print("@  Removing Advanced");
+				delete("/data/aroma/advanced");
+			endif;
+
+			# POWER SUSPEND
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.18") == "1" then
+				ui_print("@  Removing Power Suspend");
+				delete("/data/aroma/powersuspend");
+			endif;
+
+			# DOZE
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.19") == "1" then
+				ui_print("@  Removing Doze");
+				delete("/data/aroma/doze");
+			endif;
+
+			# WAKELOCKS
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.20") == "1" then
+				ui_print("@  Removing Wakelocks");
+				delete("/data/aroma/wakelocks");
+			endif;
+
+			# AUDIO
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.21") == "1" then
+				ui_print("@  Removing Audio");
+				delete("/data/aroma/audio");
+			endif;
+
+			# BATTERY
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.22") == "1" then
+				ui_print("@  Removing Battery");
+				delete("/data/aroma/battery");
+			endif;
+
+			# LED
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.23") == "1" then
+				ui_print("@  Removing LED");
+				delete("/data/aroma/led");
+			endif;
+
+			# SCREEN
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.24") == "1" then
+				ui_print("@  Removing Screen");
+				delete("/data/aroma/screen");
+			endif;
+
+			# NETWORK
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.25") == "1" then
+				ui_print("@  Removing Network");
+				delete("/data/aroma/network");
+			endif;
+
+			# SECURITY
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.26") == "1" then
+				ui_print("@  Removing Security");
+				delete("/data/aroma/security");
+			endif;
+
+			# FILE SYSTEM
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.27") == "1" then
+				ui_print("@  Removing File System");
+				delete("/data/aroma/fs");
+			endif;
+
+			# CORTEX
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.28") == "1" then
+				ui_print("@  Removing CortexBrain");
+				delete("/data/aroma/cortex");
+			endif;
+
+			# CRONTAB
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.29") == "1" then
+				ui_print("@  Removing Crontab");
+				delete("/data/aroma/crontab");
+			endif;
+
+			# STORAGE
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.30") == "1" then
+				ui_print("@  Removing Storage");
+				delete("/data/aroma/storage");
+			endif;
+
+			# MODULES
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.31") == "1" then
+				ui_print("@  Removing Modules");
+				delete("/data/aroma/modules");
+			endif;
+
+			# BACKUP & RESTORE
+			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.32") == "1" then
+				ui_print("@  Removing Backup & Restore");
+				delete("/data/aroma/backup-restore");
+			endif;
+
+		endif;
+
+		## END CUSTOM MODE
+
+	set_progress(0.45);
+
+		# BUSYBOX CLEANUP
+		ui_print(" ");
+		ui_print("Clean up busybox & applets...");
+		package_extract_dir("busybox", "/tmp/busybox");
+		run_program("/sbin/busybox", "unzip", "/tmp/busybox/BusyBox-Cleaner-YDS.zip", "META-INF/com/google/android/*", "-d", "/tmp/busybox");
+		run_program("/sbin/busybox", "sh", "/tmp/busybox/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/busybox/BusyBox-Cleaner-YDS.zip");
+
+	set_progress(0.65);
+
+		# ROOT
+		ui_print(" ");
+		package_extract_dir("supersu", "/tmp/supersu");
+		run_program("/sbin/busybox", "unzip", "/tmp/supersu/UPDATE-SuperSU-v2.76-20160630161323.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");
+		run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/UPDATE-SuperSU-v2.76-20160630161323.zip");
+
+	set_progress(0.8);
+
+		# RE-MOUNT
+		ui_print(" ");
+		ui_print("Re-mounting System...");
+		run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+
+	set_progress(0.85);
+
+		# CLEANUP MODULES & SQLITE3
+		ui_print(" ");
+		ui_print("Remove modules & sqlite3...");
+		delete_recursive("/system/lib/modules");
+		delete("/system/xbin/sqlite3", "/system/bin/sqlite3");
+
+	set_progress(0.9);
+
+		# FLASH MODULES, BUSYBOX & SQLITE3
+		ui_print(" ");
+		ui_print("Extracting modules, busybox & sqlite3...");
+		package_extract_dir("system", "/system");
+		set_perm_recursive(0, 0, 0755, 0755, "/system/lib/modules");
+		set_perm(0, 2000, 0755, "/system/xbin/busybox");
+		run_program("/system/xbin/busybox", "--install", "-s", "/system/xbin");
+		set_perm(0, 0, 0755, "/system/xbin/sqlite3");
+		set_perm(0, 0, 0755, "/system/xbin/zip");
+
+	set_progress(0.95);
+
+		ui_print(" ");
+		ui_print("************************************");
+		ui_print("*	SkyHigh Kernel                ");
+		ui_print("*	Installation Completed!       ");
+		ui_print("************************************");
+		ui_print(" ");
+
+	endif;
+
+	set_progress(1.0);
+
+endif;
+
+if file_getprop("/system/device.prop","device.type") == "incompatible" then
+	ui_print("@  UNSUPPORTED Device Detected == ABORT !!");
+
+endif;
+
+# CLEANUP TEMP
+delete("/system/device.prop");
+delete_recursive("/tmp");
+
+# UNMOUNT
+ui_print(" ");
+ui_print("Unmounting System & Data...");
+unmount("/system");
+unmount("/data");

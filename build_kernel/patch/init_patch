@@ -1,0 +1,6 @@
+
+# Call Post-init script
+service SkyHigh-init /sbin/SkyHigh.sh
+    class main
+    user root
+    oneshot

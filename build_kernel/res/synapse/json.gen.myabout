@@ -1,0 +1,131 @@
+#!/system/bin/sh
+
+cat << CTAG
+{
+    name:"ABOUT",
+    elements:[
+	{ SLiveLabel:{
+		description:"\n",
+		refresh:10000000,
+		action:"echo Hello"
+	}},
+	{ SLiveLabel:{
+		refresh:10000000,
+		style:"bold",
+		action:"echo Welcome to SkyHigh kernel !"
+	}},
+	{ SLiveLabel:{
+		refresh:10000000,
+		action:"echo by"
+	}},
+	{ SLiveLabel:{
+		refresh:10000000,
+		style:"bold",
+		action:"echo UpInTheAir"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"LICENSE AGREEMENT",
+		action:"am start -a android.intent.action.VIEW -d file:///res/LICENSE.pdf > /dev/null;
+		echo Opening browser...;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"PayPal Donation",
+		action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/donatetome.php?u=3511708 > /dev/null;
+		echo Opening browser...;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	`if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N920P" /proc/cmdline)" != "" ] || [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ] || [ "$(grep "N9200" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ NDroid",
+			action:"am start -a android.intent.action.VIEW -d http://ndroid.io/forums/thread/root-sm-n920-skyhigh-tw-6-0-1-kernel/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:1
+		}},'
+	elif [ "$(grep "G928C" /proc/cmdline)" != "" ] || [ "$(grep "G928F" /proc/cmdline)" != "" ] || [ "$(grep "G928G" /proc/cmdline)" != "" ] || [ "$(grep "G928I" /proc/cmdline)" != "" ] || [ "$(grep "G9287C" /proc/cmdline)" != "" ] || [ "$(grep "G928P" /proc/cmdline)" != "" ] || [ "$(grep "G928T" /proc/cmdline)" != "" ] || [ "$(grep "G928W8" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ NDroid",
+			action:"am start -a android.intent.action.VIEW -d http://ndroid.io/forums/thread/sm-g928-skyhigh-tw-6-0-1/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:1
+		}},'
+	fi;`
+	`if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N9200" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/note5/orig-development/kernel-sm-n920-exynos-7420-skyhigh-t3428958/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	elif [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/tmobile-galaxy-note5/orig-development/kernel-sm-n920t-w8-exynos-7420-skyhigh-t3428963/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	elif [ "$(grep "N920P" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/sprint-galaxy-note5/orig-development/kernel-sm-n920p-exynos-7420-skyhigh-t3428964/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	elif [ "$(grep "G928C" /proc/cmdline)" != "" ] || [ "$(grep "G928F" /proc/cmdline)" != "" ] || [ "$(grep "G928G" /proc/cmdline)" != "" ] || [ "$(grep "G928I" /proc/cmdline)" != "" ] || [ "$(grep "G9287C" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/s6-edge-plus/orig-development/kernel-sm-g928-exynos-7420-skyhigh-t3428970/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	elif [ "$(grep "G928P" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/sprint-galaxy-s6-edge-plus/orig-development/kernel-exynos-7420-skyhigh-kernel-t3439565/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	elif [ "$(grep "G928T" /proc/cmdline)" != "" ] || [ "$(grep "G928W8" /proc/cmdline)" != "" ]; then
+		echo '{ SButton:{
+			label:"SkyHigh kernel thread @ XDA-developers",
+			action:"am start -a android.intent.action.VIEW -d http://forum.xda-developers.com/tmobile-galaxy-s6-edge-plus/orig-development/kernel-sm-g928t-w8-exynos-7420-skyhigh-t3428972/ > /dev/null;
+			echo Opening browser...;"
+		}},
+		{ SSpacer:{
+			height:2
+		}},'
+	fi;`
+	{ SPane:{
+		title:"Up Time:"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		refresh:1500,
+		action:"live LiveUpTime"
+	}},
+    ]
+}
+CTAG

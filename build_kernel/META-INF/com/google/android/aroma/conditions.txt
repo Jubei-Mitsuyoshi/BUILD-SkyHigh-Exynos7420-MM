@@ -1,0 +1,18 @@
+<@center><b><#selectbg_g>TERMS AND CONDITIONS FOR USE</#></b></@>
+
+<b><#selectbg_g>Disclaimer:</#></b>
+
+<*>Under-volting can cause instability</*>
+
+<*>Over-clocking can cause freeze/reboot, heat & damage to CPU, GPU or other hardware</*>
+
+<*>Any customizations may void warranty</*>
+
+<*>May not be suitable for your device capabilty or customizations</*>
+
+<*>UpInTheAir is NOT responsible, the person you see in the mirror is !!</*>
+
+
+
+
+

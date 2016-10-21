@@ -1,0 +1,382 @@
+### LICENSE:
+#
+# Copyright (C) 2011 Ahmad Amarullah ( http://amarullz.com/ )
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+# Modifed for UpInTheAir for use with Skyhigh kernels
+
+ini_set("force_colorspace","rgba");
+
+ini_set("rom_name",		"SkyHigh kernel");
+ini_set("rom_version",		"v5.8.1");
+ini_set("rom_author",		"UpInTheAir");
+ini_set("rom_device",		"Exynos7420");
+ini_set("rom_date",		"17th August 2016");
+
+splash(
+	1500,
+	"splash/a1"
+);
+
+fontresload( "0", "ttf/DroidSans.ttf", "13" );
+fontresload( "1", "ttf/DroidSans.ttf", "14" ); 
+
+theme("touchwiz");
+
+###################################################################################################################
+
+viewbox(
+	"Welcome to the SkyHigh Kernel Installer!!",
+	"You have chosen to install <b>"+
+		ini_get("rom_name")+
+	"</b> for the <b>"+ini_get("rom_device")+"</b>\n\n"+
+
+	"<~Welcome!!>\n\n"+
+
+	"  VERSION\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
+	"  AUTHOR\t: <b><#selectbg_g>"+ini_get("rom_author")+"</#></b>\n"+
+	"  RELEASED\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n\n"+
+
+	"Press Next to Proceed...",
+	"@welcome"
+);
+
+###################################################################################################################
+
+agreebox(
+	"USER NOTICE",
+	"<b><#selectbg_g>To continue with this installer you must agree to my terms</#></b>",
+	"@agreement",
+
+	resread("conditions.txt"),
+
+	"I agree to these terms and conditions",
+	"You must agree to proceed, didn't you READ?"
+);
+
+agreebox(
+	"COPYRIGHT NOTICE",
+	"<b><#selectbg_g>To continue with this installer you must agree to my terms</#></b>",
+	"@license",
+
+	resread("LICENSE.txt"),
+
+	"I agree to the LICENSE",
+	"You must agree to proceed, didn't you READ?"
+);
+
+textbox(
+	"Changelog",
+	"<b><#selectbg_g>"+ini_get("rom_name")+" - "+ini_get("rom_version")+"</#></b>",
+	"@update",
+
+	resread("changelog.txt")
+);
+
+###################################################################################################################
+
+menubox(
+	"Options",
+		"Installer Options for "+ini_get("rom_name")+" "+ini_get("rom_version")+"\n"+
+		""+
+		"Please make a selection:",
+		"",
+		"flash.prop",
+
+			"Install SkyHigh kernel",	"Skip and continue with kernel installation",							"@install",
+			"System Information",		"Show device/partition information",								"@info",
+			"Exit",				"Quit to the recovery menu",									"@alert"
+);
+
+###################################################################################################################
+
+if prop("flash.prop","selected") == "2" then
+	pleasewait("Getting system information...");
+	setvar(
+		"sysinfo", 
+
+		"\n"+
+
+		"Model\t\t\t: <b><#selectbg_g>"+sysprop("ro.product.model")+"</#></b>\n"+
+		"Board Type\t\t: <b><#selectbg_g>"+sysprop("ro.product.board")+"</#></b>\n"+
+		"Manufacturer\t: <b><#selectbg_g>"+sysprop("ro.product.manufacturer")+"</#></b>\n\n"+
+
+		"CPU\t\t\t\t: <b><#selectbg_g>"+sysprop("ro.product.cpu.abi")+"</#></b>\n"+
+		"LCD Density\t\t: <b><#selectbg_g>"+sysprop("ro.sf.lcd_density")+"</#></b>\n\n"+
+
+		"System Size\t\t: <b><#selectbg_g>"+getdisksize("/system","m")+" MB</#></b>\n"+
+		"Free Space\t\t: <b><#selectbg_g>"+getdiskfree("/system","m")+" MB</#></b>\n\n"+
+		"Data Size\t\t: <b><#selectbg_g>"+getdisksize("/data","m")+" MB</#></b>\n"+
+		"Free Space\t\t: <b><#selectbg_g>"+getdiskfree("/data","m")+" MB</#></b>\n\n"+
+		""
+	);
+
+	textbox(
+		"System Information",
+		"Review your phone's information",
+		"@info",
+		getvar("sysinfo")
+	);
+	back("2");
+endif;
+
+###################################################################################################################
+
+if prop("flash.prop","selected") == "3" then
+	if
+		confirm(
+			"Exit",
+			"Are you sure want to exit the Installer?",
+			"@confirm"
+		) == "yes"
+	then
+		exit("");
+	else
+		back("1");
+	endif;
+endif;
+
+###################################################################################################################
+############################################## Kernel Install Options #############################################
+###################################################################################################################
+
+if prop("flash.prop","selected") == "1" then
+
+	selectbox(
+		"Installation Mode",
+		"Select installation method:",
+		"@install",
+		"install.prop",
+
+			"",				"",												2,
+			"Default Mode",			"Recommend: Install with stable default settings & full Synapse layout.",			1,
+			"Custom Mode",			"Customize settings & Synapse layout before installation.",					0
+	);
+
+################################################### Custom Mode ###################################################
+
+if prop("install.prop","selected.1") == "2" then
+
+###################################################################################################################
+
+	selectbox(
+		"Custom Mode",
+		"Select default SELinux Security Policy:",
+		"@customize",
+		"selinux.prop",
+
+			"",				"",												2,
+			"Permissive",			"Default: Prints warnings instead of enforcing.",						1,
+			"Enforcing",			"Policy is enforced.",										0
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to REMOVE KNOX warning:",
+		"@apps",
+		"knox.prop",
+
+			"",				"",												2,
+			"Remove SecurityLogAgent.apk",	"Stop annoying warning about modified device 'Unauthorized actions have been detected...'",	1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to set System-less SuperSU compatibility-mode:",
+		"@customize",
+		"bind.prop",
+
+			"",				"",												2,
+			"BINDSYSTEMXBIN",		"System-less SuperSU compatibility-mode for unsupported apps (ie. ES File Explorer).",		1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to move invisible apps to A53 LITTLE cores:",
+		"@customize",
+		"invisible.prop",
+
+			"",				"",														2,
+			"Invisible CPUSETS",		"All background applications are prohibited from using big (A57) cores to give you better battery life.",	1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to enable to mount all EXT4 file systems with lazytime:",
+		"@customize",
+		"mounts.prop",
+
+			"",				"",														2,
+			"Lazytime Mount",		"Reduce periodic journal writes on data & cache FS (better battery life, flash lifespan and performance).",	1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to remove placebo ROM Tweaks:",
+		"@customize",
+		"placebo.prop",
+
+			"",				"",												2,
+			"init.d",			"Delete interfering bullshit placebo ROM scripts & 'tweaks' from init.d folder.",		1,
+
+			"",				"",												2,
+			"build.prop",			"Delete interfering bullshit placebo ROM 'tweaks' from build.prop. They don't FN work !!",	1
+	);
+
+###################################################################################################################
+
+
+	selectbox(
+		"Custom Mode",
+		"Select default CPU Governor:",
+		"@customize",
+		"gov.prop",
+
+			"",				"",												2,
+			"Interactive",			"Default: Best all-round scheduler.",								1,
+			"Ktoonservative",		"Hotplug governor by Ktoonsez.",								0,
+			"Performance",			"Locks all cores to max freq unless thermally throttled.",					0
+	);
+
+###################################################################################################################
+
+	selectbox(
+		"Custom Mode",
+		"Select default IO Scheduler:",
+		"@customize",
+		"sched.prop",
+
+			"",				"",												2,
+			"ROW",				"Default: prefer read over write.",								1,
+			"CFQ",				"Stock: Optimised completely fair queuing scheduler, generally good in all situations.",	0,
+			"FIOPS",			"Fair in out performance scheduler.",								0,
+			"NOOP",				"Uses the least CPU and offers reasonable all round performance.",				0,
+			"BFQ",				"Budget Fair Queuing is good for multitasking but has lower performance.",			0,
+			"SIOPLUS",			"Based on SIO with improved read and write speeds.",						0
+#			"DEADLINE",			"May offer the fastest performance but can use more power.",					0
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
+		"Select to enable as default:",
+		"@customize",
+		"default.prop",
+
+			"",				"",												2,
+			"CortexBrain",			"Disabling will prevent screen state auto functions from working. ie. Doze, ALPM & Multicore.",	0,
+
+			"",				"",												2,
+			"Crontab",			"Auto run maintenance scripts in the background at a specified time or interval.",		1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom REMOVAL Mode",
+		"Select to REMOVE from what is VISUALLY DISPLAYED in Synapse:",
+		"@customize",
+		"synapse.prop",
+
+			"Synapse Page Layout REMOVAL",	"",												2,
+			"A57 CPU",			"A57 big cores frequency scaling.",								0,
+			"A57 Volt",			"Atlas HPM & frequency voltage controls.",							0,
+			"A53",				"A53 LITTLE cores frequency scaling.",								0,
+			"A53 Volt",			"Apollo HPM & frequency voltage controls.",							0,
+			"CPU Gov",			"CPU governors & interactive profiles.",							0,
+			"A57 Gov",			"A57 big cores governor tunables.",								0,
+			"A53 Gov",			"A53 LITTLE cores governor tunables.",								0,
+			"Multicore",			"Hotplug, HMP & multicore controls.",								0,
+			"CPU Stats",			"Time in state for online CPU0 & CPU4 cores.",							0,
+			"Boost",			"Key & touchKey input-booster profiles.",							0,
+			"GPU",				"GPU frequency scaling & DVFS controls.",							0,
+			"GPU Volt",			"Mali HPM & GPU voltage controls.",								0,
+			"Thermal",			"CPU, GPU, memory & ISP voltage controls. Your own risk!",					0,
+			"Bus",				"HPM, memory, internal & ISP frequency voltage controls.",					0,
+			"IO",				"IO scheduler, read-ahead & tunables.",								0,
+			"Memory",			"LMK, UKSM, VNSwap, VM, dynamic dirty page writeback, dynamic Fsync & more.",			0,
+			"Advanced",			"Entropy, gentle fair Sleepers, arch power, randomisation, freeze timeout.",			0,
+			"Power Suspend",		"A replacement for the early_suspend / late_resume driver.",					0,
+			"Doze",				"Doze profles & parameter controls.",								0,
+			"Wakelocks",			"Control of various common kernel & ROM wakelocks. Your own risk!",				0,
+			"Audio",			"Clearwater audio controls at board level rather than software gains.",				0,
+			"Battery",			"Battery charging controls for various input & charge currents & more.",			0,
+			"LED",				"Control LED delay & fade-in/out time period for missed notifications.",			0,
+			"Screen",			"LCD ALPM, Sweep-2-Sleep & touchkey controls.",							0,
+			"Network",			"TCP congestion, WiFi power mode, security, DNS controls & more.",				0,
+			"Security",			"Disable KNOX and other unneeded security related processes",					0,
+			"File System",			"Maintenance actions such as optimize databases, FSTrim & clean up.",				0,
+			"CortexBrain",			"Manipulate many kernel settings based on screen state (ON or OFF).",				0,
+			"Crontab",			"Auto run maintenance scripts in the background at a specified time or interval.",		0,
+			"Storage",			"USB modes: MTP, CD_ROM (drivedroid) or USB_keyboard-mouse.",					0,
+			"Modules",			"CIFS, NTFS, ISO9660_FS, UDF & XPAD.",								0,
+			"Backup & Restore",		"Name, Backup & restore Synapse profiles & boot.img.",						0
+	);
+
+endif;
+endif;
+
+###################################################################################################################
+
+ini_set("text_next", "Next");
+
+###################################################################################################################
+
+viewbox(
+	"Ready to Install Choices",
+
+	"The wizard is ready to begin installation.\n\n"+
+	"Press <b>Next</b> to begin the installation.\n\n"+
+	"If you want to review or change any of your installation settings, press <b>Back</b>. Press Menu Key -> Quit Installation to exit the wizard.",
+
+	"@install"
+);
+
+ini_set("text_next", "Next");
+
+restotmp("exec_demo/sleep","sleep");
+
+setvar("retstatus",
+	install(
+		"Installing",
+		"Installing "+ini_get("rom_name")+" "+ini_get("rom_version")+"\nPlease wait until it finishes ...",
+		"@install",
+		"Press Next to continue."
+	)
+);
+
+ini_set("text_next", "Finish");
+
+viewbox(
+	"Installation Completed",
+
+	"<#selectbg_g><b>Congratulations ...</b></#>\n\n"+
+	"<@center><b>"+ini_get("rom_name")+"</b> <b>"+ini_get("rom_version")+"</b> has been installed\n\n"+
+	"Press '<b>Finish<b>' to exit to TWRP\n"+
+	"&\n"+
+	"'<b>Reboot System</b>'</@>",
+
+	"@alert"
+);

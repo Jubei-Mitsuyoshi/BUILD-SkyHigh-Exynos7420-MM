@@ -1,0 +1,53 @@
+# Original by halaskk88
+# Modified by UpInTheAir for SkyHigh kernels
+
+BB=/system/xbin/busybox;
+SWAP=/dev/block/vnswap0;
+
+if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /;
+fi;
+
+case $1 in
+vnswap0)
+  P=/res/synapse/SkyHigh/vnswap0
+
+  # check swap size (zero == disabled)
+  while read -r TYPE MEM KB; do
+	export KB
+	if [ "$TYPE" = "SwapTotal:" ]; then
+		TOTAL=$((MEM / 1024));
+	fi;
+  done < /proc/meminfo;
+
+  if [ ! -z "$2" ]; then
+  if [ "$2" == Disabled ]; then
+    echo 0 > $P
+	if [ "$TOTAL" == 0 ]; then
+		exit 0;
+	else
+		$BB swapoff $SWAP > /dev/null 2>&1
+		$BB sync;
+		$BB echo "0" > /proc/sys/vm/swappiness;
+	fi;
+  elif [ "$2" == Enabled ]; then
+    echo 1 > $P
+	if [ "$TOTAL" != 0 ]; then
+		exit 0;
+	else
+		$BB mkswap $SWAP > /dev/null 2>&1
+		$BB swapon $SWAP > /dev/null 2>&1
+		$BB sync;
+		$BB echo "190" > /proc/sys/vm/swappiness;
+	fi;
+  fi; fi
+  copy=$(cat $P)
+  if [ "$copy" == 0 ]; then
+	echo Disabled
+  elif [ "$copy" == 1 ]; then
+	echo Enabled
+  fi
+  ;;
+esac
+
+$BB mount -t rootfs -o remount,ro rootfs;
