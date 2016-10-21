@@ -399,6 +399,26 @@ cat << CTAG
 						height:1
 					}},'
 			fi`
+			`if [ -f "/sys/module/wacom_i2c/parameters/wl_divide_pen" ]; then
+				PEN=\`$BB cat /sys/module/wacom_i2c/parameters/wl_divide_pen\`
+				$BB echo '{ SPane:{
+					title:"Pen detect",
+					description:" "
+				}},
+					{ SSeekBar:{
+						title:"wacom_pen_detect",
+						description:"Default = 10. Stock = 10 (Higher = lower wake time)\n",
+						unit:"",
+						min:10,
+						max:20,
+						step:1,
+						default:'$PEN',
+						action:"generic sys/module/wacom_i2c/parameters/wl_divide_pen"
+					}},'
+					$BB echo '{ SSpacer:{
+						height:1
+					}},'
+			fi`
 			`if [ -f "/sys/module/wakeup/parameters/enable_lli_pm_wl" ] || [ -f "/sys/module/wakeup/parameters/enable_radio_interface_wl" ] || [ -f "/sys/module/wakeup/parameters/enable_umts_ipc0_wl" ] || [ -f "/sys/module/wakeup/parameters/enable_power_manager_service_wl" ]; then
 				$BB echo '{ SPane:{
 					title:"Wakeup Sources",
