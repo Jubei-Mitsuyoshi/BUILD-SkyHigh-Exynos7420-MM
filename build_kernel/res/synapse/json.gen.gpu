@@ -63,7 +63,7 @@ cat << CTAG
 	}},
 	{ SSeekBar:{
 		title:"GPU MAX freq",
-		description:"Set the maximum frequency the GPU scales up to. Default is 700.\n",
+		description:"Set the maximum frequency the GPU scales up to.\n",
 		unit:" MHz",
 		default:$(cat /sys/devices/platform/gpusysfs/gpu_max_clock),
 		action:"generic /sys/devices/platform/gpusysfs/gpu_max_clock",
@@ -81,7 +81,7 @@ cat << CTAG
 	}},
 	{ SSeekBar:{
 		title:"GPU MIN freq",
-		description:"Set the minimum frequency the GPU scales up to. Default is 266.\n",
+		description:"Set the minimum frequency the GPU scales up to.\n",
 		unit:" MHz",
 		default:$(cat /sys/devices/platform/gpusysfs/gpu_min_clock),
 		action:"generic /sys/devices/platform/gpusysfs/gpu_min_clock",
