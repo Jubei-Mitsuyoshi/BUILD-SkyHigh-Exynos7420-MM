@@ -568,7 +568,7 @@ read -p "${grn}PRE-patch ramdisk for SuperSU? (y/n) > ${txtrst}";
 		else
 			insert_line $EXTRACT/ramdisk/init.rc "# SkyHigh KERNEL" before "mkdir /data 0771 system system" "     mkdir /su 0755 root root # create mount point for SuperSU";
 		fi;
-		if [ "$(grep "# SuperSU:PATCH:276" $EXTRACT/ramdisk/init.rc)" != "" ]; then
+		if [ "$(grep "# SuperSU:PATCH:278" $EXTRACT/ramdisk/init.rc)" != "" ]; then
 			echo ""
 		else
 			SUPATCH=$(cat ./$BK/patch/su_patch)
