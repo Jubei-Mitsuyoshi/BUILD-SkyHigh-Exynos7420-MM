@@ -19,10 +19,10 @@
 ini_set("force_colorspace","rgba");
 
 ini_set("rom_name",		"SkyHigh kernel");
-ini_set("rom_version",		"v5.8.1");
+ini_set("rom_version",		"v6.0.0");
 ini_set("rom_author",		"UpInTheAir");
 ini_set("rom_device",		"Exynos7420");
-ini_set("rom_date",		"17th August 2016");
+ini_set("rom_date",		"22nd October 2016");
 
 splash(
 	1500,
