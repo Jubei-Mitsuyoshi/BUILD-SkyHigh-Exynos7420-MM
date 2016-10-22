@@ -209,6 +209,11 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 		else
 			echo ""
 		fi;
+		if [ "$(grep "persist.security.ams.enforcing=3" $EXTRACT/ramdisk/default.prop)" != "" ]; then
+			replace_string $EXTRACT/ramdisk/default.prop "persist.security.ams.enforcing=0" "persist.security.ams.enforcing=3" "persist.security.ams.enforcing=0";
+		else
+			echo ""
+		fi;
 		if [ "$(grep "ro.secure=1" $EXTRACT/ramdisk/default.prop)" != "" ]; then
 			replace_string $EXTRACT/ramdisk/default.prop "ro.secure=0" "ro.secure=1" "ro.secure=0";
 		else
