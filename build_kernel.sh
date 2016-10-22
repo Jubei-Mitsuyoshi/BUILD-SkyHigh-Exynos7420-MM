@@ -192,7 +192,7 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 		backup_file $EXTRACT/ramdisk/init.samsungexynos7420.rc;
 
 		# default.prop
-		if [ "$TARGET" == "G928C" ]; then
+		if [ "$TARGET" == "G928F" ]; then
 			if [ "$(grep "# SM-G9287C dual SIM support" $EXTRACT/ramdisk/default.prop)" != "" ]; then
 				echo ""
 			else
@@ -316,7 +316,7 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 		fi;
 
 		# init.rilcommon.rc
-		if [ "$TARGET" == "N920C" ] ||  [ "$TARGET" == "N9200" ] ||  [ "$TARGET" == "N9208" ] ||  [ "$TARGET" == "G928C" ]; then
+		if [ "$TARGET" == "N920C" ] ||  [ "$TARGET" == "N9200" ] ||  [ "$TARGET" == "N9208" ] ||  [ "$TARGET" == "G928F" ]; then
 
 			if [ "$(grep "import /init.rilcarrier.rc" $EXTRACT/ramdisk/init.rilcommon.rc)" != "" ]; then
 				remove_line $EXTRACT/ramdisk/init.rilcommon.rc "import /init.rilcarrier.rc";
@@ -388,7 +388,7 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 		backup_file $EXTRACT/ramdisk/default.prop;
 
 		# default.prop
-		if [ "$TARGET" == "G928C" ]; then
+		if [ "$TARGET" == "G928F" ]; then
 			if [ "$(grep "# SM-G9287C dual SIM support" $EXTRACT/ramdisk/default.prop)" != "" ]; then
 				echo ""
 			else

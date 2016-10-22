@@ -84,7 +84,7 @@ echo "${bldcya}***** Set up Environment before compile *****${txtrst}";
 		echo "example: build_kernel.sh N920T";
 		echo "example: build_kernel.sh N9200";
 		echo "example: build_kernel.sh N9208";
-		echo "example: build_kernel.sh G928C";
+		echo "example: build_kernel.sh G928F";
 		echo "example: build_kernel.sh G928P";
 		echo "example: build_kernel.sh G928T";
 		exit 1
@@ -126,8 +126,8 @@ echo "${bldcya}***** Set up Environment before compile *****${txtrst}";
 		export KERNEL_CONFIG="SkyHigh_N9208_SEA_defconfig";
 		board="SYSMAGIC000KU";
 	# SM-G928 C/F/G/I/7C
-	elif [ "$TARGET" == "G928C" ] ; then
-		export KERNEL_CONFIG="SkyHigh_G928C_defconfig";
+	elif [ "$TARGET" == "G928F" ] ; then
+		export KERNEL_CONFIG="SkyHigh_G928F_defconfig";
 		board="SYSMAGIC000KU";
 	# SM-G928 P (Sprint)
 	elif [ "$TARGET" == "G928P" ] ; then
