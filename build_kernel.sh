@@ -124,7 +124,7 @@ echo
 			echo "${grn}--- Creating custom dt.img ---${txtrst}"
 			echo
 			# stock generated tools
-			./tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/
+			./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/
 	else
 		echo "${bldred}Kernel STUCK in BUILD!${txtrst}"
 		echo
