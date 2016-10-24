@@ -35,6 +35,3 @@ elif [ "$FSTRIM" == 0 ]; then
 	date +%R-%F > /data/crontab/cron-fstrim;
 	echo " File System Trim is disabled" >> /data/crontab/cron-fstrim;
 fi;
-
-$BB mount -t rootfs -o remount,ro rootfs;
-$BB mount -o remount,ro /system;

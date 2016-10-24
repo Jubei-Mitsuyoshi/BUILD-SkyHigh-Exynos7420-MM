@@ -58,5 +58,3 @@ $time_min_7 $time_hour_7 * * $day_7 /system/xbin/busybox sh /data/crontab/cron-s
 $BB nohup $BB sh /res/crontab_service/service.sh 2> /dev/null;
 
 echo "All Cron tasks changes set";
-
-$BB mount -t rootfs -o remount,ro rootfs;

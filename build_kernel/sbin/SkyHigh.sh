@@ -236,6 +236,4 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 fi;
 
 
-$BB mount -t rootfs -o remount,ro rootfs
-$BB mount -o remount,ro /system
 $BB mount -o remount,rw /data

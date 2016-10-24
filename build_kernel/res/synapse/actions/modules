@@ -99,6 +99,3 @@ xpad)
   fi
   ;;
 esac
-
-$BB mount -t rootfs -o remount,ro rootfs;
-$BB mount -o remount,ro /system;

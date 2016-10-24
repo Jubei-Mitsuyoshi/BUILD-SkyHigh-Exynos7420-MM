@@ -312,6 +312,3 @@ case $1 in
 		echo "Logfile saved to $saved";
 	;;
 esac;
-
-$BB mount -t rootfs -o remount,ro rootfs;
-$BB mount -o remount,ro /system;

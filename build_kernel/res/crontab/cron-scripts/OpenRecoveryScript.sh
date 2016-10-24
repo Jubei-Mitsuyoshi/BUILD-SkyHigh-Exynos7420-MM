@@ -149,5 +149,3 @@ elif [ "$TWRP" == 0 ]; then
 	date +%R-%F > /data/crontab/cron-twrp_backup;
 	echo " TWRP-auto-backup is disabled" >> /data/crontab/cron-twrp_backup;
 fi;
-
-$BB mount -t rootfs -o remount,ro rootfs;

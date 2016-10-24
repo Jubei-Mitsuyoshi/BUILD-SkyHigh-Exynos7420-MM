@@ -49,5 +49,3 @@ vnswap0)
   fi
   ;;
 esac
-
-$BB mount -t rootfs -o remount,ro rootfs;
