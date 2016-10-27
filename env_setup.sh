@@ -140,8 +140,8 @@ echo "${bldcya}***** Set up Environment before compile *****${txtrst}";
 	fi;
 
 
-	# system compiler : Ubuntu/Linaro 5.4.0 20160609
-	export CROSS_COMPILE=/usr/bin/aarch64-linux-gnu-
+	# system compiler : UBERTC 6.2.1 20161012
+	export CROSS_COMPILE=/home/upintheair/aarch64-linux-android-6.x-kernel/bin/aarch64-linux-android-
 
 
 	# CPU Core
