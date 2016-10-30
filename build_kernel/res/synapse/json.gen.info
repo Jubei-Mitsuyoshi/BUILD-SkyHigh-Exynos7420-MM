@@ -108,6 +108,16 @@ cat << CTAG
 		height:1
 	}},
 	{ SPane:{
+		title:"Ramdisk"
+	}},
+	{ SLiveLabel:{
+		refresh:10000,
+		action:"default ramdisk"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SPane:{
 		title:"Busybox Version"
 	}},
 	{ SLiveLabel:{

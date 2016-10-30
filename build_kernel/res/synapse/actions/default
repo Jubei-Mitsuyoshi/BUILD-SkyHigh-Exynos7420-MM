@@ -19,6 +19,9 @@ date)
 android_version)
   $BB echo "$(getprop ro.build.version.release)"
   ;;
+ramdisk)
+  $BB echo $(grep "ro.bootimage.build.fingerprint" /default.prop) | cut -d":" -f2
+  ;;
 busybox_version)
   $BB echo "$(busybox | head -1)"
   ;;
