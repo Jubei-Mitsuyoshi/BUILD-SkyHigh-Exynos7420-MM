@@ -42,7 +42,7 @@ cat << CTAG
 	}},
 	{ SLiveLabel:{
 		refresh:10000,
-		action:"show asv"
+		action:"default asv"
 	}},
 	{ SSpacer:{
 		height:1
