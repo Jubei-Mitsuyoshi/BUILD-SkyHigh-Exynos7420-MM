@@ -479,8 +479,8 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 		# ROOT
 		ui_print(" ");
 		package_extract_dir("supersu", "/tmp/supersu");
-		run_program("/sbin/busybox", "unzip", "/tmp/supersu/SR2-SuperSU-v2.78-SR2-20161029143931.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");
-		run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/SR2-SuperSU-v2.78-SR2-20161029143931.zip");
+		run_program("/sbin/busybox", "unzip", "/tmp/supersu/SR3-SuperSU-v2.78-SR3-20161103171345.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");
+		run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/SR3-SuperSU-v2.78-SR3-20161103171345.zip");
 
 	set_progress(0.8);
 

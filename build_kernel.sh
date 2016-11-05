@@ -585,6 +585,11 @@ read -p "${grn}PRE-patch ramdisk for SuperSU? (y/n) > ${txtrst}";
 			echo ""
 		fi;
 
+		# create empty su folder
+		if [ ! -d $EXTRACT/ramdisk/su ]; then
+			mkdir -p $EXTRACT/ramdisk/su;
+		fi;
+
 		# launch_daemonsu.sh
 		if [ -f "$EXTRACT/ramdisk/sbin/launch_daemonsu.sh" ]; then
 			rm -rf $EXTRACT/ramdisk/sbin/launch_daemonsu.sh
