@@ -37,6 +37,11 @@ if [ "$1" = "INVISIBLE" ]; then
 	echo 1 >> /data/.SkyHigh/invisible_cpuset;
 fi;
 
+# VNSWAP
+if [ "$1" = "VNSWAP" ]; then
+	echo "vnswap_enabled" >> /system/SkyHigh.prop
+fi;
+
 # LAZYTIME MOUNT
 if [ "$1" = "LAZYTIME" ]; then
 	if [ -f /data/.SkyHigh/lazytime_mount ]; then

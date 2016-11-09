@@ -64,6 +64,9 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			# INVISIBLE CPUSETS
 			run_program("/tmp/defaults.sh", "INVISIBLE");
 
+			# VNSWAP
+			run_program("/tmp/defaults.sh", "VNSWAP");
+
 			# LAZYTIME MOUNT
 			run_program("/tmp/defaults.sh", "LAZYTIME");
 
@@ -160,6 +163,12 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			if file_getprop("/tmp/aroma-data/invisible.prop","item.1.1") == "0" then
 				ui_print("@  Disabling Invisible CPUSETS");
 				delete("/data/.SkyHigh/invisible_cpuset");
+			endif;
+
+			# VNSWAP
+			if file_getprop("/tmp/aroma-data/swaps.prop","item.1.1") == "1" then
+				ui_print("@  Enabling VNSwap");
+				run_program("/tmp/defaults.sh", "VNSWAP");
 			endif;
 
 			# LAZYTIME MOUNT

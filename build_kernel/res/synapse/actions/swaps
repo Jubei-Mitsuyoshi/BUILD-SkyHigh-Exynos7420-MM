@@ -11,30 +11,17 @@ fi;
 case $1 in
 vnswap0)
   P=/res/synapse/SkyHigh/vnswap0
-
-  # check swap size (zero == disabled)
-  while read -r TYPE MEM KB; do
-	export KB
-	if [ "$TYPE" = "SwapTotal:" ]; then
-		TOTAL=$((MEM / 1024));
-	fi;
-  done < /proc/meminfo;
-
   if [ ! -z "$2" ]; then
   if [ "$2" == Disabled ]; then
     echo 0 > $P
-	if [ "$TOTAL" == 0 ]; then
-		exit 0;
-	else
+	if [ "$(grep "vnswap0" /proc/swaps)" != "" ]; then
 		$BB swapoff $SWAP > /dev/null 2>&1
 		$BB sync;
 		$BB echo "0" > /proc/sys/vm/swappiness;
 	fi;
   elif [ "$2" == Enabled ]; then
     echo 1 > $P
-	if [ "$TOTAL" != 0 ]; then
-		exit 0;
-	else
+	if [ "$(grep "vnswap0" /proc/swaps)" == "" ]; then
 		$BB mkswap $SWAP > /dev/null 2>&1
 		$BB swapon $SWAP > /dev/null 2>&1
 		$BB sync;

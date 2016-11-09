@@ -221,6 +221,18 @@ if prop("install.prop","selected.1") == "2" then
 
 	checkbox(
 		"Custom Mode",
+		"Select to enable VNSwap:",
+		"@customize",
+		"swaps.prop",
+
+			"",				"",														2,
+			"VNSwap",			"Virtual NAND swap device to improve multitasking.",						1
+	);
+
+###################################################################################################################
+
+	checkbox(
+		"Custom Mode",
 		"Select to enable to mount all EXT4 file systems with lazytime:",
 		"@customize",
 		"mounts.prop",
