@@ -1,8 +1,5 @@
 BB=/system/xbin/busybox;
 
-# SQLite log location
-LOGS=/sdcard/SkyHigh/Logs/SQLite.txt;
-
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 	$BB mount -o remount,rw /;
 fi;
@@ -72,15 +69,18 @@ case $1 in
 	$BB echo "$(getenforce)";
   ;;
   optimizedb)
+	# SQLite log location
+	LOGS=/data/media/0/SkyHigh/Logs/SQLite.txt;
+
 	if [ -e $LOGS ]; then
 		rm $LOGS;
 	fi;
 
 	# Create Log folder on sdcard
-	LOG=/sdcard/SkyHigh/Logs;
+	LOG=/data/media/0/SkyHigh/Logs;
 
 	[ ! -d "$LOG" ] && mkdir -p "$LOG";
-	chmod 755 $LOG
+	$BB chmod -R 755 $LOG;
 
 	echo "SQLite database VACUUM and REINDEX started at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $LOGS;
 

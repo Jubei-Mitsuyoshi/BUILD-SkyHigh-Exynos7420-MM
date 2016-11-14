@@ -195,6 +195,14 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 	fi;
 
 
+	# Make SkyHigh directory & correct ownership/permissions
+	if [ ! -d /data/media/0/SkyHigh ]; then
+		$BB mkdir -p /data/media/0/SkyHigh
+	fi;
+	$BB chown -R media_rw:media_rw /data/media/0/SkyHigh;
+	$BB chmod -R 755 /data/media/0/SkyHigh;
+
+
 	# Synapse
 	$BB chmod -R 755 /res/*
 	$BB ln -fs /res/synapse/uci /sbin/uci

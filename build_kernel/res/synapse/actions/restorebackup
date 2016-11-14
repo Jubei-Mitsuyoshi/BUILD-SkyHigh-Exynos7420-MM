@@ -7,7 +7,7 @@ if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 fi;
 
 if [ -d /data/data/com.af.synapse ]; then
-  SYNAPSE_SD_DIR=/sdcard/SkyHigh/Synapse;
+  SYNAPSE_SD_DIR=/data/media/0/SkyHigh/Synapse;
   SYNAPSE_BOOT_DIR=$SYNAPSE_SD_DIR/kernel_backups;
   SYNAPSE_CONFIG_DIR=$SYNAPSE_SD_DIR/saved_configs;
 
