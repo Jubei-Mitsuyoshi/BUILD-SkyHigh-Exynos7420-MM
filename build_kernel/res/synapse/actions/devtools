@@ -120,19 +120,31 @@ case $1 in
 		echo "Database $i:  VACUUM=$resVac  REINDEX=$resIndex" | tee -a $LOGS;
 	done;
 		echo "SQLite database VACUUM and REINDEX finished at $( date +"%m-%d-%Y %H:%M:%S" )" | tee -a $LOGS;
-		
+
 	$BB echo "Databases have been optimized";
   ;;
   fstrim)
-	echo -e "Trim /data"
-	/system/xbin/fstrim -v /data
-	echo -e ""
-	echo -e "Trim /cache"
-	/system/xbin/fstrim -v /cache
-	echo -e ""
-	echo -e "Trim /system"
-	/system/xbin/fstrim -v /system
-	echo -e ""
+	if grep -q 'system ext4' /proc/mounts ; then
+		echo -e "Trim "
+		/system/xbin/fstrim -v /system
+		echo -e ""
+	else
+		echo " --System is F2FS-- ";
+	fi;
+	if grep -q 'data ext4' /proc/mounts ; then
+		echo -e "Trim "
+		/system/xbin/fstrim -v /data
+		echo -e ""
+	else
+		echo " --Data is F2FS-- ";
+	fi;
+	if grep -q 'cache ext4' /proc/mounts ; then
+		echo -e "Trim "
+		/system/xbin/fstrim -v /cache
+		echo -e ""
+	else
+		echo " --Cache is F2FS-- ";
+	fi;
 	$BB sync
   ;;
   wipe_cache_reboot)

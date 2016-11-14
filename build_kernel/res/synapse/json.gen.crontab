@@ -184,7 +184,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"File System Trim",
-		description:"Cron to trim System, Data and Cache partitions every day at 4:50AM, only if CPU is resting (IDLE)! This will help retain consistant IO throughput."
+		description:"Cron to trim System, Data and Cache EXT4 partitions every day at 4:50AM, only if CPU is resting (IDLE)! This will help retain consistant IO throughput."
 	}},
 	{ SSpacer:{
 		height:1
