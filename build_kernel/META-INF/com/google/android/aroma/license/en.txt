@@ -1,0 +1,27 @@
+<@center><b><#selectbg_g>UpInTheAir SkyHigh License</#></b>
+
+<b><#selectbg_g>TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION</#></b></@>
+
+<b><#selectbg_g>* Disclaimer</#></b>
+
+<@fill><q>UpInTheAir is NOT responsible, the person you see in the mirror is !!</q></@>
+
+<b><#selectbg_g>* Copyright</#></b>
+
+<@fill><q>© Copyright (c) 2015-16 UpInTheAir <upintheair.xda@gmail.com>
+
+All rights reserved. The alterations from OEM, associated script files and coding packed within this ramdisk & installation package (the "Software"), may not be reproduced, displayed, modified or distributed without the express prior written permission of the copyright holder. For permission, contact upintheair.xda@gmail.com.
+
+The above copyright notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</q></@>
+
+<b><#selectbg_g>*BUG Reporting</#></b>
+
+<@fill><q>I might not have your device variant and or able to reproduce your "issue". With this in mind, please provide as much information as possible, including steps to reproduce or what you have done to help yourself. Without providing this important information, any potential troubleshooting or logs could be meaningless and a waste of my time.</q></@>
+
+<b><#selectbg_g>* Kernel Source</#></b>
+
+<@fill><q>To comply with GPLv2 requirements, source is always available upon request.</q></@>
+
+<@center><b><#selectbg_g>END OF TERMS AND CONDITIONS</#></b></@>

@@ -1,144 +1,141 @@
-### LICENSE:
-#
-# Copyright (C) 2011 Ahmad Amarullah ( http://amarullz.com/ )
-#
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#      http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
-# Modifed for UpInTheAir for use with Skyhigh kernels
+################################# Aroma config for SkyHigh kernels by UpInTheAir ##################################
 
-ini_set("force_colorspace","rgba");
-
-ini_set("rom_name",		"SkyHigh kernel");
+ini_set("rom_name",		"SkyHigh 7420 Kernel");
 ini_set("rom_version",		"v6.6.1");
 ini_set("rom_author",		"UpInTheAir");
 ini_set("rom_device",		"Exynos7420");
 ini_set("rom_date",		"5th November 2016");
 
 splash(
-	1500,
+	2000,
 	"splash/a1"
 );
 
-fontresload( "0", "ttf/DroidSans.ttf", "13" );
-fontresload( "1", "ttf/DroidSans.ttf", "14" ); 
+fontresload( "0", "ttf/Roboto-Regular.ttf;ttf/DroidSansArabic.ttf;ttf/DroidSansFallback.ttf;", "12" );
+
+loadlang("langs/en.lang");
+fontresload( "0", "ttf/Roboto-Regular.ttf", "12" );
+fontresload( "1", "ttf/Roboto-Regular.ttf", "18" );
 
 theme("touchwiz");
 
 ###################################################################################################################
 
 viewbox(
-	"Welcome to the SkyHigh Kernel Installer!!",
-	"You have chosen to install <b>"+
-		ini_get("rom_name")+
-	"</b> for the <b>"+ini_get("rom_device")+"</b>\n\n"+
+	"<~welcome.title>",
+	"<~welcome.text1>"+
 
-	"<~Welcome!!>\n\n"+
+	"\n\n"+
 
-	"  VERSION\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
-	"  AUTHOR\t: <b><#selectbg_g>"+ini_get("rom_author")+"</#></b>\n"+
-	"  RELEASED\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n\n"+
+	"<~welcome.text2>\n\n"+
 
-	"Press Next to Proceed...",
+	"  <~welcome.version>\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
+	"  <~welcome.author>\t: <b><#selectbg_g>"+ini_get("rom_author")+"</#></b>\n"+
+	"  <~welcome.released>\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n\n"+
+
+	"<~welcome.next>",
+
 	"@welcome"
 );
 
 ###################################################################################################################
 
 agreebox(
-	"USER NOTICE",
-	"<b><#selectbg_g>To continue with this installer you must agree to my terms</#></b>",
-	"@agreement",
+	"<~terms.title>",
+	"<~terms.desc>",
 
-	resread("conditions.txt"),
-
-	"I agree to these terms and conditions",
-	"You must agree to proceed, didn't you READ?"
-);
-
-agreebox(
-	"COPYRIGHT NOTICE",
-	"<b><#selectbg_g>To continue with this installer you must agree to my terms</#></b>",
 	"@license",
 
-	resread("LICENSE.txt"),
+	resread("license/en.txt"),
 
-	"I agree to the LICENSE",
-	"You must agree to proceed, didn't you READ?"
-);
-
-textbox(
-	"Changelog",
-	"<b><#selectbg_g>"+ini_get("rom_name")+" - "+ini_get("rom_version")+"</#></b>",
-	"@update",
-
-	resread("changelog.txt")
+	"<~terms.check>",
+	"<~terms.confirm>"
 );
 
 ###################################################################################################################
 
 menubox(
-	"Options",
-		"Installer Options for "+ini_get("rom_name")+" "+ini_get("rom_version")+"\n"+
-		""+
-		"Please make a selection:",
-		"",
-		"flash.prop",
+	"<~main.title>",
+	"<~main.subtutle>",
 
-			"Install SkyHigh kernel",	"Skip and continue with kernel installation",							"@install",
-			"System Information",		"Show device/partition information",								"@info",
-			"Exit",				"Quit to the recovery menu",									"@alert"
+	"@apps",
+
+	"menu.prop",
+
+	"<~main.inst>",			"<~main.instdesc>",					"@install",
+	"<~main.sysinfo>",		"<~main.sysinfodesc>",					"@info",
+	"<~main.changelog>",		"<~main.changelogdesc>",				"@agreement",
+	"<~main.quit>",			"<~main.quitdesc>",					"@alert"
+
 );
 
 ###################################################################################################################
 
-if prop("flash.prop","selected") == "2" then
-	pleasewait("Getting system information...");
+if prop("menu.prop","selected") == "2" then
+
+	pleasewait("<~sysinfo.wait>");
 	setvar(
-		"sysinfo", 
+		"sysinfo",
 
 		"\n"+
 
-		"Model\t\t\t: <b><#selectbg_g>"+sysprop("ro.product.model")+"</#></b>\n"+
-		"Board Type\t\t: <b><#selectbg_g>"+sysprop("ro.product.board")+"</#></b>\n"+
-		"Manufacturer\t: <b><#selectbg_g>"+sysprop("ro.product.manufacturer")+"</#></b>\n\n"+
+		"<~sysinfo.device>"+"\t\t:  <b><#selectbg_g>"+sysprop("ro.build.product")+"</#></b>\n"+
+		"<~sysinfo.board>"+"\t\t: <b><#selectbg_g>"+sysprop("ro.product.board")+"</#></b>\n"+
+		"<~sysinfo.manufac>"+"\t: <b><#selectbg_g>"+sysprop("ro.product.manufacturer")+"</#></b>\n\n"+
 
-		"CPU\t\t\t\t: <b><#selectbg_g>"+sysprop("ro.product.cpu.abi")+"</#></b>\n"+
-		"LCD Density\t\t: <b><#selectbg_g>"+sysprop("ro.sf.lcd_density")+"</#></b>\n\n"+
-
-		"System Size\t\t: <b><#selectbg_g>"+getdisksize("/system","m")+" MB</#></b>\n"+
-		"Free Space\t\t: <b><#selectbg_g>"+getdiskfree("/system","m")+" MB</#></b>\n\n"+
-		"Data Size\t\t: <b><#selectbg_g>"+getdisksize("/data","m")+" MB</#></b>\n"+
-		"Free Space\t\t: <b><#selectbg_g>"+getdiskfree("/data","m")+" MB</#></b>\n\n"+
+		"<~sysinfo.system>"+"\t: <b><#selectbg_g>"+getdisksize("/system","m")+" MB</#></b>\n"+
+		"Free\t\t\t: <b><#selectbg_g>"+getdiskfree("/system","m")+" MB</#></b>\n\n"+
+		"<~sysinfo.data>"+"\t\t: <b><#selectbg_g>"+getdisksize("/data","m")+" MB</#></b>\n"+
+		"Free\t\t\t: <b><#selectbg_g>"+getdiskfree("/data","m")+" MB</#></b>\n\n"+
 		""
 	);
 
 	textbox(
-		"System Information",
-		"Review your phone's information",
+		"<~sysinfo.title>",
+		"<~sysinfo.subtitle>",
+
 		"@info",
+
 		getvar("sysinfo")
 	);
+
+	alert(
+		"<~sysinfo.alert.title>",
+		"<~sysinfo.alert.text>",
+
+		"@alert"
+	);
+
 	back("2");
+
 endif;
 
 ###################################################################################################################
 
-if prop("flash.prop","selected") == "3" then
+if prop("menu.prop","selected") == "3" then
+
+	textdialog(
+		"<~changelog.title>",
+
+		resread("changelog/en.txt"),
+		"<~changelog.exit>"
+	);
+
+	back("1");
+
+endif;
+
+###################################################################################################################
+
+if prop("menu.prop","selected") == "4" then
+
 	if
 		confirm(
-			"Exit",
-			"Are you sure want to exit the Installer?",
-			"@confirm"
+			"<~quit.title>",
+			"<~quit.text>",
+
+			"@alert"
+
 		) == "yes"
 	then
 		exit("");
@@ -147,248 +144,252 @@ if prop("flash.prop","selected") == "3" then
 	endif;
 endif;
 
-###################################################################################################################
 ############################################## Kernel Install Options #############################################
-###################################################################################################################
 
-if prop("flash.prop","selected") == "1" then
+if prop("menu.prop","selected") == "1" then
 
 	selectbox(
-		"Installation Mode",
-		"Select installation method:",
-		"@install",
+		"<~install.title>",
+		"<~install.subtitle>",
+
+		"icons/install",
+
 		"install.prop",
 
-			"",				"",												2,
-			"Default Mode",			"Recommend: Install with stable default settings & full Synapse layout.",			1,
-			"Custom Mode",			"Customize settings & Synapse layout before installation.",					0
+		"<~install.option>",		"",							2,
+		"<~install.option1>",		"<~install.option1-desc>",				1,
+		"<~install.option2>",		"<~install.option2-desc>",				0
 	);
 
 ################################################### Custom Mode ###################################################
 
-if prop("install.prop","selected.1") == "2" then
+	if prop("install.prop","selected.1") == "2" then
+
+		selectbox(
+			"<~selinux.title>",
+			"<~selinux.subtitle>",
+
+			"icons/customize",
+
+			"selinux.prop",
+
+			"<~>",				"",							2,
+			"<~selinux.option1>",		"<~selinux.option1-desc>",				1,
+			"<~selinux.option2>",		"<~selinux.option2-desc>",				0
+
+		);
+
+		checkbox(
+			"<~bind.title>",
+			"<~bind.subtitle>",
+
+			"icons/customize",
+
+			"bind.prop",
+
+			"<~>",				"",							2,
+			"<~bind.option1>",		"<~bind.option1-desc>",					1
+
+		);
+
+		checkbox(
+			"<~cpusets.title>",
+			"<~cpusets.subtitle>",
+
+			"icons/customize",
+
+			"cpusets.prop",
+
+			"<~>",				"",							2,
+			"<~cpusets.option1>",		"<~cpusets.option1-desc>",				1
+
+		);
+
+		checkbox(
+			"<~swaps.title>",
+			"<~swaps.subtitle>",
+
+			"icons/customize",
+
+			"swaps.prop",
+
+			"<~>",				"",							2,
+			"<~swaps.option1>",		"<~swaps.option1-desc>",				1
+
+		);
+
+		checkbox(
+			"<~mounts.title>",
+			"<~mounts.subtitle>",
+
+			"icons/customize",
+
+			"mounts.prop",
+
+			"<~>",				"",							2,
+			"<~mounts.option1>",		"<~mounts.option1-desc>",				1
+
+		);
+
+		checkbox(
+			"<~placebo.title>",
+			"<~placebo.subtitle>",
+
+			"icons/customize",
+
+			"placebo.prop",
+
+			"<~>",				"",							2,
+			"<~placebo.option1>",		"<~placebo.option1-desc>",				1,
+
+			"<~>",				"",							2,
+			"<~placebo.option2>",		"<~placebo.option2-desc>",				1
+
+		);
+
+		selectbox(
+			"<~gov.title>",
+			"<~gov.subtitle>",
+
+			"icons/customize",
+
+			"gov.prop",
+
+			"<~>",				"",							2,
+			"<~gov.option1>",		"<~gov.option1-desc>",					1,
+			"<~gov.option2>",		"<~gov.option2-desc>",					0,
+			"<~gov.option3>",		"<~gov.option3-desc>",					0
+
+		);
+
+		selectbox(
+			"<~sched.title>",
+			"<~sched.subtitle>",
+
+			"icons/customize",
+
+			"sched.prop",
+
+			"<~>",				"",							2,
+			"<~sched.option1>",		"<~sched.option1-desc>",				1,
+			"<~sched.option2>",		"<~sched.option2-desc>",				0,
+			"<~sched.option3>",		"<~sched.option3-desc>",				0,
+			"<~sched.option4>",		"<~sched.option4-desc>",				0,
+			"<~sched.option5>",		"<~sched.option5-desc>",				0,
+			"<~sched.option6>",		"<~sched.option6-desc>",				0
+#			"<~sched.option7>",		"<~sched.option7-desc>",				0
+
+		);
+
+		checkbox(
+			"<~default.title>",
+			"<~default.subtitle>",
+
+			"icons/customize",
+
+			"default.prop",
+
+			"<~>",				"",							2,
+			"<~default.option1>",		"<~default.option1-desc>",				0,
+
+			"<~>",				"",							2,
+			"<~default.option2>",		"<~default.option2-desc>",				1
+
+		);
+
+		checkbox(
+			"<~synapse.title>",
+			"<~synapse.subtitle>",
+
+			"icons/customize",
+
+			"synapse.prop",
+
+			"<~>",				"",							2,
+			"<~synapse.option1>",		"<~synapse.option1-desc>",				0,
+			"<~synapse.option2>",		"<~synapse.option2-desc>",				0,
+			"<~synapse.option3>",		"<~synapse.option3-desc>",				0,
+			"<~synapse.option4>",		"<~synapse.option4-desc>",				0,
+			"<~synapse.option5>",		"<~synapse.option5-desc>",				0,
+			"<~synapse.option6>",		"<~synapse.option6-desc>",				0,
+			"<~synapse.option7>",		"<~synapse.option7-desc>",				0,
+			"<~synapse.option8>",		"<~synapse.option8-desc>",				0,
+			"<~synapse.option9>",		"<~synapse.option9-desc>",				0,
+			"<~synapse.option10>",		"<~synapse.option10-desc>",				0,
+			"<~synapse.option11>",		"<~synapse.option11-desc>",				0,
+			"<~synapse.option12>",		"<~synapse.option12-desc>",				0,
+			"<~synapse.option13>",		"<~synapse.option13-desc>",				0,
+			"<~synapse.option14>",		"<~synapse.option14-desc>",				0,
+			"<~synapse.option15>",		"<~synapse.option15-desc>",				0,
+			"<~synapse.option16>",		"<~synapse.option16-desc>",				0,
+			"<~synapse.option17>",		"<~synapse.option17-desc>",				0,
+			"<~synapse.option18>",		"<~synapse.option18-desc>",				0,
+			"<~synapse.option19>",		"<~synapse.option19-desc>",				0,
+			"<~synapse.option20>",		"<~synapse.option20-desc>",				0,
+			"<~synapse.option21>",		"<~synapse.option21-desc>",				0,
+			"<~synapse.option22>",		"<~synapse.option22-desc>",				0,
+			"<~synapse.option23>",		"<~synapse.option23-desc>",				0,
+			"<~synapse.option24>",		"<~synapse.option24-desc>",				0,
+			"<~synapse.option25>",		"<~synapse.option25-desc>",				0,
+			"<~synapse.option26>",		"<~synapse.option26-desc>",				0,
+			"<~synapse.option27>",		"<~synapse.option27-desc>",				0,
+			"<~synapse.option28>",		"<~synapse.option28-desc>",				0,
+			"<~synapse.option29>",		"<~synapse.option29-desc>",				0,
+			"<~synapse.option30>",		"<~synapse.option30-desc>",				0,
+			"<~synapse.option31>",		"<~synapse.option31-desc>",				0,
+			"<~synapse.option32>",		"<~synapse.option32-desc>",				0
+
+		);
+
+	endif;
 
 ###################################################################################################################
-
-	selectbox(
-		"Custom Mode",
-		"Select default SELinux Security Policy:",
-		"@customize",
-		"selinux.prop",
-
-			"",				"",												2,
-			"Permissive",			"Default: Prints warnings instead of enforcing.",						1,
-			"Enforcing",			"Policy is enforced.",										0
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to REMOVE KNOX warning:",
-		"@apps",
-		"knox.prop",
-
-			"",				"",												2,
-			"Remove SecurityLogAgent.apk",	"Stop annoying warning about modified device 'Unauthorized actions have been detected...'",	1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to set System-less SuperSU compatibility-mode:",
-		"@customize",
-		"bind.prop",
-
-			"",				"",												2,
-			"BINDSYSTEMXBIN",		"System-less SuperSU compatibility-mode for unsupported apps (ie. ES File Explorer).",		1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to move invisible apps to A53 LITTLE cores:",
-		"@customize",
-		"invisible.prop",
-
-			"",				"",														2,
-			"Invisible CPUSETS",		"All background applications are prohibited from using big (A57) cores to give you better battery life.",	1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to enable VNSwap:",
-		"@customize",
-		"swaps.prop",
-
-			"",				"",														2,
-			"VNSwap",			"Virtual NAND swap device to improve multitasking.",						1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to enable to mount all EXT4 file systems with lazytime:",
-		"@customize",
-		"mounts.prop",
-
-			"",				"",														2,
-			"Lazytime Mount",		"Reduce periodic journal writes on data & cache FS (better battery life, flash lifespan and performance).",	1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to remove placebo ROM Tweaks:",
-		"@customize",
-		"placebo.prop",
-
-			"",				"",												2,
-			"init.d",			"Delete interfering bullshit placebo ROM scripts & 'tweaks' from init.d folder.",		1,
-
-			"",				"",												2,
-			"build.prop",			"Delete interfering bullshit placebo ROM 'tweaks' from build.prop. They don't FN work !!",	1
-	);
-
-###################################################################################################################
-
-
-	selectbox(
-		"Custom Mode",
-		"Select default CPU Governor:",
-		"@customize",
-		"gov.prop",
-
-			"",				"",												2,
-			"Interactive",			"Default: Best all-round scheduler.",								1,
-			"Ktoonservative",		"Hotplug governor by Ktoonsez.",								0,
-			"Performance",			"Locks all cores to max freq unless thermally throttled.",					0
-	);
-
-###################################################################################################################
-
-	selectbox(
-		"Custom Mode",
-		"Select default IO Scheduler:",
-		"@customize",
-		"sched.prop",
-
-			"",				"",												2,
-			"ROW",				"Default: prefer read over write.",								1,
-			"CFQ",				"Stock: Optimised completely fair queuing scheduler, generally good in all situations.",	0,
-			"FIOPS",			"Fair in out performance scheduler.",								0,
-			"NOOP",				"Uses the least CPU and offers reasonable all round performance.",				0,
-			"BFQ",				"Budget Fair Queuing is good for multitasking but has lower performance.",			0,
-			"SIOPLUS",			"Based on SIO with improved read and write speeds.",						0
-#			"DEADLINE",			"May offer the fastest performance but can use more power.",					0
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom Mode",
-		"Select to enable as default:",
-		"@customize",
-		"default.prop",
-
-			"",				"",												2,
-			"CortexBrain",			"Disabling will prevent screen state auto functions from working. ie. Doze, ALPM & Multicore.",	0,
-
-			"",				"",												2,
-			"Crontab",			"Auto run maintenance scripts in the background at a specified time or interval.",		1
-	);
-
-###################################################################################################################
-
-	checkbox(
-		"Custom REMOVAL Mode",
-		"Select to REMOVE from what is VISUALLY DISPLAYED in Synapse:",
-		"@customize",
-		"synapse.prop",
-
-			"Synapse Page Layout REMOVAL",	"",												2,
-			"A57 CPU",			"A57 big cores frequency scaling.",								0,
-			"A57 Volt",			"Atlas HPM & frequency voltage controls.",							0,
-			"A53",				"A53 LITTLE cores frequency scaling.",								0,
-			"A53 Volt",			"Apollo HPM & frequency voltage controls.",							0,
-			"CPU Gov",			"CPU governors & interactive profiles.",							0,
-			"A57 Gov",			"A57 big cores governor tunables.",								0,
-			"A53 Gov",			"A53 LITTLE cores governor tunables.",								0,
-			"Multicore",			"Hotplug, HMP & multicore controls.",								0,
-			"CPU Stats",			"Time in state for online CPU0 & CPU4 cores.",							0,
-			"Boost",			"Key & touchKey input-booster profiles.",							0,
-			"GPU",				"GPU frequency scaling & DVFS controls.",							0,
-			"GPU Volt",			"Mali HPM & GPU voltage controls.",								0,
-			"Thermal",			"CPU, GPU, memory & ISP voltage controls. Your own risk!",					0,
-			"Bus",				"HPM, memory, internal & ISP frequency voltage controls.",					0,
-			"IO",				"IO scheduler, read-ahead & tunables.",								0,
-			"Memory",			"LMK, UKSM, VNSwap, VM, dynamic dirty page writeback, dynamic Fsync & more.",			0,
-			"Advanced",			"Entropy, gentle fair Sleepers, arch power, randomisation, freeze timeout.",			0,
-			"Power Suspend",		"A replacement for the early_suspend / late_resume driver.",					0,
-			"Doze",				"Doze profles & parameter controls.",								0,
-			"Wakelocks",			"Control of various common kernel & ROM wakelocks. Your own risk!",				0,
-			"Audio",			"Clearwater audio controls at board level rather than software gains.",				0,
-			"Battery",			"Battery charging controls for various input & charge currents & more.",			0,
-			"LED",				"Control LED delay & fade-in/out time period for missed notifications.",			0,
-			"Screen",			"LCD ALPM, Sweep-2-Sleep & touchkey controls.",							0,
-			"Network",			"TCP congestion, WiFi power mode, security, DNS controls & more.",				0,
-			"Security",			"Disable KNOX and other unneeded security related processes",					0,
-			"File System",			"Maintenance actions such as optimize databases, FSTrim & clean up.",				0,
-			"CortexBrain",			"Manipulate many kernel settings based on screen state (ON or OFF).",				0,
-			"Crontab",			"Auto run maintenance scripts in the background at a specified time or interval.",		0,
-			"Storage",			"USB modes: MTP, CD_ROM (drivedroid) or USB_keyboard-mouse.",					0,
-			"Modules",			"CIFS, NTFS, ISO9660_FS, UDF & XPAD.",								0,
-			"Backup & Restore",		"Name, Backup & restore Synapse profiles & boot.img.",						0
-	);
 
 endif;
-endif;
 
 ###################################################################################################################
 
-ini_set("text_next", "Next");
+if prop("menu.prop","selected") == "1" then
 
-###################################################################################################################
+	ini_set("text_next", "<~ini_set.next>");
+	ini_set("icon_next", "@installbutton");
 
-viewbox(
-	"Ready to Install Choices",
+	viewbox(
+		"<~ini_set.title>",
+		"\n" +
+		"<~ini_set.text1>\n\n"+
+		"\n" +
+		"<~ini_set.text2>\n\n"+
+		"<~ini_set.text3>\n\n"+
+		"<~ini_set.text4>",
 
-	"The wizard is ready to begin installation.\n\n"+
-	"Press <b>Next</b> to begin the installation.\n\n"+
-	"If you want to review or change any of your installation settings, press <b>Back</b>. Press Menu Key -> Quit Installation to exit the wizard.",
+		"@install"
 
-	"@install"
-);
+	);
 
-ini_set("text_next", "Next");
+	ini_set("text_next", "<~text_next>");
+	ini_set("icon_next", "@next");
 
-restotmp("exec_demo/sleep","sleep");
-
-setvar("retstatus",
 	install(
-		"Installing",
-		"Installing "+ini_get("rom_name")+" "+ini_get("rom_version")+"\nPlease wait until it finishes ...",
-		"@install",
-		"Press Next to continue."
-	)
-);
+		"<~inst.title>",
+		"\n" +
+		"<~inst.text>" +
+		"",
+		"@install"
+	);
 
-ini_set("text_next", "Finish");
+	ini_set("text_next", "<~inst.finish.button>");
+	ini_set("icon_next", "@finish");
 
-viewbox(
-	"Installation Completed",
+	viewbox(
+		"<~inst.finish.title>",
+		"\n" +
 
-	"<#selectbg_g><b>Congratulations ...</b></#>\n\n"+
-	"<@center><b>"+ini_get("rom_name")+"</b> <b>"+ini_get("rom_version")+"</b> has been installed\n\n"+
-	"Press '<b>Finish<b>' to exit to TWRP\n"+
-	"&\n"+
-	"'<b>Reboot System</b>'</@>",
+		"<#selectbg_g><b>"+ini_get("rom_name")+"</b></#> "+"<~inst.info>"+"\n\n"+
+		"<~inst.finish>",
 
-	"@alert"
-);
+		"@welcome"
+
+	);
+
+endif;

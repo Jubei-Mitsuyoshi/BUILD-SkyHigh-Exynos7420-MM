@@ -2,7 +2,7 @@ ui_print(" ");
 
 ui_print("************************************");
 ui_print("*	SkyHigh Kernel                ");
-ui_print("*	Exynos7420 TW 6.0.1 device    ");
+ui_print("*	Exynos7420 CM13               ");
 ui_print("*	by UpInTheAir                 ");
 ui_print("************************************");
 
@@ -22,18 +22,16 @@ run_program("/tmp/defaults.sh", "DETECT");
 if file_getprop("/system/device.prop","device.type") == "compatible" then
 	ui_print("@  SUPPORTED Device Detected == CONTINUE !!");
 
-	if file_getprop("/tmp/aroma-data/flash.prop","selected") == "1" then
+	if file_getprop("/tmp/aroma-data/menu.prop","selected") == "1" then
 
 		## START DEFAULT MODE
 		if file_getprop("/tmp/aroma-data/install.prop","selected.1") == "1" then
 
 		set_progress(0.1);
 
-			ui_print(" ");
-			ui_print("Setting SkyHigh kernel defaults...");
-
 			# CLEAR SYNAPSE
-			delete("/data/dalvik-cache/arm64/data@app@com.af.synapse@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-1@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-2@base.apk@classes.dex");
+			ui_print(" ");
+			ui_print("Clear Synapse data for clean install...");
 			delete("/data/dalvik-cache/profiles/com.af.synapse");
 			delete_recursive("/data/data/com.af.synapse");
 
@@ -46,17 +44,14 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 		set_progress(0.25);
 
+			ui_print(" ");
+			ui_print("Setting SkyHigh kernel defaults...");
+
 			# DEFAULTS
 			delete("/system/SkyHigh.prop");
 
 			# SELINUX PERMISSIVE
 			run_program("/tmp/defaults.sh", "PERMISSIVE");
-
-			# KNOX
-			delete_recursive("/system/app/SecurityLogAgent");
-			delete_recursive("/data/app/com.samsung.android.securitylogagent");
-			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
-			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
 
 			# BINDSYSTEMXBIN
 			run_program("/tmp/defaults.sh", "BIND");
@@ -106,7 +101,6 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			# CLEAR SYNAPSE
 			ui_print(" ");
 			ui_print("Clear Synapse data for clean install...");
-			delete("/data/dalvik-cache/arm64/data@app@com.af.synapse@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-1@base.apk@classes.dex", "/data/dalvik-cache/arm64/data@app@com.af.synapse-2@base.apk@classes.dex");
 			delete("/data/dalvik-cache/profiles/com.af.synapse");
 			delete_recursive("/data/data/com.af.synapse");
 
@@ -136,15 +130,6 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 				run_program("/tmp/defaults.sh", "ENFORCING");
 			endif;
 
-			# KNOX
-			if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "1" then
-				ui_print("@  Removing SecurityLogAgent.apk");
-				delete_recursive("/system/app/SecurityLogAgent");
-				delete_recursive("/data/app/com.samsung.android.securitylogagent");
-				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
-				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
-			endif;
-
 			# BINDSYSTEMXBIN
 			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "1" then
 				ui_print("@  Setting BINDSYSTEMXBIN");
@@ -156,11 +141,11 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			endif;
 
 			# INVISIBLE CPUSETS
-			if file_getprop("/tmp/aroma-data/invisible.prop","item.1.1") == "1" then
+			if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "1" then
 				ui_print("@  Enabling Invisible CPUSETS");
 				run_program("/tmp/defaults.sh", "INVISIBLE");
 			endif;
-			if file_getprop("/tmp/aroma-data/invisible.prop","item.1.1") == "0" then
+			if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "0" then
 				ui_print("@  Disabling Invisible CPUSETS");
 				delete("/data/.SkyHigh/invisible_cpuset");
 			endif;
@@ -545,5 +530,6 @@ delete_recursive("/tmp");
 # UNMOUNT
 ui_print(" ");
 ui_print("Unmounting System & Data...");
-unmount("/system");
-unmount("/data");
+run_program("/sbin/sleep", "2");
+run_program("/sbin/busybox", "umount", "/system");
+run_program("/sbin/busybox", "umount", "/data");

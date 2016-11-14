@@ -1,4 +1,4 @@
-﻿### LICENSE:
+### LICENSE:
 #
 # Copyright (C) 2011 Ahmad Amarullah ( http://amarullz.com/ )
 #
@@ -6,7 +6,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#      http://www.apache.org/licenses/LICENSE-2.0
+#	http://www.apache.org/licenses/LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,16 +16,16 @@
 #
 ### LANGUAGE STRING RESOURCE FILE
 #
-#   Language  : English
-#   By        : amarullz
+#	Language	: English
+#	By		: UpInTheAir
 #
 
 #
 #--- COMMON SYSTEM STRING RESOURCE
 #
 text_ok=OK
-text_next=Next
-text_back=Back
+text_next=Next >
+text_back=< Back
 text_yes=Yes
 text_no=No
 text_about=About
@@ -33,37 +33,214 @@ text_calibrating=Calibrating Tools
 text_quit=Quit Installation
 text_quit_msg=Are you sure to quit the installer?
 
-#
-#-- CUSTOM STRING RESOURCE
-#
-common.for=for
-
-langtest.title=Language Test
-langtest.multiline=This text is located in langs/en.lang\
-Use backslash before enter to add new line\
-\
-You can also do <b>Formatting</b> inside the language string resource.\
-\
-Thanks for using AROMA Installer
-
-#-- End of string without any backslash for multiline text
-
-
-themes.title=Select Theme
-themes.desc=Please select installer theme that you want to use in this installation test:
-
 welcome.title=Welcome
-welcome.text1=You are about to Installing
-welcome.text2=AROMA Installer was the first and the only Touch and Customizable ANDROID ROM Installer in the World.
+welcome.text1=Now proceed with SkyHigh 7420 Kernel installation
+welcome.text2= SkyHigh Kernel Version Info:
 welcome.version=VERSION
-welcome.codename=CODENAME
-welcome.updated=UPDATED
-welcome.next=Press Next to Continue the Installation...
+welcome.author=AUTHOR
+welcome.released=RELEASED
+welcome.next=Press Next to Proceed ...
 
-terms.title=Terms and Conditions
-terms.desc=Please read carefully The AROMA Installer Terms and Conditions Below.
-terms.check=I Agree with this Terms and Conditions...
-terms.confirm=Please check the agreement...
+main.title=SkyHigh Kernel Installation Menu
+main.subtutle=Select what you want:
+main.inst=Install SkyHigh kernel
+main.instdesc=Skip and continue with kernel installation
+main.sysinfo=System Info
+main.sysinfodesc=Show device/partition information
+main.changelog=ChangeLog
+main.changelogdesc=Changes since last release
+main.quit=Quit Install
+main.quitdesc=Quit to the Recovery menu
+
+sysinfo.wait=Getting System Information ...
+sysinfo.maintext=Device System Information
+sysinfo.device=Model
+sysinfo.board=Board
+sysinfo.manufac=Manufacturer
+sysinfo.system=System Size
+sysinfo.data=Data Size
+sysinfo.subtitle=Current System information for your device
+sysinfo.alert.title=Finished
+sysinfo.alert.text=Back to Menu
+
+changelog.title=SkyHigh Kernel ChangeLog
+changelog.exit=Close
+
+quit.title=Exit
+quit.text=Are you sure want to exit the Installer?
+
+terms.title=Terms & Conditions
+terms.desc=Please read carefully the Terms & Conditions below
+terms.check=I agree to these Terms & Conditions
+terms.confirm=You must agree to proceed, didn't you READ?
 
 changelog.title=Changelog
-changelog.desc=AROMA Installer Changelog
+changelog.desc=Changelog
+
+install.title=Installation Mode
+install.subtitle=Select installation method:
+install.option=Mode
+install.option1=Default Mode
+install.option1-desc=Recommend: Install with stable default settings & full Synapse layout
+install.option2=Custom Mode
+install.option2-desc=Customize settings & Synapse layout before installation
+
+selinux.title=Custom Mode
+selinux.subtitle=Select default SELinux Security Policy:
+selinux.option=
+selinux.option1=Permissive
+selinux.option1-desc=Default: Prints warnings instead of enforcing
+selinux.option2=Enforcing
+selinux.option2-desc=Policy is enforced
+
+bind.title=Custom Mode
+bind.subtitle=Select to set System-less SuperSU compatibility-mode:
+bind.option=
+bind.option1=BINDSYSTEMXBIN
+bind.option1-desc=System-less SuperSU compatibility-mode for unsupported apps (ie. ES File Explorer)
+
+cpusets.title=Custom Mode
+cpusets.subtitle=Select to move invisible apps to A53 LITTLE cores:
+cpusets.option=
+cpusets.option1=Invisible CPUSETS
+cpusets.option1-desc=All background applications are prohibited from using big (A57) cores to give you better battery life
+
+swaps.title=Custom Mode
+swaps.subtitle=Select to enable VNSwap:
+swaps.option=
+swaps.option1=VNSwap
+swaps.option1-desc=Virtual NAND swap device to improve multitasking
+
+mounts.title=Custom Mode
+mounts.subtitle=Select to enable to mount all EXT4 file systems with lazytime:
+mounts.option=
+mounts.option1=Lazytime Mount
+mounts.option1-desc=Reduce periodic journal writes on data & cache FS (better battery life, flash lifespan and performance)
+
+placebo.title=Custom Mode
+placebo.subtitle=Select to remove placebo ROM Tweaks:
+placebo.option=
+placebo.option1=init.d
+placebo.option1-desc=Delete interfering bullshit placebo ROM scripts & 'tweaks' from init.d folder
+placebo.option=
+placebo.option2=build.prop
+placebo.option2-desc=Delete interfering bullshit placebo ROM 'tweaks' from build.prop
+
+gov.title=Custom Mode
+gov.subtitle=Select default CPU Governor:
+gov.option=
+gov.option1=Interactive
+gov.option1-desc=Default: Best all-round scheduler
+gov.option2=Ktoonservative
+gov.option2-desc=Hotplug governor by Ktoonsez
+gov.option3=Performance
+gov.option3-desc=Locks all cores to max freq unless thermally throttled
+
+sched.title=Custom Mode
+sched.subtitle=Select default IO Scheduler:
+sched.option=
+sched.option1=ROW
+sched.option1-desc=Default: prefer read over write
+sched.option2=CFQ
+sched.option2-desc=Stock: Optimised completely fair queuing scheduler, generally good in all situations
+sched.option3=FIOPS
+sched.option3-desc=Fair in out performance scheduler
+sched.option4=NOOP
+sched.option4-desc=Uses the least CPU and offers reasonable all round performance
+sched.option5=BFQ
+sched.option5-desc=Budget Fair Queuing is good for multitasking but has lower performance
+sched.option6=SIOPLUS
+sched.option6-desc=Based on SIO with improved read and write speeds
+#sched.option7=DEADLINE
+#sched.option7-desc=May offer the fastest performance but can use more power
+
+default.title=Custom Mode
+default.subtitle=Select to enable as default:
+default.option-1=
+default.option1=CortexBrain
+default.option1-desc=Disabling will prevent screen state auto functions from working. ie. Doze, ALPM & Multicore
+default.option-2=
+default.option2=Crontab
+default.option2-desc=Auto run maintenance scripts in the background at a specified time or interval
+
+synapse.title=Custom Mode
+synapse.subtitle=Select to REMOVE from what is VISUALLY DISPLAYED in Synapse:
+synapse.option=Synapse Page Layout REMOVAL
+synapse.option1=A57 CPU
+synapse.option1-desc=A57 big cores frequency scaling
+synapse.option2=A57 Volt
+synapse.option2-desc=Atlas HPM & frequency voltage controls
+synapse.option3=A53
+synapse.option3-desc=A53 LITTLE cores frequency scaling
+synapse.option4=A53 Volt
+synapse.option4-desc=Apollo HPM & frequency voltage controls
+synapse.option5=CPU Gov
+synapse.option5-desc=CPU governors & interactive profiles
+synapse.option6=A57 Gov
+synapse.option6-desc=A57 big cores governor tunables
+synapse.option7=A53 Gov
+synapse.option7-desc=A53 LITTLE cores governor tunables
+synapse.option8=Multicore
+synapse.option8-desc=Hotplug, HMP & multicore controls
+synapse.option9=CPU Stats
+synapse.option9-desc=Time in state for online CPU0 & CPU4 cores
+synapse.option10=Boost
+synapse.option10-desc=Key & touchKey input-booster profiles
+synapse.option11=GPU
+synapse.option11-desc=GPU frequency scaling & DVFS controls
+synapse.option12=GPU Volt
+synapse.option12-desc=Mali HPM & GPU voltage controls
+synapse.option13=Thermal
+synapse.option13-desc=CPU, GPU, memory & ISP voltage controls. Your own risk!
+synapse.option14=Bus
+synapse.option14-desc=HPM, memory, internal & ISP frequency voltage controls
+synapse.option15=IO
+synapse.option15-desc=IO scheduler, read-ahead & tunables
+synapse.option16=Memory
+synapse.option16-desc=LMK, UKSM, VNSwap, VM, dynamic dirty page writeback, dynamic Fsync & more
+synapse.option17=Advanced
+synapse.option17-desc=Entropy, gentle fair Sleepers, arch power, randomisation, freeze timeout
+synapse.option18=Power Suspend
+synapse.option18-desc=A replacement for the early_suspend / late_resume driver
+synapse.option19=Doze
+synapse.option19-desc=Doze profles & parameter controls
+synapse.option20=Wakelocks
+synapse.option20-desc=Control of various common kernel & ROM wakelocks. Your own risk!
+synapse.option21=Audio
+synapse.option21-desc=Clearwater audio controls at board level rather than software gains
+synapse.option22=Battery
+synapse.option22-desc=Battery charging controls for various input & charge currents & more
+synapse.option23=LED
+synapse.option23-desc=Control LED delay & fade-in/out time period for missed notifications
+synapse.option24=Screen
+synapse.option24-desc=LCD ALPM, Sweep-2-Sleep & touchkey controls
+synapse.option25=Network
+synapse.option25-desc=TCP congestion, WiFi power mode, security, DNS controls & more
+synapse.option26=Security
+synapse.option26-desc=Toggle SELinux between Permissive & Enforcing modes
+synapse.option27=File System
+synapse.option27-desc=Maintenance actions such as optimize databases, FSTrim & clean up
+synapse.option28=CortexBrain
+synapse.option28-desc=Manipulate many kernel settings based on screen state (ON or OFF)
+synapse.option29=Crontab
+synapse.option29-desc=Auto run maintenance scripts in the background at a specified time or interval
+synapse.option30=Storage
+synapse.option30-desc=USB modes: MTP, CD_ROM (drivedroid) or USB_keyboard-mouse
+synapse.option31=Modules
+synapse.option31-desc=CIFS, NTFS, ISO9660_FS, UDF & XPAD
+synapse.option32=Backup & Restore
+synapse.option32-desc=Name, Backup & restore Synapse profiles & boot.img
+
+ini_set.next=Install Now
+ini_set.title=Ready to Install
+ini_set.text1=<b>The wizard is ready to begin installation:</b>
+ini_set.text2=Press '<b>Install Now</b>' to proceed
+ini_set.text3=Press '<b>Back</b>' to review or change your options
+ini_set.text4=Press '<b>Menu</b>' to quit installation
+
+inst.title=Installing
+inst.text=Please wait until it finishes ...
+inst.finish.title=Installation Complete
+inst.finish=Press '<b>Finish</b>' to reboot into TWRP
+inst.finish.button=Finish
+inst.info= is now installed onto your device
