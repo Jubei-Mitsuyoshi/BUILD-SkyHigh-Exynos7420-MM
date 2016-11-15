@@ -165,7 +165,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"Lazytime Mount",
-		description:"Reduce periodic journal writes on data & cache file systems (better battery life, flash lifespan and performance)."
+		description:"Reduce periodic journal writes on data & cache on EXT4 file systems (better battery life, flash lifespan and performance)."
 	}},
 	{ SSpacer:{
 		height:1
@@ -178,7 +178,7 @@ cat << CTAG
 	}},
 	{ SOptionList:{
 		title:"Enable Lazytime Mount",
-		description:"Enable to mount file systems with lazytime. Changing this value requires REBOOT.\n",
+		description:"Enable to mount EXT4 file systems with lazytime. Changing this value requires REBOOT.\n",
 		default:$(cat /data/.SkyHigh/lazytime_mount),
 		action:"generic /data/.SkyHigh/lazytime_mount",
 		values:{

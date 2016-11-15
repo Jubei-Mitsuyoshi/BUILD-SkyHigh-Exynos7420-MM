@@ -158,11 +158,11 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 			# LAZYTIME MOUNT
 			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "1" then
-				ui_print("@  Enabling Lazytime Mount");
+				ui_print("@  Enabling EXT4 Lazytime Mount");
 				run_program("/tmp/defaults.sh", "LAZYTIME");
 			endif;
 			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "0" then
-				ui_print("@  Disabling Lazytime Mount");
+				ui_print("@  Disabling EXT4 Lazytime Mount");
 				delete("/data/.SkyHigh/lazytime_mount");
 			endif;
 

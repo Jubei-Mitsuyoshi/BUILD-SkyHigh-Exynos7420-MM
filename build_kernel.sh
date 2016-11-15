@@ -657,7 +657,7 @@ read -p "${grn}Patch ramdisk for UX beta firmware? (y/n) > ${txtrst}";
 	fi;
 
 echo
-read -p "${grn}Patch ramdisk for lazytime mount? (y/n) > ${txtrst}";
+read -p "${grn}Patch ramdisk for lazytime mount for EXT$ FS? (y/n) > ${txtrst}";
 
 	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ]; then
 		sleep 1
