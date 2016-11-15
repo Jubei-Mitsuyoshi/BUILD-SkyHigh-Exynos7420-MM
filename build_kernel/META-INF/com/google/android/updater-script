@@ -30,10 +30,10 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 		set_progress(0.1);
 
 			# CLEAR SYNAPSE
-			ui_print(" ");
-			ui_print("Clear Synapse data for clean install...");
-			delete("/data/dalvik-cache/profiles/com.af.synapse");
-			delete_recursive("/data/data/com.af.synapse");
+#			ui_print(" ");
+#			ui_print("Clear Synapse data for clean install...");
+#			delete("/data/dalvik-cache/profiles/com.af.synapse");
+#			delete_recursive("/data/data/com.af.synapse");
 
 		set_progress(0.15);
 
@@ -81,7 +81,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
 
 			# RESET CRONTAB TASKS
-			delete_recursive("/data/crontab");
+#			delete_recursive("/data/crontab");
 
 		set_progress(0.35);
 
@@ -99,10 +99,10 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 		set_progress(0.1);
 
 			# CLEAR SYNAPSE
-			ui_print(" ");
-			ui_print("Clear Synapse data for clean install...");
-			delete("/data/dalvik-cache/profiles/com.af.synapse");
-			delete_recursive("/data/data/com.af.synapse");
+#			ui_print(" ");
+#			ui_print("Clear Synapse data for clean install...");
+#			delete("/data/dalvik-cache/profiles/com.af.synapse");
+#			delete_recursive("/data/data/com.af.synapse");
 
 		set_progress(0.15);
 
@@ -253,7 +253,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			endif;
 
 			# RESET CRONTAB TASKS
-			delete_recursive("/data/crontab");
+#			delete_recursive("/data/crontab");
 
 		set_progress(0.35);
 
