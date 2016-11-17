@@ -67,6 +67,9 @@ echo
 	if [ -e $EXTRACT/ramdisk.lzo ]; then
 		rm -rf $EXTRACT/ramdisk.lzo
 	fi;
+	if [ -e $EXTRACT/ramdisk.gz ]; then
+		rm -rf $EXTRACT/ramdisk.gz
+	fi;
 	if [ -e $EXTRACT/ramdisk/lib/modules/ ]; then
 		cd $EXTRACT || exit 1;
 		find . -type f -name "*.ko" -exec rm -f {} \;
@@ -108,7 +111,7 @@ echo
 	cd ${KERNELDIR} || exit 1;
 
 	if [ $USER != "root" ]; then
-		make CONFIG_DEBUG_SECTION_MISMATCH=y -j5 Image ARCH=arm64
+		make CONFIG_DEBUG_SECTION_MISMATCH=y -j$(($NUMBEROFCPUS + 1)) Image ARCH=arm64;
 	else
 		make -j$(($NUMBEROFCPUS + 1)) Image ARCH=arm64;
 	fi;
@@ -657,7 +660,7 @@ read -p "${grn}Patch ramdisk for UX beta firmware? (y/n) > ${txtrst}";
 	fi;
 
 echo
-read -p "${grn}Patch ramdisk for lazytime mount for EXT$ FS? (y/n) > ${txtrst}";
+read -p "${grn}Patch ramdisk for lazytime mount for EXT4 FS? (y/n) > ${txtrst}";
 
 	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ]; then
 		sleep 1
@@ -749,6 +752,19 @@ echo
 echo "${bldcya}***** Make ramdisk *****${txtrst}"
 echo
 
+read -p "${grn}Choose either lzo or gzip de/compression algorithm (l/g) > ${txtrst}";
+	if [ "$REPLY" == "l" -o "$REPLY" == "L" ]; then
+		COMP="lzop -9"
+		EXT="lzo";
+		echo "LZO selected";
+	else
+		COMP="gzip -9"
+		EXT="gz";
+		echo "GZIP selected";
+	fi;
+
+	sleep 1
+
 	# fix ramdisk permissions
 	cd ${KERNELDIR}/$BK/patch || exit 1;
 	cp ./ramdisk_fix_permissions.sh $EXTRACT/ramdisk/ramdisk_fix_permissions.sh
@@ -756,11 +772,12 @@ echo
 	chmod 0777 ramdisk_fix_permissions.sh
 	./ramdisk_fix_permissions.sh 2>/dev/null
 	rm -f ramdisk_fix_permissions.sh
+	echo
 	echo "Permissions fixed"
 
 	# make ramdisk
 	cd ${KERNELDIR}/$BK/tools || exit 1;
-	./mkbootfs $EXTRACT/ramdisk | lzop -9 > $EXTRACT/ramdisk.lzo
+	./mkbootfs $EXTRACT/ramdisk | $COMP > $EXTRACT/ramdisk.$EXT
 
 echo "Ramdisk done"
 
@@ -773,10 +790,10 @@ echo
 
 read -p "${grn}Use Stock dt.img? (y/n) > ${txtrst}";
 	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ]; then
-		./mkbootimg --kernel $EXTRACT/Image --dt $EXTRACT/dt.img --board $board --ramdisk $EXTRACT/ramdisk.lzo --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
+		./mkbootimg --kernel $EXTRACT/Image --dt $EXTRACT/dt.img --board $board --ramdisk $EXTRACT/ramdisk.$EXT --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
 		echo "Build with stock dt.img";
 	else
-		./mkbootimg --kernel $EXTRACT/Image --dt ${KERNELDIR}/dt.img --board $board --ramdisk $EXTRACT/ramdisk.lzo --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
+		./mkbootimg --kernel $EXTRACT/Image --dt ${KERNELDIR}/dt.img --board $board --ramdisk $EXTRACT/ramdisk.$EXT --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
 		echo "Build with custom dt.img";
 	fi;
 
@@ -787,6 +804,7 @@ read -p "${grn}Use Stock dt.img? (y/n) > ${txtrst}";
 	if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
 		echo
 		echo "${bldred}$TARGET${txtrst} ${red}boot.img size larger than partition size !!${txtrst}" 1>&2;
+		echo "Please change your de/compression algorithm !!";
 		cd ${KERNELDIR} || exit 1;
 
 		echo

@@ -1,9 +1,9 @@
 ui_print(" ");
 
 ui_print("************************************");
-ui_print("*	SkyHigh Kernel                ");
-ui_print("*	Exynos7420 CM13               ");
-ui_print("*	by UpInTheAir                 ");
+ui_print("*          SkyHigh Kernel           ");
+ui_print("*          Exynos7420 TW            ");
+ui_print("*          by UpInTheAir            ");
 ui_print("************************************");
 
 # MOUNT
@@ -507,8 +507,8 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 		ui_print(" ");
 		ui_print("************************************");
-		ui_print("*	SkyHigh Kernel                ");
-		ui_print("*	Installation Completed!       ");
+		ui_print("*          SkyHigh Kernel           ");
+		ui_print("*     Installation Completed!       ");
 		ui_print("************************************");
 		ui_print(" ");
 
