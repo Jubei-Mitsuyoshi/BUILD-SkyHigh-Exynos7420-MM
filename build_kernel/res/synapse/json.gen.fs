@@ -152,33 +152,35 @@ cat << CTAG
 	{ SSpacer:{
 		height:1
 	}},
-	{ SPane:{
-		title:"Wipe Options",
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Wipe Cache Reboot",
-		action:"devtools wipe_cache_reboot"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Wipe Dalvik-Cache Reboot",
-		action:"devtools wipe_dalvik_reboot"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Wipe Cache & Dalvik-Cache Reboot",
-		action:"devtools wipe_cache-dalvik_reboot"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
+	`if grep -q 'cache ext4' /proc/mounts && grep -q 'data ext4' /proc/mounts ; then
+		echo '{ SPane:{
+			title:"Wipe Options",
+		}},
+		{ SSpacer:{
+			height:1
+		}},
+		{ SButton:{
+			label:"Wipe Cache Reboot",
+			action:"devtools wipe_cache_reboot"
+		}},
+		{ SSpacer:{
+			height:1
+		}},
+		{ SButton:{
+			label:"Wipe Dalvik-Cache Reboot",
+			action:"devtools wipe_dalvik_reboot"
+		}},
+		{ SSpacer:{
+			height:1
+		}},
+		{ SButton:{
+			label:"Wipe Cache & Dalvik-Cache Reboot",
+			action:"devtools wipe_cache-dalvik_reboot"
+		}},
+		{ SSpacer:{
+			height:1
+		}},'
+	fi;`
 	{ SPane:{
 		title:"Wipe Junk Folders"
 	}},
