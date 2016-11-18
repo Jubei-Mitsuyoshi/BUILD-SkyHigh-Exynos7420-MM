@@ -180,6 +180,19 @@ if prop("menu.prop","selected") == "1" then
 		);
 
 		checkbox(
+			"<~knox.title>",
+			"<~knox.subtitle>",
+
+			"icons/customize",
+
+			"knox.prop",
+
+			"<~>",				"",							2,
+			"<~knox.option1>",		"<~knox.option1-desc>",					1
+
+		);
+
+		checkbox(
 			"<~bind.title>",
 			"<~bind.subtitle>",
 

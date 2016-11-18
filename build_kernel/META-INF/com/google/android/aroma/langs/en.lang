@@ -93,6 +93,12 @@ selinux.option1-desc=Default: Prints warnings instead of enforcing
 selinux.option2=Enforcing
 selinux.option2-desc=Policy is enforced
 
+knox.title=Custom Mode
+knox.subtitle=Select to REMOVE KNOX warning:
+knox.option=
+knox.option1=Remove SecurityLogAgent.apk
+knox.option1-desc=Stop annoying warning about modified device 'Unauthorized actions have been detected...'
+
 bind.title=Custom Mode
 bind.subtitle=Select to set System-less SuperSU compatibility-mode:
 bind.option=

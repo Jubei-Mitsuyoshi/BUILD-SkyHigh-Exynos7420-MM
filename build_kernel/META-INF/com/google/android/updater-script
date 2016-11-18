@@ -53,6 +53,12 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			# SELINUX PERMISSIVE
 			run_program("/tmp/defaults.sh", "PERMISSIVE");
 
+			# KNOX
+			delete_recursive("/system/app/SecurityLogAgent");
+			delete_recursive("/data/app/com.samsung.android.securitylogagent");
+			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
+			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
+
 			# BINDSYSTEMXBIN
 			run_program("/tmp/defaults.sh", "BIND");
 
@@ -128,6 +134,15 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "2" then
 				ui_print("@  Setting SELinux Enforcing");
 				run_program("/tmp/defaults.sh", "ENFORCING");
+			endif;
+
+			# KNOX
+			if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "1" then
+				ui_print("@  Removing SecurityLogAgent.apk");
+				delete_recursive("/system/app/SecurityLogAgent");
+				delete_recursive("/data/app/com.samsung.android.securitylogagent");
+				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
+				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
 			endif;
 
 			# BINDSYSTEMXBIN
