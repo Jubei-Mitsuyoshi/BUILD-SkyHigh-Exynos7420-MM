@@ -222,6 +222,18 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 				run_program("/tmp/defaults.sh", "PERFORMANCE");
 			endif;
 
+			# ONDEMAND
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "4" then
+				ui_print("@  Setting Ondemand Governor");
+				run_program("/tmp/defaults.sh", "ONDEMAND");
+			endif;
+
+			# CONSERVATIVE
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "5" then
+				ui_print("@  Setting Conservative Governor");
+				run_program("/tmp/defaults.sh", "CONSERVATIVE");
+			endif;
+
 			# ROW
 			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
 				ui_print("@  Setting ROW Scheduler");

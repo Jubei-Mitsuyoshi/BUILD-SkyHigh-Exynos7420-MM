@@ -271,7 +271,9 @@ if prop("menu.prop","selected") == "1" then
 			"<~>",				"",							2,
 			"<~gov.option1>",		"<~gov.option1-desc>",					1,
 			"<~gov.option2>",		"<~gov.option2-desc>",					0,
-			"<~gov.option3>",		"<~gov.option3-desc>",					0
+			"<~gov.option3>",		"<~gov.option3-desc>",					0,
+			"<~gov.option4>",		"<~gov.option4-desc>",					0,
+			"<~gov.option5>",		"<~gov.option5-desc>",					0
 
 		);
 

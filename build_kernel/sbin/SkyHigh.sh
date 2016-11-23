@@ -144,6 +144,12 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 	elif [ "$(grep "cpugov_performance" /system/SkyHigh.prop)" != "" ]; then
 		echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
 		echo "performance" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor;
+	elif [ "$(grep "cpugov_ondemand" /system/SkyHigh.prop)" != "" ]; then
+		echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
+		echo "ondemand" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor;
+	elif [ "$(grep "cpugov_conservative" /system/SkyHigh.prop)" != "" ]; then
+		echo "conservative" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
+		echo "conservative" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor;
 	fi;
 
 

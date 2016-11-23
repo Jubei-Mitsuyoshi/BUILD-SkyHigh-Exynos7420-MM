@@ -134,6 +134,10 @@ elif [ "$1" = "KTOONSERVATIVE" ]; then
 	echo "cpugov_ktoonservative" >> /system/SkyHigh.prop
 elif [ "$1" = "PERFORMANCE" ]; then
 	echo "cpugov_performance" >> /system/SkyHigh.prop
+elif [ "$1" = "ONDEMAND" ]; then
+	echo "cpugov_ondemand" >> /system/SkyHigh.prop
+elif [ "$1" = "CONSERVATIVE" ]; then
+	echo "cpugov_conservative" >> /system/SkyHigh.prop
 fi;
 
 # IO SCHEDULER
