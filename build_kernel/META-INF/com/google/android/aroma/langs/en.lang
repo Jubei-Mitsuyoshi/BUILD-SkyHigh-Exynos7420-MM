@@ -145,6 +145,8 @@ gov.option4=Ondemand
 gov.option4-desc=Quickly increase CPU frequency when the load reaches a set threshold. Great for UI fluidity at the expense of battery
 gov.option5=Conservative
 gov.option5-desc=Scales up slowly to save battery
+gov.option6=ConservativeX
+gov.option6-desc=Less aggressive version of Conservative
 
 sched.title=Custom Mode
 sched.subtitle=Select default IO Scheduler:

@@ -234,6 +234,12 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 				run_program("/tmp/defaults.sh", "CONSERVATIVE");
 			endif;
 
+			# CONSERVATIVEX
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "6" then
+				ui_print("@  Setting ConservativeX Governor");
+				run_program("/tmp/defaults.sh", "CONSERVATIVEX");
+			endif;
+
 			# ROW
 			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
 				ui_print("@  Setting ROW Scheduler");

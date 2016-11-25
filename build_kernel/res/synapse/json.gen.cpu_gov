@@ -28,6 +28,7 @@ cat << CTAG
 				on:APPLY,
 				do:[ REFRESH, APPLY ],
 				to:[
+					"/sys/devices/system/cpu/cpufreq",
 					"/sys/devices/system/cpu/cpu4/cpufreq",
 					"/sys/devices/system/cpu/cpu0/cpufreq"
 				],
@@ -36,6 +37,7 @@ cat << CTAG
 				on:REFRESH,
 				do:REFRESH,
 				to:[
+					"/sys/devices/system/cpu/cpufreq",
 					"/sys/devices/system/cpu/cpu4/cpufreq",
 					"/sys/devices/system/cpu/cpu0/cpufreq"
 				],

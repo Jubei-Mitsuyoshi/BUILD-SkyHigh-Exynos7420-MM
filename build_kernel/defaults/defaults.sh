@@ -138,6 +138,8 @@ elif [ "$1" = "ONDEMAND" ]; then
 	echo "cpugov_ondemand" >> /system/SkyHigh.prop
 elif [ "$1" = "CONSERVATIVE" ]; then
 	echo "cpugov_conservative" >> /system/SkyHigh.prop
+elif [ "$1" = "CONSERVATIVEX" ]; then
+	echo "cpugov_conservativex" >> /system/SkyHigh.prop
 fi;
 
 # IO SCHEDULER

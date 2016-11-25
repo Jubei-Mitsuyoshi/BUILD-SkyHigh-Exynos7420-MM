@@ -150,6 +150,9 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 	elif [ "$(grep "cpugov_conservative" /system/SkyHigh.prop)" != "" ]; then
 		echo "conservative" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
 		echo "conservative" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor;
+	elif [ "$(grep "cpugov_conservativex" /system/SkyHigh.prop)" != "" ]; then
+		echo "conservativex" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor;
+		echo "conservativex" > /sys/devices/system/cpu/cpu4/cpufreq/scaling_governor;
 	fi;
 
 

@@ -112,6 +112,29 @@ cat << CTAG
 			"stats"
 		]
 	}},
+	{ STreeDescriptor:{
+		path:"/sys/devices/system/cpu/cpufreq",
+		generic: {
+			directory: {
+				STreeDescriptor:{
+					generic: {
+						directory: {},
+						element: {
+							SGeneric: { title:"@BASENAME" }
+						}
+					},
+					exclude: [
+						"sampling_rate_min"
+					]
+				},
+			}
+		},
+		exclude: [
+			"all_time_in_state",
+			"bL_all_time_in_state",
+			"mp-cpufreq"
+		]
+	}},
     ]
 }
 CTAG
