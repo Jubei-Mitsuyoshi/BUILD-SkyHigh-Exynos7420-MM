@@ -212,7 +212,7 @@ cat << CTAG
 	{ SOptionList:{
 		title:"Enable Dynamic FSYNC",
 		description:" ",
-		default:0,
+		default:1,
 		action:"generic /sys/kernel/dyn_fsync/Dyn_fsync_active",
 		values:{
 			0:"Disabled", 1:"Enabled"
