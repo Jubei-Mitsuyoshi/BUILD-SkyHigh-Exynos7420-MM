@@ -124,6 +124,7 @@ cat << CTAG
 						}
 					},
 					exclude: [
+						"sampling_rate",
 						"sampling_rate_min"
 					]
 				},
