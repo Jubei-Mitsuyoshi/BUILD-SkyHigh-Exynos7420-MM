@@ -19,7 +19,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
 		title:"PowerSuspend State",
@@ -31,7 +31,19 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
+	}},
+	{ SOptionList:{
+		title:"PowerSuspend Debugging",
+		description:"Enable here to print state to kernel log.\n",
+		default:0,
+		action:"generic /sys/module/powersuspend/parameters/debug_mask",
+		values:{
+			0:"Disabled", 1:"Enabled"
+		}
+	}},
+	{ SSpacer:{
+		height:2
 	}},
 	{ SButton:{
 		label:"PowerSuspend version",
