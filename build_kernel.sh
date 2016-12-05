@@ -790,10 +790,31 @@ echo
 
 read -p "${grn}Use Stock dt.img? (y/n) > ${txtrst}";
 	if [ "$REPLY" == "y" -o "$REPLY" == "Y" ]; then
-		./mkbootimg --kernel $EXTRACT/Image --dt $EXTRACT/dt.img --board $board --ramdisk $EXTRACT/ramdisk.$EXT --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
+
+		./mkbootimg \
+			--kernel $EXTRACT/Image \
+			--dt $EXTRACT/dt.img \
+			--board $board \
+			--ramdisk $EXTRACT/ramdisk.$EXT \
+			--base 0x10000000 \
+			--kernel_offset 0x00008000 \
+			--ramdisk_offset 0x01000000 \
+			--tags_offset 0x00000100 \
+			--pagesize 2048 -o $EXTRACT/boot.img
+
 		echo "Build with stock dt.img";
 	else
-		./mkbootimg --kernel $EXTRACT/Image --dt ${KERNELDIR}/dt.img --board $board --ramdisk $EXTRACT/ramdisk.$EXT --base 0x10000000 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 0x00000100 --pagesize 2048 -o $EXTRACT/boot.img;
+		./mkbootimg \
+			--kernel $EXTRACT/Image \
+			--dt ${KERNELDIR}/dt.img \
+			--board $board \
+			--ramdisk $EXTRACT/ramdisk.$EXT \
+			--base 0x10000000 \
+			--kernel_offset 0x00008000 \
+			--ramdisk_offset 0x01000000 \
+			--tags_offset 0x00000100 \
+			--pagesize 2048 -o $EXTRACT/boot.img
+
 		echo "Build with custom dt.img";
 	fi;
 
