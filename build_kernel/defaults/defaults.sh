@@ -140,6 +140,8 @@ elif [ "$1" = "CONSERVATIVE" ]; then
 	echo "cpugov_conservative" >> /system/SkyHigh.prop
 elif [ "$1" = "CONSERVATIVEX" ]; then
 	echo "cpugov_conservativex" >> /system/SkyHigh.prop
+elif [ "$1" = "CHILL" ]; then
+	echo "cpugov_chill" >> /system/SkyHigh.prop
 fi;
 
 # IO SCHEDULER

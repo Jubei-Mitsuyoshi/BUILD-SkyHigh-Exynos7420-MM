@@ -274,7 +274,8 @@ if prop("menu.prop","selected") == "1" then
 			"<~gov.option3>",		"<~gov.option3-desc>",					0,
 			"<~gov.option4>",		"<~gov.option4-desc>",					0,
 			"<~gov.option5>",		"<~gov.option5-desc>",					0,
-			"<~gov.option6>",		"<~gov.option6-desc>",					0
+			"<~gov.option6>",		"<~gov.option6-desc>",					0,
+			"<~gov.option7>",		"<~gov.option7-desc>",					0
 
 		);
 

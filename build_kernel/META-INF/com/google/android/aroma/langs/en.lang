@@ -147,6 +147,8 @@ gov.option5=Conservative
 gov.option5-desc=Scales up slowly to save battery
 gov.option6=ConservativeX
 gov.option6-desc=Less aggressive version of Conservative
+gov.option7=Chill
+gov.option7-desc=Similar to 'Conservative', but optimized for devices that go into suspended or display off states often
 
 sched.title=Custom Mode
 sched.subtitle=Select default IO Scheduler:
@@ -158,7 +160,7 @@ sched.option2-desc=Stock: Optimised completely fair queuing scheduler, generally
 sched.option3=FIOPS
 sched.option3-desc=Fair in out performance scheduler
 sched.option4=NOOP
-sched.option4-desc=Uses the least CPU and offers reasonable all round performance
+sched.option4-desc=Uses the least CPU and offers reasonable all-round performance
 sched.option5=BFQ
 sched.option5-desc=Budget Fair Queuing is good for multitasking but has lower performance
 sched.option6=SIOPLUS

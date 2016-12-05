@@ -240,6 +240,12 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 				run_program("/tmp/defaults.sh", "CONSERVATIVEX");
 			endif;
 
+			# CHILL
+			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "7" then
+				ui_print("@  Setting Chill Governor");
+				run_program("/tmp/defaults.sh", "CHILL");
+			endif;
+
 			# ROW
 			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
 				ui_print("@  Setting ROW Scheduler");
