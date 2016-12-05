@@ -85,7 +85,8 @@ cat << CTAG
 						"lockout_hotplug_screen_on_core_3",
 						"lockout_hotplug_screen_off_core_1",
 						"lockout_hotplug_screen_off_core_2",
-						"lockout_hotplug_screen_off_core_3"
+						"lockout_hotplug_screen_off_core_3",
+						"down_threshold_suspended"
 					]
 				},
 			}
