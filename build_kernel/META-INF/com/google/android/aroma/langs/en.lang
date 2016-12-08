@@ -85,6 +85,12 @@ install.option1-desc=Recommend: Install with stable default settings & full Syna
 install.option2=Custom Mode
 install.option2-desc=Customize settings & Synapse layout before installation
 
+reset.title=Custom Mode
+reset.subtitle=Select to RESET Synapse app:
+reset.option=
+reset.option1=Reset Synapse
+reset.option1-desc=Reset Synapse app settings for clean install
+
 selinux.title=Custom Mode
 selinux.subtitle=Select default SELinux Security Policy:
 selinux.option=

@@ -38,14 +38,6 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 		set_progress(0.1);
 
-			# CLEAR SYNAPSE
-#			ui_print(" ");
-#			ui_print("Clear Synapse data for clean install...");
-#			delete("/data/dalvik-cache/profiles/com.af.synapse");
-#			delete_recursive("/data/data/com.af.synapse");
-
-		set_progress(0.15);
-
 			# FLASH KERNEL
 			ui_print(" ");
 			ui_print("Extracting Kernel files...");
@@ -58,6 +50,9 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 			# DEFAULTS
 			delete("/system/SkyHigh.prop");
+
+			# SYNAPSE
+			delete_recursive("/data/data/com.af.synapse/databases");
 
 			# SELINUX PERMISSIVE
 			run_program("/tmp/defaults.sh", "PERMISSIVE");
@@ -96,7 +91,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
 
 			# RESET CRONTAB TASKS
-#			delete_recursive("/data/crontab");
+			delete_recursive("/data/crontab");
 
 		set_progress(0.35);
 
@@ -113,14 +108,6 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 		set_progress(0.1);
 
-			# CLEAR SYNAPSE
-#			ui_print(" ");
-#			ui_print("Clear Synapse data for clean install...");
-#			delete("/data/dalvik-cache/profiles/com.af.synapse");
-#			delete_recursive("/data/data/com.af.synapse");
-
-		set_progress(0.15);
-
 			# FLASH KERNEL
 			ui_print(" ");
 			ui_print("Extracting Kernel files...");
@@ -132,6 +119,12 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			ui_print(" ");
 			ui_print("@ USER selected Synapse & Kernel defaults :");
 			delete("/system/SkyHigh.prop");
+
+			# SYNAPSE
+			if file_getprop("/tmp/aroma-data/reset.prop","item.1.1") == "1" then
+				ui_print("@  Reset Synapse");
+				delete_recursive("/data/data/com.af.synapse/databases");
+			endif;
 
 			# SELINUX PERMISSIVE
 			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "1" then
@@ -301,7 +294,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			endif;
 
 			# RESET CRONTAB TASKS
-#			delete_recursive("/data/crontab");
+			delete_recursive("/data/crontab");
 
 		set_progress(0.35);
 

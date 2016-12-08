@@ -165,6 +165,19 @@ if prop("menu.prop","selected") == "1" then
 
 	if prop("install.prop","selected.1") == "2" then
 
+		checkbox(
+			"<~reset.title>",
+			"<~reset.subtitle>",
+
+			"icons/customize",
+
+			"reset.prop",
+
+			"<~>",				"",							2,
+			"<~reset.option1>",		"<~reset.option1-desc>",				1
+
+		);
+
 		selectbox(
 			"<~selinux.title>",
 			"<~selinux.subtitle>",
