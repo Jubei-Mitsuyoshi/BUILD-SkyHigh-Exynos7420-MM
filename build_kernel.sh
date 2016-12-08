@@ -195,8 +195,6 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 		backup_file $EXTRACT/ramdisk/init.rc;
 		backup_file $EXTRACT/ramdisk/init.rilcommon.rc;
 		backup_file $EXTRACT/ramdisk/init.samsungexynos7420.rc;
-		backup_file $EXTRACT/ramdisk/fstab.samsungexynos7420;
-		backup_file $EXTRACT/ramdisk/fstab.samsungexynos7420.fwup;
 
 		# default.prop
 		if [ "$TARGET" == "G928F" ]; then
@@ -370,25 +368,6 @@ read -p "${grn}Patch ramdisk with SkyHigh mods? (y/n) > ${txtrst}";
 			remove_line $EXTRACT/ramdisk/init.samsungexynos7420.rc "    write /proc/sys/vm/dirty_background_bytes";
 		else
 			echo ""
-		fi;
-
-		# fstab.samsungexynos7420
-		if [ "$(grep "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	f2fs" $EXTRACT/ramdisk/fstab.samsungexynos7420)" != "" ]; then
-			echo ""
-		else
-			insert_line $EXTRACT/ramdisk/fstab.samsungexynos7420 "# SkyHigh KERNEL" before "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	ext4" "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	f2fs	nosuid,nodev,noatime,discard,flush_merge							wait,check,formattable";
-		fi;
-		if [ "$(grep "/dev/block/platform/15570000.ufs/by-name/USERDATA	/data	f2fs" $EXTRACT/ramdisk/fstab.samsungexynos7420)" != "" ]; then
-			echo ""
-		else
-			insert_line $EXTRACT/ramdisk/fstab.samsungexynos7420 "# SkyHigh KERNEL" before "/dev/block/platform/15570000.ufs/by-name/USERDATA	/data	ext4" "/dev/block/platform/15570000.ufs/by-name/USERDATA	/data	f2fs	nosuid,nodev,noatime,discard,flush_merge							wait,check,formattable";
-		fi;
-
-		# fstab.samsungexynos7420.fwup
-		if [ "$(grep "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	f2fs" $EXTRACT/ramdisk/fstab.samsungexynos7420.fwup)" != "" ]; then
-			echo ""
-		else
-			insert_line $EXTRACT/ramdisk/fstab.samsungexynos7420.fwup "# SkyHigh KERNEL" before "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	ext4" "/dev/block/platform/15570000.ufs/by-name/CACHE		/cache	f2fs	nosuid,nodev,noatime,discard,flush_merge							wait,check,formattable";
 		fi;
 
 		# SkyHigh init
