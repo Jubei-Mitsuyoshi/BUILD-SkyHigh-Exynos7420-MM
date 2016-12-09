@@ -6,15 +6,15 @@ cat << CTAG
 {
     name:IO,
     elements:[
-    	{ SPane:{
+	{ SPane:{
 		title:"I/O Schedulers",
 		description:"Set the active I/O elevator algorithm. The I/O Scheduler decides how to prioritize and handle I/O requests. More info: <a href='http://timos.me/tm/wiki/ioscheduler'>Wiki</a>"
-    	}},
+	}},
 	{ SSpacer:{
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Storage scheduler",
+		title:"Scheduler",
 		description:" ",
 		default:$(cat /sys/block/sda/queue/scheduler | $BB awk 'NR>1{print $1}' RS=[ FS=]),
 		action:"ioset scheduler",
@@ -33,10 +33,10 @@ cat << CTAG
 		]
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SSeekBar:{
-		title:"Storage Read-Ahead",
+		title:"Read-Ahead",
 		description:" ",
 		max:4096,
 		min:64,
@@ -46,17 +46,17 @@ cat << CTAG
 		action:"ioset queue read_ahead_kb"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SPane:{
 		title:"General I/O Tunables",
-		description:"Set the internal storage general tunables"
+		description:"Set the internal storage general tunables."
 	}},
 	{ SSpacer:{
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Add Random",
+		title:"Add Random",
 		description:"Draw entropy from spinning (rotational) storage.\n",
 		default:0,
 		action:"ioset queue add_random",
@@ -65,10 +65,10 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
-		title:"Enable I/O Stats",
+		title:"IO Stats",
 		description:"Maintain I/O statistics for this storage device. Disabling will break I/O monitoring apps but reduce CPU overhead.\n",
 		default:0,
 		action:"ioset queue iostats",
@@ -77,10 +77,10 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
-		title:"Enable Rotational",
+		title:"Rotational",
 		description:"Treat device as rotational storage.\n",
 		default:0,
 		action:"ioset queue rotational",
@@ -89,7 +89,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
 		title:"No Merges",
@@ -101,7 +101,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
 		title:"RQ Affinity",
@@ -113,7 +113,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SSeekBar:{
 		title:"NR Requests",
@@ -125,7 +125,7 @@ cat << CTAG
 		action:"ioset queue nr_requests"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SPane:{
 		title:"I/O Scheduler Tunables"

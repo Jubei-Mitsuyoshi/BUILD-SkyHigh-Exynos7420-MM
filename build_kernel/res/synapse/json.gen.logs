@@ -25,7 +25,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Android logger",
+		title:"Logcat",
 		description:" ",
 		default:2,
 		action:"generic /sys/module/logger/parameters/log_mode",
@@ -33,7 +33,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SButton:{
 		label:"Save logcat",
@@ -50,7 +50,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Kernel logger",
+		title:"Printk Mode",
 		description:" ",
 		default:1,
 		action:"generic /sys/kernel/printk_mode/printk_mode",
@@ -73,7 +73,7 @@ cat << CTAG
 		action:"log kmsg"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
     ]
 }

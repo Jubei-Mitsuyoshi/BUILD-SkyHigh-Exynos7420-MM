@@ -24,14 +24,14 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Disable KNOX",
+		title:"Freeze KNOX",
 		description:" ",
 		default:$(echo "$(/res/synapse/actions/security knox_security)"),
 		action:"security knox_security",
 		values:[NO_ACTION, Disabled, Enabled,]
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SPane:{
 		title:"SELinux (Security-Enhanced Linux)"
@@ -41,7 +41,7 @@ cat << CTAG
 	}},
 	{ SLiveLabel:{
 		title:"Status",
-		description:"",
+		description:" ",
 		refresh:3000,
 		action:"live selinux_status"
 	}},
@@ -56,7 +56,7 @@ cat << CTAG
 		values:[Enforcing, Permissive,]
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SOptionList:{
 		title:"Force Audit",
@@ -68,7 +68,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
     ]
 }

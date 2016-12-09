@@ -5,7 +5,7 @@ cat << CTAG
     name:"A53 GOV",
     elements:[
 	{ SPane:{
-		title:"A53 Governor tunables",
+		title:"A53 Governor Tunables",
 		description:"The various configuration items which are governor-dependent."
 	}},
 	{ SSpacer:{

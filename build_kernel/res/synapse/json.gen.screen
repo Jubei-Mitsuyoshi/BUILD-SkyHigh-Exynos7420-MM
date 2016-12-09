@@ -8,7 +8,7 @@ cat << CTAG
     elements:[
 	{ SLiveLabel:{
 		title:"Lux",
-		description:"Live ambient light value as read from the light sensor",
+		description:"Live ambient light value as read from the light sensor.",
 		refresh:500,
 		action:"live lux"
 	}},
@@ -16,7 +16,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
-		title:"Display brightness",
+		title:"Display Brightness",
 		description:"Live panel brightness value 0-255",
 		refresh:500,
 		action:"live actual_brightness"
@@ -26,7 +26,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"ALPM (Aggressive Link Power Management)",
-		description:"ALPM is a mechanism for reducing SSD/HDD power consumption. If ALPM is enabled, SSD goes into low-power mode when SSD has no I/O activity. On I/O request, SSD power is resumed. More info: <a href='http://www.fit-pc.com/wiki/index.php/Aggressive_Link_Power_Management_(ALPM)'>Wiki</a>"
+		description:"ALPM is a mechanism for reducing SSD/HDD power consumption. If ALPM is enabled, SSD goes into low-power mode when SSD has no I/O activity. On I/O request, SSD power is resumed.\nMore info: <a href='http://www.fit-pc.com/wiki/index.php/Aggressive_Link_Power_Management_(ALPM)'>Wiki</a>"
 	}},
 	{ SSpacer:{
 		height:1
@@ -39,17 +39,17 @@ cat << CTAG
 		values:[Disabled, Enabled, Auto]
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SSeekBar:{
-		title:"Lux threshold",
+		title:"Lux Threshold",
 		description:"Max ambient light value required to enable 'Auto' LCD ALPM. Requires CortexBrain ENABLED !\n",
 		min:0, max:200, unit:" lx", step:1,
 		default:$(cat /res/synapse/SkyHigh/cortexbrain_lux),
 		action:"hmp /res/synapse/SkyHigh/cortexbrain_lux"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SPane:{
 		title:"Sweep-2-Sleep",
@@ -59,7 +59,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Sweep-2-Sleep",
+		title:"Sweep-2-Sleep",
 		description:"NOTE: Ensure PowerSuspend driver 'State' is DISABLED\n",
 		default:0,
 		action:"generic /sys/sweep2sleep/sweep2sleep",
@@ -68,7 +68,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 			`if [ -f "/sys/devices/virtual/sec/sec_touchkey/input/enabled" ] || [ -f "/sys/devices/virtual/sec/sec_touchkey/key_power_mode" ] || [ -f "/sys/devices/13900000.dsim/tk_brightness_sync" ] || [ -f "/sys/devices/virtual/sec/sec_touchkey/touchkey_brightness" ] || [ -f "/sys/module/mdnie_lite/parameters/elable_toggle_negative" ]; then
 				$BB echo '{ SPane:{
@@ -78,7 +78,7 @@ cat << CTAG
 				if [ -f "/sys/devices/virtual/sec/sec_touchkey/input/enabled" ]; then
 					TK_DIS=\`$BB cat /sys/devices/virtual/sec/sec_touchkey/input/enabled\`
 					$BB echo '{ SOptionList:{
-						title:"Disable Touchkeys",
+						title:"Touchkey Disable",
 						description:"Completely disable touchkey events.\n",
 						default:'$TK_DIS',
 						action:"touchkey tk_disable",
@@ -87,13 +87,13 @@ cat << CTAG
 						}
 					}},'
 					$BB echo '{ SSpacer:{
-						height:1
+						height:2
 					}},'
 				fi
 				if [ -f "/sys/devices/virtual/sec/sec_touchkey/key_power_mode" ]; then
 					TK_PM=\`$BB cat /sys/devices/virtual/sec/sec_touchkey/key_power_mode\`
 					$BB echo '{ SOptionList:{
-						title:"Touchkey Power Mode",
+						title:"Power Mode",
 						description:"Turn off the display by pressing both 'recent' and 'back' keys at the same time.\n",
 						default:'$TK_PM',
 						action:"generic sys/devices/virtual/sec/sec_touchkey/key_power_mode",
@@ -102,13 +102,13 @@ cat << CTAG
 						}
 					}},'
 					$BB echo '{ SSpacer:{
-						height:1
+						height:2
 					}},'
 				fi
 				if [ -f "/sys/devices/13900000.dsim/tk_brightness_sync" ]; then
 					TK_SYNC=\`$BB cat /sys/devices/13900000.dsim/tk_brightness_sync\`
 					$BB echo '{ SOptionList:{
-						title:"Adaptive Touchkey Brightness",
+						title:"Adaptive Brightness Sync",
 						description:"Touchkey brightness changes with panel AUTO brightness at the same time.\n",
 						default:'$TK_SYNC',
 						action:"touchkey tk_brightness_sync",
@@ -117,14 +117,14 @@ cat << CTAG
 						}
 					}},'
 					$BB echo '{ SSpacer:{
-						height:1
+						height:2
 					}},'
 				fi
 				if [ -f "/sys/devices/virtual/sec/sec_touchkey/touchkey_brightness" ]; then
 					TK_BRT=\`$BB cat /sys/devices/virtual/sec/sec_touchkey/touchkey_brightness\`
 					if [ "$TK_BRT" != "" ]; then
 						$BB echo '{ SSeekBar:{
-							title:"Touchkey Brightness",
+							title:"Brightness",
 							description:"Manually set the desired touchkey brightness. Requires Adaptive Touchkey Brightness DISABLED!\n",
 							min:2600, max:3300, unit:"", step:25,
 							default:'$TK_BRT',
@@ -138,7 +138,7 @@ cat << CTAG
 				if [ -f "/sys/module/mdnie_lite/parameters/elable_toggle_negative" ]; then
 					NEG=\`$BB cat /sys/module/mdnie_lite/parameters/elable_toggle_negative\`
 					$BB echo '{ SOptionList:{
-						title:"Negative Effect Toggle",
+						title:"Negative Effect Control",
 						description:"Toggle by quickly tapping the multi-tasking button x4.\n",
 						default:'$NEG',
 						action:"generic sys/module/mdnie_lite/parameters/elable_toggle_negative",
@@ -146,10 +146,10 @@ cat << CTAG
 							0:"Disabled", 1:"Enabled"
 						}
 					}},'
-					$BB echo '{ SSpacer:{
-						height:1
-					}},'
 				fi
+				$BB echo '{ SSpacer:{
+					height:2
+				}},'
 			fi`
     ]
 }

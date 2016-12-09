@@ -12,7 +12,8 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		description:"Jack left channel volume\n",
+		title:"Jack Left Channel Volume",
+		description:" ",
 		min:80, max:150, unit:" dB", weight:0.5, offset:128,
 		default:$(cat /sys/class/misc/arizona_control/hp_left_dvol),
 		action:"generic /sys/class/misc/arizona_control/hp_left_dvol"
@@ -21,7 +22,8 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		description:"Jack right channel volume\n",
+		title:"Jack Right Channel Volume",
+		description:" ",
 		min:80, max:150, unit:" dB", weight:0.5, offset:128,
 		default:$(cat /sys/class/misc/arizona_control/hp_right_dvol),
 		action:"generic /sys/class/misc/arizona_control/hp_right_dvol"
@@ -39,7 +41,7 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SPane:{ 
 		title:"Speaker Volume Control",
@@ -49,25 +51,25 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Earpiece speaker volume",
-		description:"",
+		title:"Earpiece Speaker Volume",
+		description:" ",
 		min:-8, max:16, unit:" dB", weight:0.5,
 		default:$(cat /sys/class/misc/arizona_control/ep_dvol),
                 action:"generic /sys/class/misc/arizona_control/ep_dvol"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},	
 	{ SPane:{ 
 		title:"Main Equalizer (Combined / Left Channel)",
-		description:"The controls use the audio SoC's integrated hardware equalizers. Please keep ENABLED if you wish to use earphones / handsfree whilst in-call !"
+		description:"The controls use the audio SoC's integrated hardware equalizers."
 	}},
 	{ SSpacer:{
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Equalizer",
-		description:"Default is Enabled.\n",
+		title:"Equalizer",
+		description:"Please keep ENABLED if you wish to use earphones / handsfree whilst in-call !\n",
 		default:1,
 		action:"generic /sys/class/misc/arizona_control/switch_eq_hp",
 		values:{
@@ -75,10 +77,10 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SSeekBar:{
-		title:"Band 1 gain",
+		title:"Band 1 Gain",
 		description:"Cutoff-frequency: 25 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_1),
@@ -88,7 +90,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 2 gain",
+		title:"Band 2 Gain",
 		description:"Center-frequency: 200 Hz, bandwidth: 100 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_2),
@@ -98,7 +100,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 3 gain",
+		title:"Band 3 Gain",
 		description:"Center-frequency: 500 Hz, bandwidth: 250 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_3),
@@ -108,7 +110,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 4 gain",
+		title:"Band 4 Gain",
 		description:"Center-frequency: 1000 Hz, bandwidth: 500 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_4),
@@ -118,7 +120,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 5 gain",
+		title:"Band 5 Gain",
 		description:"Center-frequency: 2000 Hz, bandwidth: 1000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_5),
@@ -128,7 +130,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 6 gain",
+		title:"Band 6 Gain",
 		description:"Center-frequency: 4000 Hz, bandwidth: 2000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_6),
@@ -138,7 +140,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 7 gain",
+		title:"Band 7 Gain",
 		description:"Center-frequency: 8000 Hz, bandwidth: 4000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_7),
@@ -148,14 +150,14 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 8 gain",
+		title:"Band 8 Gain",
 		description:"Cutoff-frequency: 16000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpl_gain_8),
                 action:"generic /sys/class/misc/arizona_control/eq_hpl_gain_8"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},	
 	{ SPane:{ 
 		title:"Advanced Stereo Equalizer (Right Channel)",
@@ -165,8 +167,8 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"Enable Per-Channel Controls",
-		description:"Default is Disabled.\n",
+		title:"Per-Channel Controls",
+		description:" ",
 		default:0,
 		action:"generic /sys/class/misc/arizona_control/switch_eq_hp_per_ch",
 		values:{
@@ -174,10 +176,10 @@ cat << CTAG
 		}
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
 	{ SSeekBar:{
-		title:"Band 1 gain",
+		title:"Band 1 Gain",
 		description:"Cutoff-frequency: 25 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_1),
@@ -187,7 +189,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 2 gain",
+		title:"Band 2 Gain",
 		description:"Center-frequency: 200 Hz, bandwidth: 100 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_2),
@@ -197,7 +199,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 3 gain",
+		title:"Band 3 Gain",
 		description:"Center-frequency: 500 Hz, bandwidth: 250 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_3),
@@ -207,7 +209,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 4 gain",
+		title:"Band 4 Gain",
 		description:"Center-frequency: 1000 Hz, bandwidth: 500 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_4),
@@ -217,7 +219,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 5 gain",
+		title:"Band 5 Gain",
 		description:"Center-frequency: 2000 Hz, bandwidth: 1000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_5),
@@ -227,7 +229,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 6 gain",
+		title:"Band 6 Gain",
 		description:"Center-frequency: 4000 Hz, bandwidth: 2000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_6),
@@ -237,7 +239,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 7 gain",
+		title:"Band 7 Gain",
 		description:"Center-frequency: 8000 Hz, bandwidth: 4000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_7),
@@ -247,14 +249,14 @@ cat << CTAG
 		height:1
 	}},
 	{ SSeekBar:{
-		title:"Band 8 gain",
+		title:"Band 8 Gain",
 		description:"Cutoff-frequency: 16000 Hz\n",
 		min:-12, max:12, unit:" dB",
 		default:$(cat /sys/class/misc/arizona_control/eq_hpr_gain_8),
                 action:"generic /sys/class/misc/arizona_control/eq_hpr_gain_8"
 	}},
 	{ SSpacer:{
-		height:1
+		height:2
 	}},
     ]
 }
