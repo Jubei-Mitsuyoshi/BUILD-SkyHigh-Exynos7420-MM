@@ -40,9 +40,13 @@ echo
 echo "${bldcya}***** Clean up first *****${txtrst}"
 echo
 
-	find . -type f -name "*~" -exec rm -f {} \;
-	find . -type f -name "*orig" -exec rm -f {} \;
-	find . -type f -name "*rej" -exec rm -f {} \;
+	find . -type f \( -iname \*.bkp \
+			-o -iname \EMPTY_DIRECTORY \
+			-o -iname \*.old \
+			-o -iname \*.org \
+			-o -iname \*.orig \
+			-o -iname \*.rej \) \
+			| rm -fv {};
 
 	# cleanup previous Image files
 	if [ -e ${KERNELDIR}/dt.img ]; then
@@ -56,8 +60,6 @@ echo
 	fi;
 
 	# cleanup variant ramdisk files
-	find . -type f -name "EMPTY_DIRECTORY" -exec rm -f {} \;
-
 	if [ -e $EXTRACT/boot.img ]; then
 		rm -rf $EXTRACT/boot.img
 	fi;
