@@ -96,7 +96,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"DVFS Governor",
-		description:"Booster may give 	{improved graphic & benchmark performance at the expense of battery."
+		description:"Booster may give improved graphic & benchmark performance at the expense of battery."
 	}},
 	{ SSpacer:{
 		height:1

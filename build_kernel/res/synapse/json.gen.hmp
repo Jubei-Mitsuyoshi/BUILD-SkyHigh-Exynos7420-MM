@@ -173,7 +173,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"Power-Efficient Workqueues",
-		description:"Enable or disable PEWQ will help to reduce power consumption at the cost of slight performance overhead. By enabling this, PEWQ are used for unbound scheduled work to save load on sibling CPU cores and queuing work on CPU 0."
+		description:"PEWQ are used for unbound scheduled work to save load on sibling CPU cores and queuing work on CPU 0. This helps to reduce power consumption at the cost of slight performance overhead."
 	}},
 	{ SSpacer:{
 		height:1
