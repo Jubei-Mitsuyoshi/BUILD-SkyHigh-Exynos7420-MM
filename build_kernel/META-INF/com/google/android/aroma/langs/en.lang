@@ -251,6 +251,12 @@ synapse.option31-desc=CIFS, NTFS, ISO9660_FS, UDF & XPAD
 synapse.option32=Backup & Restore
 synapse.option32-desc=Name, Backup & restore Synapse profiles & boot.img
 
+freeze.attention=Alert
+freeze.attention-desc=If you experience “freeze” during installation, do not worry. The script will install SkyHigh and your selections in the background.\
+\
+Just wait a minute, then press in between the top right ‘home’ key & top left of the ‘back’ key.
+\
+
 ini_set.next=Install Now
 ini_set.title=Ready to Install
 ini_set.text1=<b>The wizard is ready to begin installation:</b>
