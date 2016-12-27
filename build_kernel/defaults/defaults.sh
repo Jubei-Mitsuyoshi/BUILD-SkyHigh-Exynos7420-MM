@@ -159,6 +159,10 @@ elif [ "$1" = "SIOPLUS" ]; then
 	echo "sched_sioplus" >> /system/SkyHigh.prop
 elif [ "$1" = "DEADLINE" ]; then
 	echo "sched_deadline" >> /system/SkyHigh.prop
+elif [ "$1" = "ZEN" ]; then
+	echo "sched_zen" >> /system/SkyHigh.prop
+elif [ "$1" = "MAPLE" ]; then
+	echo "sched_maple" >> /system/SkyHigh.prop
 fi;
 
 # CORTEX

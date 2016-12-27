@@ -307,7 +307,9 @@ if prop("menu.prop","selected") == "1" then
 			"<~sched.option4>",		"<~sched.option4-desc>",				0,
 			"<~sched.option5>",		"<~sched.option5-desc>",				0,
 			"<~sched.option6>",		"<~sched.option6-desc>",				0,
-			"<~sched.option7>",		"<~sched.option7-desc>",				0
+			"<~sched.option7>",		"<~sched.option7-desc>",				0,
+			"<~sched.option8>",		"<~sched.option8-desc>",				0,
+			"<~sched.option9>",		"<~sched.option9-desc>",				0
 
 		);
 

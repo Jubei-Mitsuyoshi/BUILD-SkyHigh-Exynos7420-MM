@@ -281,6 +281,18 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 				run_program("/tmp/defaults.sh", "DEADLINE");
 			endif;
 
+			# ZEN
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "8" then
+				ui_print("@  Setting Zen Scheduler");
+				run_program("/tmp/defaults.sh", "ZEN");
+			endif;
+
+			# MAPLE
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "9" then
+				ui_print("@  Setting Maple Scheduler");
+				run_program("/tmp/defaults.sh", "MAPLE");
+			endif;
+
 			# CORTEX
 			if file_getprop("/tmp/aroma-data/default.prop","item.1.1") == "1" then
 				ui_print("@  Enabling CortexBrain");
