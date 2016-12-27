@@ -78,7 +78,7 @@ cat << CTAG
 	}},
 	{ SSeekBar:{
 		title:"Min Freq",
-		description:"Set the minimum frequency the GPU scales up to.\n",
+		description:"Set the minimum frequency the GPU scales down to.\n",
 		unit:" MHz",
 		default:$(cat /sys/devices/platform/gpusysfs/gpu_min_clock),
 		action:"generic /sys/devices/platform/gpusysfs/gpu_min_clock",
