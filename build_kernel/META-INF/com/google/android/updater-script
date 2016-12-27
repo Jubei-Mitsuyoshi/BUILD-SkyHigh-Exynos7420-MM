@@ -271,15 +271,15 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 			# SIOPLUS
 			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "6" then
-				ui_print("@  Setting SIOPLUS Scheduler");
+				ui_print("@  Setting SIOPlus Scheduler");
 				run_program("/tmp/defaults.sh", "SIOPLUS");
 			endif;
 
 			# DEADLINE
-#			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "7" then
-#				ui_print("@  Setting DEADLINE Scheduler");
-#				run_program("/tmp/defaults.sh", "DEADLINE");
-#			endif;
+			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "7" then
+				ui_print("@  Setting Deadline Scheduler");
+				run_program("/tmp/defaults.sh", "DEADLINE");
+			endif;
 
 			# CORTEX
 			if file_getprop("/tmp/aroma-data/default.prop","item.1.1") == "1" then

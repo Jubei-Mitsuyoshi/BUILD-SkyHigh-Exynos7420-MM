@@ -16,9 +16,15 @@ cat << CTAG
 	{ SOptionList:{
 		title:"Scheduler",
 		description:" ",
-		default:$(cat /sys/block/sda/queue/scheduler | $BB awk 'NR>1{print $1}' RS=[ FS=]),
+		default:$(echo $(/res/synapse/actions/bracket-option /sys/block/sda/queue/scheduler)),
 		action:"ioset scheduler",
-		values:[`while read values; do $BB printf "%s, \n" $values | $BB tr -d '[]'; done < /sys/block/sda/queue/scheduler`],
+		values:[
+`
+			for IOSCHED in \`cat /sys/block/sda/queue/scheduler | $BB sed -e 's/\]//;s/\[//'\`; do
+				echo "\"$IOSCHED\",";
+			done;
+`
+		],
 		notify:[
 			{
 				on:APPLY,

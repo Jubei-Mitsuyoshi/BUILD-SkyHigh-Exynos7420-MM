@@ -153,12 +153,12 @@ elif [ "$1" = "FIOPS" ]; then
 	echo "sched_fiops" >> /system/SkyHigh.prop
 elif [ "$1" = "NOOP" ]; then
 	echo "sched_noop" >> /system/SkyHigh.prop
-elif [ "$1" = "DEADLINE" ]; then
-	echo "sched_deadline" >> /system/SkyHigh.prop
 elif [ "$1" = "BFQ" ]; then
 	echo "sched_bfq" >> /system/SkyHigh.prop
 elif [ "$1" = "SIOPLUS" ]; then
 	echo "sched_sioplus" >> /system/SkyHigh.prop
+elif [ "$1" = "DEADLINE" ]; then
+	echo "sched_deadline" >> /system/SkyHigh.prop
 fi;
 
 # CORTEX

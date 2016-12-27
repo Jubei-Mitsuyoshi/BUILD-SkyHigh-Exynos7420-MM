@@ -169,10 +169,10 @@ sched.option4=NOOP
 sched.option4-desc=Uses the least CPU and offers reasonable all-round performance
 sched.option5=BFQ
 sched.option5-desc=Budget Fair Queuing is good for multitasking but has lower performance
-sched.option6=SIOPLUS
+sched.option6=SIOPlus
 sched.option6-desc=Based on SIO with improved read and write speeds
-#sched.option7=DEADLINE
-#sched.option7-desc=May offer the fastest performance but can use more power
+sched.option7=Deadline
+sched.option7-desc=May offer the fastest performance but can use more power
 
 default.title=Custom Mode
 default.subtitle=Select to enable as default:

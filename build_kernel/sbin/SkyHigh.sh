@@ -184,10 +184,10 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 		for i in /sys/block/sd*/queue/scheduler; do
 			$BB echo "sioplus" > "$i" 2> /dev/null;
 		done;
-#	elif [ "$(grep "sched_deadline" /system/SkyHigh.prop)" != "" ]; then
-#		for i in /sys/block/sd*/queue/scheduler; do
-#			$BB echo "deadline" > "$i" 2> /dev/null;
-#		done;
+	elif [ "$(grep "sched_deadline" /system/SkyHigh.prop)" != "" ]; then
+		for i in /sys/block/sd*/queue/scheduler; do
+			$BB echo "deadline" > "$i" 2> /dev/null;
+		done;
 	fi;
 
 
