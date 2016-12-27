@@ -292,8 +292,8 @@ cat << CTAG
 		height:1
 	}},
 	{ SOptionList:{
-		title:"VNSwap",
-		description:"Virtual NAND Swap (VNSwap) attempts to improve performance & multitasking by avoiding paging on physical storage, instead using a compressed virtual device in RAM. Paging takes place in RAM until it is necessary to use the swap space on physical storage. Depending on the amount of swap currently in use, disabling can take ~1 minute with Synapse being UNRESPONSIVE during this time. PLEASE WAIT for the process to finish.\n\n Disabling or Enabling will auto set swappiness to 0 or 190 respectively.\n",
+		title:"VNSwap (Virtual NAND Swap)",
+		description:"VNSwap attempts to improve performance & multitasking by avoiding paging on physical storage, instead using a compressed virtual device in RAM. Paging takes place in RAM until it is necessary to use the swap space on physical storage. Depending on the amount of swap currently in use, disabling can take ~1 minute with Synapse being UNRESPONSIVE during this time. PLEASE WAIT for the process to finish.\n\n Disabling or Enabling will auto set swappiness to 0 or 190 respectively.\n",
 		default:Enabled,
 		action:"swaps vnswap0",
 		values:[Disabled, Enabled,],
@@ -326,6 +326,18 @@ cat << CTAG
 		min:0, max:50, unit:" %", step:1,
 		default:$(cat /sys/module/zswap/parameters/max_pool_percent),
 		action:"generic /sys/module/zswap/parameters/max_pool_percent"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SSeekBar:{
+		title:"Swappiness",
+		description:"A low value means the kernel will try to avoid swapping as much as possible where a higher value instead will make the kernel aggressively try to use swap space.\n",
+		max:200,
+		min:0,
+		step:10,
+		default:$(cat /proc/sys/vm/swappiness),
+		action:"generic /proc/sys/vm/swappiness",
 	}},
 	{ SSpacer:{
 		height:1
@@ -377,18 +389,6 @@ cat << CTAG
 	}},
 	{ SSpacer:{
 		height:2
-	}},
-	{ SSeekBar:{
-		title:"Swappiness",
-		description:"A low value means the kernel will try to avoid swapping as much as possible where a higher value instead will make the kernel aggressively try to use swap space.\n",
-		max:200,
-		min:0,
-		step:10,
-		default:$(cat /proc/sys/vm/swappiness),
-		action:"generic /proc/sys/vm/swappiness",
-	}},
-	{ SSpacer:{
-		height:1
 	}},
 	{ SSeekBar:{
 		title:"Adaptive VFS Cache Pressure on Suspend / Resume",
