@@ -42,7 +42,7 @@ cat << CTAG
 		description:"2- Enable USB_KEYBOARD-MOUSE & [apply] in Synapse"
 	}},
 	{ SDescription:{
-		description:"3- Run USB KEYBOARD app <a href='https://play.google.com/store/apps/details?id=remote.hid.keyboard.client&hl=en'>(Download from Google Play)</a> and ensure SU permission."
+		description:"3- Run <a href='https://play.google.com/store/apps/details?id=remote.hid.keyboard.client&hl=en'>USB KEYBOARD</a> app and ensure SU permission."
 	}},
 	{ SSpacer:{
 		height:2
