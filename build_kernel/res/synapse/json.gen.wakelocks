@@ -233,13 +233,42 @@ cat << CTAG
 					height:1
 				}},'
 			fi`
-			`if [ -f "/sys/module/dhd/parameters/wl_divide" ]; then
-				WIFI=\`$BB cat /sys/module/dhd/parameters/wl_divide\`
+			`if [ -f "/sys/module/wakeup/parameters/enable_wlan_rx_wake_ws" ] || [ -f "/sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws" ] || [ -f "/sys/module/dhd/parameters/wl_divide" ] || [ -f "/sys/module/wakeup/parameters/enable_wlan_wake_ws" ]; then
 				$BB echo '{ SPane:{
 					title:"Wireless",
 					description:" "
-				}},
-					{ SSeekBar:{
+				}},'
+				if [ -f "/sys/module/wakeup/parameters/enable_wlan_rx_wake_ws" ]; then
+					WLAN_RX=\`$BB cat /sys/module/wakeup/parameters/enable_wlan_rx_wake_ws\`
+					$BB echo '{ SOptionList:{
+						title:"wlan_rx_wake",
+						description:" ",
+						default:'$WLAN_RX',
+						action:"generic sys/module/wakeup/parameters/enable_wlan_rx_wake_ws",
+						values:{ Y:"Enabled", N:"Disabled"
+						}
+					}},'
+					$BB echo '{ SSpacer:{
+						height:2
+					}},'
+				fi
+				if [ -f "/sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws" ]; then
+					WLAN_CTL=\`$BB cat /sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws\`
+					$BB echo '{ SOptionList:{
+						title:"wlan_ctrl_wake",
+						description:" ",
+						default:'$WLAN_CTL',
+						action:"generic sys/module/wakeup/parameters/enable_wlan_ctrl_wake_ws",
+						values:{ Y:"Enabled", N:"Disabled"
+						}
+					}},'
+					$BB echo '{ SSpacer:{
+						height:2
+					}},'
+				fi
+				if [ -f "/sys/module/dhd/parameters/wl_divide" ]; then
+					WIFI=\`$BB cat /sys/module/dhd/parameters/wl_divide\`
+					$BB echo '{ SSeekBar:{
 						title:"wlan_rx & wlan_ctrl",
 						description:"Default = 3. Stock = 1 (Higher = lower wake time)\n",
 						unit:"",
@@ -250,18 +279,48 @@ cat << CTAG
 						action:"generic sys/module/dhd/parameters/wl_divide"
 					}},'
 					$BB echo '{ SSpacer:{
+						height:1
+					}},'
+				fi
+				if [ -f "/sys/module/wakeup/parameters/enable_wlan_wake_ws" ]; then
+					WLAN_WAKE=\`$BB cat /sys/module/wakeup/parameters/enable_wlan_wake_ws\`
+					$BB echo '{ SOptionList:{
+						title:"wlan_wake",
+						description:" ",
+						default:'$WLAN_WAKE',
+						action:"generic sys/module/wakeup/parameters/enable_wlan_wake_ws",
+						values:{ Y:"Enabled", N:"Disabled"
+						}
+					}},'
+					$BB echo '{ SSpacer:{
 						height:2
 					}},'
+				fi
 			fi`
-			`if [ -f "/sys/module/bcm4359/parameters/wl_divide_bt" ]; then
-				BT=\`$BB cat /sys/module/bcm4359/parameters/wl_divide_bt\`
+			`if [ -f "/sys/module/wakeup/parameters/enable_bluedroid_timer_ws" ] || [ -f "/sys/module/bcm4359/parameters/wl_divide_bt" ]; then
 				$BB echo '{ SPane:{
 					title:"Bluetooth",
-					description:"Wakelock timeout for bluetooth to enter low power mode.\n"
-				}},
-					{ SSeekBar:{
+					description:" "
+				}},'
+				if [ -f "/sys/module/wakeup/parameters/enable_bluedroid_timer_ws" ]; then
+					BDROID=\`$BB cat /sys/module/wakeup/parameters/enable_bluedroid_timer_ws\`
+					$BB echo '{ SOptionList:{
+						title:"bluedroid_timer",
+						description:" ",
+						default:'$BDROID',
+						action:"generic sys/module/wakeup/parameters/enable_bluedroid_timer_ws",
+						values:{ Y:"Enabled", N:"Disabled"
+						}
+					}},'
+					$BB echo '{ SSpacer:{
+						height:2
+					}},'
+				fi
+				if [ -f "/sys/module/bcm4359/parameters/wl_divide_bt" ]; then
+					BT=\`$BB cat /sys/module/bcm4359/parameters/wl_divide_bt\`
+					$BB echo '{ SSeekBar:{
 						title:"bt_lpm",
-						description:"Default = 2. Stock = 2 (Higher = lower wake time)\n",
+						description:"Wakelock timeout for bluetooth to enter low power mode.\nDefault = 2. Stock = 2 (Higher = lower wake time)\n",
 						unit:"",
 						min:2,
 						max:4,
@@ -272,6 +331,7 @@ cat << CTAG
 					$BB echo '{ SSpacer:{
 						height:2
 					}},'
+				fi
 			fi`
 			`if [ -f "/sys/module/sec_battery/parameters/wl_polling" ] || [ -f "/sys/module/max77833_charger/parameters/wl_mains" ] || [ -f "/sys/module/max77833_charger/parameters/wl_wireless" ]; then
 				$BB echo '{ SPane:{
