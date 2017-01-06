@@ -56,16 +56,16 @@ agreebox(
 
 menubox(
 	"<~main.title>",
-	"<~main.subtutle>",
+	"<~main.subtitle>",
 
 	"@apps",
 
 	"menu.prop",
 
-	"<~main.inst>",			"<~main.instdesc>",					"@install",
-	"<~main.sysinfo>",		"<~main.sysinfodesc>",					"@info",
-	"<~main.changelog>",		"<~main.changelogdesc>",				"@agreement",
-	"<~main.quit>",			"<~main.quitdesc>",					"@alert"
+	"<~main.inst>",			"<~main.inst-desc>",					"@install",
+	"<~main.sysinfo>",		"<~main.sysinfo-desc>",					"@info",
+	"<~main.changelog>",		"<~main.changelog-desc>",				"@agreement",
+	"<~main.quit>",			"<~main.quit-desc>",					"@alert"
 
 );
 
@@ -377,7 +377,6 @@ if prop("menu.prop","selected") == "1" then
 
 ###################################################################################################################
 
-	alert( "<~freeze.attention>", "<~freeze.attention-desc>");
 endif;
 
 ###################################################################################################################
@@ -402,6 +401,8 @@ if prop("menu.prop","selected") == "1" then
 
 	ini_set("text_next", "<~text_next>");
 	ini_set("icon_next", "@next");
+
+	alert( "<~freeze.attention>", "<~freeze.attention-desc>");
 
 	install(
 		"<~inst.title>",

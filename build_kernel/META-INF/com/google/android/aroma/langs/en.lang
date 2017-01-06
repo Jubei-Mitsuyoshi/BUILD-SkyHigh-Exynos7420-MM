@@ -41,25 +41,30 @@ welcome.author=AUTHOR
 welcome.released=RELEASED
 welcome.next=Press Next to Proceed ...
 
+terms.title=Terms & Conditions
+terms.desc=Please read carefully the Terms & Conditions below
+terms.check=I agree to these Terms & Conditions
+terms.confirm=You must agree to proceed, didn't you READ?
+
 main.title=SkyHigh Kernel Installation Menu
-main.subtutle=Select what you want:
+main.subtitle=Select what you want:
 main.inst=Install SkyHigh kernel
-main.instdesc=Skip and continue with kernel installation
+main.inst-desc=Skip and continue with kernel installation
 main.sysinfo=System Info
-main.sysinfodesc=Show device/partition information
+main.sysinfo-desc=Show device/partition information
 main.changelog=ChangeLog
-main.changelogdesc=Changes since last release
+main.changelog-desc=Changes since last release
 main.quit=Quit Install
-main.quitdesc=Quit to the Recovery menu
+main.quit-desc=Quit to the Recovery menu
 
 sysinfo.wait=Getting System Information ...
-sysinfo.maintext=Device System Information
+sysinfo.title=Device System Information
+sysinfo.subtitle=Current System information for your device
 sysinfo.device=Model
 sysinfo.board=Board
 sysinfo.manufac=Manufacturer
 sysinfo.system=System Size
 sysinfo.data=Data Size
-sysinfo.subtitle=Current System information for your device
 sysinfo.alert.title=Finished
 sysinfo.alert.text=Back to Menu
 
@@ -68,11 +73,6 @@ changelog.exit=Close
 
 quit.title=Exit
 quit.text=Are you sure want to exit the Installer?
-
-terms.title=Terms & Conditions
-terms.desc=Please read carefully the Terms & Conditions below
-terms.check=I agree to these Terms & Conditions
-terms.confirm=You must agree to proceed, didn't you READ?
 
 changelog.title=Changelog
 changelog.desc=Changelog
