@@ -1,12 +1,12 @@
 /*
 
-© Copyright (c) 2015 UpInTheAir <upintheair.xda@gmail.com>
+© Copyright (c) 2015-2017 UpInTheAir <upintheair.skyhigh@gmail.com>
 
-All rights reserved. The alterations from OEM, associated script 
+All rights reserved. The alterations from O.E.M. of associated script 
 files and coding packed within this ramdisk & installation package 
 (the "Software"), may not be reproduced, displayed, modified or 
 distributed without the express prior written permission of the 
-copyright holder. For permission, contact upintheair.xda@gmail.com.
+copyright holder. For permission, contact upintheair.skyhigh@gmail.com.
 
 The above copyright notice shall be included in all copies or 
 substantial portions of the Software.
