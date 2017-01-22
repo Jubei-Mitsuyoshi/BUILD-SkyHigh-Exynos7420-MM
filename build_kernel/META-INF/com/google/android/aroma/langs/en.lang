@@ -38,7 +38,7 @@ welcome.text1=Now proceed with SkyHigh 7420 Kernel installation
 welcome.text2= SkyHigh Kernel Version Info:
 welcome.version=VERSION
 welcome.author=AUTHOR
-welcome.released=RELEASED
+welcome.device=DEVICE
 welcome.next=Press Next to Proceed ...
 
 terms.title=Terms & Conditions

@@ -1,10 +1,8 @@
 ################################# Aroma config for SkyHigh kernels by UpInTheAir ##################################
 
-ini_set("rom_name",		"SkyHigh 7420 Kernel");
-ini_set("rom_version",		"v7.6.0");
+ini_set("rom_name",		"SkyHigh-MM Kernel");
+ini_set("rom_version",		"[DATE]");
 ini_set("rom_author",		"UpInTheAir");
-ini_set("rom_device",		"Exynos7420");
-ini_set("rom_date",		"6th January 2017");
 
 splash(
 	2000,
@@ -31,7 +29,7 @@ viewbox(
 
 	"  <~welcome.version>\t: <b><#selectbg_g>"+ini_get("rom_version")+"</#></b>\n"+
 	"  <~welcome.author>\t: <b><#selectbg_g>"+ini_get("rom_author")+"</#></b>\n"+
-	"  <~welcome.released>\t: <b><#selectbg_g>"+ini_get("rom_date")+"</#></b>\n\n\n"+
+	"  <~welcome.device>\t\t: <b><#selectbg_g>"+sysprop("ro.product.board")+"</#></b>\n\n\n"+
 
 	"<~welcome.next>",
 
