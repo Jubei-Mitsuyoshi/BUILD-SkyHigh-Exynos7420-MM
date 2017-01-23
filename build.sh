@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# by UpInTheAir for SkyHigh kernels
+# Copyright (C) 2017 UpInTheAir
 
 
 # COLORIZE & ADD TEXT PARAMETERS
@@ -44,7 +44,7 @@
 	export DATE;
 	DATE=$(date +[%F]);
 
-	export AROMA_CONFIG=${KERNELDIR}/$BK/META-INF/com/google/android/aroma-config;
+	export AROMA_CONFIG="${KERNELDIR}"/$BK/META-INF/com/google/android/aroma-config;
 
 	# N920* G928*
 	export PARTITION_SIZE=29360128;
@@ -83,9 +83,6 @@
 
 # RESET CURRENT LOCAL BRANCH TO GIT REPO
 
-	echo;
-	echo "${bldcya}***** Set up Environment before compile *****${txtrst}";
-
 	function parse_git_branch() {
 		git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
 	}
@@ -93,6 +90,7 @@
 
 	echo;
 	read -p "${grn}Reset current local branch to gitHub repo? (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			git reset --hard origin/"$BRANCH" && git clean -fd;
 			echo;
@@ -106,11 +104,12 @@
 
 	echo;
 	read -p "${grn}Make clean source? (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			make clean;
 			make distclean;
 			make mrproper;
-			echo
+			echo;
 			echo "Source cleaned";
 		else
 			echo "Source not cleaned";
@@ -121,6 +120,7 @@
 
 	echo;
 	read -p "${grn}Clear ccache but keeping the config file? (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			ccache -C;
 		else
@@ -132,6 +132,7 @@
 
 	echo;
 	read -p "${grn}Use lzo de/compression algorithm (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			export COMP="lzop -9";
 			export EXT="lzo";
@@ -147,6 +148,7 @@
 
 	echo;
 	read -p "${grn}Use Stock dt.img? (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			DT="$EXTRACT";
 			echo "Stock dt.img";
@@ -159,6 +161,7 @@
 # TARGET VARIANT
 
 	TARGET=$1;
+
 	if [ "$TARGET" != "" ]; then
 		echo;
 		echo "Starting your build for ${red}$TARGET${txtrst}";
@@ -214,6 +217,7 @@
 
 # START BUILD
 
+	export DATE_START;
 	DATE_START=$(date +"%s");
 
 
@@ -228,8 +232,8 @@
 
 # TOOLCHAIN
 
-	# UBERTC 6.2.1 20161012
-	export CROSS_COMPILE=~/aarch64-linux-android-6.x-kernel/bin/aarch64-linux-android-;
+	# GCC 6.3.1 20170122 https://gitlab.com/Flash-ROM/aarch64-linux-android-6.x
+	export CROSS_COMPILE=~/Toolchains/aarch64-linux-android-6.x/bin/aarch64-linux-android-;
 
 
 # CPU CORE
@@ -251,8 +255,8 @@
 
 # CLEAN UP
 
-	echo
-	echo "${bldcya}***** Clean up first *****${txtrst}"
+	echo;
+	echo "${bldcya}***** Clean up first *****${txtrst}";
 
 	# cleanup
 	find . -type f \( -iname \*.bkp \
@@ -301,13 +305,13 @@
 		echo "${bldcya}***** Final Touch for Kernel *****${txtrst}";
 		echo;
 
-			stat "${KERNELDIR}"/arch/arm64/boot/Image || exit 1;
-			mv ./arch/arm64/boot/Image "$EXTRACT";
-			echo;
-			echo "${grn}--- Creating custom dt.img ---${txtrst}";
-			echo;
-			# stock generated tools
-			./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/;
+		stat "${KERNELDIR}"/arch/arm64/boot/Image || exit 1;
+		mv ./arch/arm64/boot/Image "$EXTRACT";
+		echo;
+		echo "${grn}--- Creating custom dt.img ---${txtrst}";
+		echo;
+		# stock generated tools
+		./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/;
 	else
 		echo "${bldred}Kernel STUCK in BUILD!${txtrst}";
 		echo;
@@ -373,7 +377,6 @@
 	backup_file "$EXTRACT"/ramdisk/init.rilcommon.rc;
 	backup_file "$EXTRACT"/ramdisk/init.samsungexynos7420.rc;
 
-
 	# default.prop
 	if [ "$TARGET" == "G928F" ]; then
 		insert_line "$EXTRACT"/ramdisk/default.prop "# SkyHigh KERNEL" after "rild.libpath=/system/lib64/libsec-ril.so" "\n# SM-G9287C dual SIM support";
@@ -393,12 +396,10 @@
 	insert_line "$EXTRACT"/ramdisk/default.prop "# SkyHigh KERNEL" after "ro.securestorage.support=false" "\n# Screen mirroring / AllShare Cast fix";
 	insert_line "$EXTRACT"/ramdisk/default.prop "# SkyHigh KERNEL" after "# Screen mirroring / AllShare Cast fix" "wlan.wfd.hdcp=disable\n";
 
-
 	# file_contexts
 	insert_line "$EXTRACT"/ramdisk/file_contexts "# SkyHigh KERNEL" after "u:object_r:uio_device:s0" "/dev/erandom		u:object_r:urandom_device:s0";
 	insert_line "$EXTRACT"/ramdisk/file_contexts "# SkyHigh KERNEL" before "/dev/urandom" "/dev/frandom		u:object_r:random_device:s0";
 	insert_line "$EXTRACT"/ramdisk/file_contexts "# SkyHigh KERNEL" before "/system/xbin/su" "/system/xbin(/.*)?      u:object_r:system_file:s0";
-
 
 	# init.rc
 	remove_line "$EXTRACT"/ramdisk/init.rc "import /init.sec_debug.rc";
@@ -409,7 +410,6 @@
 	remove_line "$EXTRACT"/ramdisk/init.rc "    write /sys/block/mmcblk0/queue/scheduler cfq";
 	remove_line "$EXTRACT"/ramdisk/init.rc "    write /sys/block/sda/queue/scheduler cfq";
 
-
 	# init.rilcommon.rc
 	if [ "$TARGET" == "N920C" ] ||  [ "$TARGET" == "N9200" ] ||  [ "$TARGET" == "N9208" ] ||  [ "$TARGET" == "G928F" ]; then
 		remove_line "$EXTRACT"/ramdisk/init.rilcommon.rc "import /init.rilcarrier.rc";
@@ -418,14 +418,12 @@
 		remove_line "$EXTRACT"/ramdisk/init.rilcommon.rc "import /init.rilepdg.rc";
 	fi;
 
-
 	# init.samsungexynos7420.rc
 	remove_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "import init.fac.rc";
 	remove_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "import init.exynos7420_fac.rc";
 	remove_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "import init.remove_recovery.rc";
 	remove_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "    write /proc/sys/vm/dirty_bytes";
 	remove_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "    write /proc/sys/vm/dirty_background_bytes";
-
 
 	# CPUSets
 	replace_line "$EXTRACT"/ramdisk/init.rc "write /dev/cpuset/foreground/cpus" "    write /dev/cpuset/foreground/cpus 0-7";
@@ -446,7 +444,6 @@
 
 	cp -r ./"$BK"/patch/init.invisible_cpuset.sh "$EXTRACT"/ramdisk;
 
-
 	# lazytime mount for EXT4 FS
 	insert_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "# SkyHigh KERNEL" after "setprop ro.mst.support 1" "\n    start lazy_mount";
 	insert_line "$EXTRACT"/ramdisk/init.samsungexynos7420.rc "# SkyHigh KERNEL" after "start lazy_mount" "    wait /dev/block/mounted";
@@ -457,14 +454,11 @@
 
 	cp -r ./"$BK"/patch/init.lazytime_mount.sh "$EXTRACT"/ramdisk;
 
-
 	# UX ROM boot support
 	replace_line "$EXTRACT"/ramdisk/init.environ.rc "export SYSTEMSERVERCLASSPATH /system/framework/services.jar:/system/framework/ethernet-service.jar:/system/framework/wifi-service.jar" "    export SYSTEMSERVERCLASSPATH /system/framework/services.jar:/system/framework/ethernet-service.jar:/system/framework/wifi-service.jar:/system/framework/ssrm.jar";
 
-
 	# SkyHigh init
 	cp -r ./"$BK"/patch/init.SkyHigh.rc "$EXTRACT"/ramdisk;
-
 
 	# Synapse UCI & replace adbd with 5.1.1 version (adb debugging)
 	cp -r ./"$BK"/res "$EXTRACT"/ramdisk/res;
@@ -472,7 +466,6 @@
 	cp -r ./"$BK"/sbin/* "$EXTRACT"/ramdisk/sbin;
 	INITPATCH=$(cat ./"$BK"/patch/init_patch);
 	echo "$INITPATCH" >> "$EXTRACT"/ramdisk/init.rc;
-
 
 	# SuperSU
 	CONTEXTS_PATCH=$(cat ./"$BK"/patch/file_contexts_su_patch);
@@ -503,10 +496,8 @@
 	rm -rf "$EXTRACT"/ramdisk/sepolicy;
 	cp -r ./$BK/patch/sepolicy "$EXTRACT"/ramdisk/;
 
-
 	# license agreement
 	cp -r ./"$BK"/patch/LICENSE.md "$EXTRACT"/ramdisk/;
-
 
 	# fix ramdisk permissions
 	cd "${KERNELDIR}"/"$BK"/patch || exit 1;
@@ -516,10 +507,8 @@
 	./ramdisk_fix_permissions.sh 2>/dev/null;
 	rm -f ramdisk_fix_permissions.sh;
 
-
 	# clean up patch temp files
 	find . -type f -name "*~" -exec rm -f {} \;
-
 
 	echo "Patched ramdisk with SkyHigh";
 
@@ -556,7 +545,6 @@
 	cd "${KERNELDIR}"/"$BK"/tools || exit 1;
 	./mkbootfs "$EXTRACT"/ramdisk | $COMP > "$EXTRACT"/ramdisk.$EXT;
 
-
 	echo "Ramdisk done";
 
 
@@ -565,43 +553,43 @@
 	echo;
 	echo "${bldcya}***** Make boot.img *****${txtrst}";
 
-		./mkbootimg \
-			--kernel "$EXTRACT"/Image \
-			--dt "$DT"/dt.img \
-			--board "$BOARD" \
-			--ramdisk "$EXTRACT"/ramdisk."$EXT" \
-			--base 0x10000000 \
-			--kernel_offset 0x00008000 \
-			--ramdisk_offset 0x01000000 \
-			--tags_offset 0x00000100 \
-			--pagesize 2048 -o "$EXTRACT"/boot.img
+	./mkbootimg \
+		--kernel "$EXTRACT"/Image \
+		--dt "$DT"/dt.img \
+		--board "$BOARD" \
+		--ramdisk "$EXTRACT"/ramdisk."$EXT" \
+		--base 0x10000000 \
+		--kernel_offset 0x00008000 \
+		--ramdisk_offset 0x01000000 \
+		--tags_offset 0x00000100 \
+		--pagesize 2048 -o "$EXTRACT"/boot.img
 
-		echo -n "SEANDROIDENFORCE" >> "$EXTRACT"/boot.img;
+	echo -n "SEANDROIDENFORCE" >> "$EXTRACT"/boot.img;
 
-		# check boot.img less than partition size
-		GENERATED_SIZE=$(stat -c %s "$EXTRACT"/boot.img);
-		if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
-			echo;
-			echo "${bldred}$TARGET${txtrst} ${red}boot.img size larger than partition size !!${txtrst}" 1>&2;
-			echo "Please change your de/compression algorithm !!";
-			cd "${KERNELDIR}" || exit 1;
+	# check boot.img less than partition size
+	GENERATED_SIZE=$(stat -c %s "$EXTRACT"/boot.img);
+	if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
+		echo;
+		echo "${bldred}$TARGET${txtrst} ${red}boot.img size larger than partition size !!${txtrst}" 1>&2;
+		echo "Please change your de/compression algorithm !!";
+		cd "${KERNELDIR}" || exit 1;
 
-			echo;
-			read -p "${grn}Make clean source? (y/n) > ${txtrst}";
-				if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-					make clean;
-					make distclean;
-					make mrproper;
-					echo;
-					echo "Source cleaned";
-					echo;
-					exit 1;
-				else
-					echo "Source not cleaned";
-					echo;
-					exit 1;
-				fi;
-		fi;
+		echo;
+		read -p "${grn}Make clean source? (y/n) > ${txtrst}";
+			if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
+				make clean;
+				make distclean;
+				make mrproper;
+				echo;
+				echo "Source cleaned";
+				echo;
+				exit 1;
+			else
+				echo "Source not cleaned";
+				echo;
+				exit 1;
+			fi;
+	fi;
 
 	echo "boot.img done";
 
@@ -639,6 +627,7 @@
 
 	DATE_END=$(date +"%s");
 	DIFF=$((DATE_END - DATE_START));
+
 	echo;
 	echo "Build time: $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds.";
 
@@ -651,6 +640,7 @@
 	cd "${KERNELDIR}" || exit 1;
 
 	read -p "${grn}Make clean source? (y/n) > ${txtrst}";
+
 		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
 			make clean;
 			make distclean;
