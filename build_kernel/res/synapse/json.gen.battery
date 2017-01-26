@@ -477,7 +477,7 @@ cat << CTAG
 	}},
 	{ SPane:{
 		title:"Store Mode",
-		description:"Enable to set MAX & MIN battery capacity limits whilst on charge."
+		description:"To set MAX & MIN battery capacity limits whilst on charge, set your values, 'Enable', and then (re)connect charging source."
 	}},
 	{ SSpacer:{
 		height:1
