@@ -12,7 +12,7 @@ fi;
 
 
 # Variant detection for supported devices
-if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N920P" /proc/cmdline)" != "" ] || [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ] || [ "$(grep "N9200" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ] || [ "$(grep "G928C" /proc/cmdline)" != "" ] || [ "$(grep "G928F" /proc/cmdline)" != "" ] || [ "$(grep "G928G" /proc/cmdline)" != "" ] || [ "$(grep "G928I" /proc/cmdline)" != "" ] || [ "$(grep "G9287C" /proc/cmdline)" != "" ] || [ "$(grep "G928P" /proc/cmdline)" != "" ] || [ "$(grep "G928T" /proc/cmdline)" != "" ] || [ "$(grep "G928W8" /proc/cmdline)" != "" ]; then
+if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
 
 
 	# Set SELinux permissive by default (parse defaults from prop)

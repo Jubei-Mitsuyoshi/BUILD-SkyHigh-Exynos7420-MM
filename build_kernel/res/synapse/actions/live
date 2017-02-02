@@ -409,7 +409,7 @@ Live_storage)
   MEDIA_USED=$(du -hs /data/media/0);
   MEDIA_USED=$(echo "${MEDIA_USED%G*} $KB" | awk '{printf "%.0f \n", $1*$2}');
 
-  # boot size in KB for N920* G928* (28MB)
+  # boot size in KB for N920* (28MB)
   BOOT=28672;
 
   # total backup size (approx)

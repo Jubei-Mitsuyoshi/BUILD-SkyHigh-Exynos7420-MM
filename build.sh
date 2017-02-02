@@ -53,33 +53,13 @@
 	if [ "$TARGET" == "N920C" ] ; then
 		export KERNEL_CONFIG="SkyHigh_N920C_defconfig";
 		export BOARD="SYSMAGIC000KU";
-	# SM-N920 P (Sprint)
-	elif [ "$TARGET" == "N920P" ] ; then
-		export KERNEL_CONFIG="SkyHigh_N920P_defconfig";
-		export BOARD="SYSMAGIC000KU";
 	# SM-N920 T/W8
 	elif [ "$TARGET" == "N920T" ] ; then
 		export KERNEL_CONFIG="SkyHigh_N920T_defconfig";
 		export BOARD="SYSMAGIC000KU";
-	# SM-N9200 HK
-	elif [ "$TARGET" == "N9200" ] ; then
-		export KERNEL_CONFIG="SkyHigh_N9200_HK_defconfig";
-		export BOARD="FPRPNLCC000KU";
 	# SM-N9208 SEA
 	elif [ "$TARGET" == "N9208" ] ; then
 		export KERNEL_CONFIG="SkyHigh_N9208_SEA_defconfig";
-		export BOARD="SYSMAGIC000KU";
-	# SM-G928 C/F/G/I/7C
-	elif [ "$TARGET" == "G928F" ] ; then
-		export KERNEL_CONFIG="SkyHigh_G928F_defconfig";
-		export BOARD="SYSMAGIC000KU";
-	# SM-G928 P (Sprint)
-	elif [ "$TARGET" == "G928P" ] ; then
-		export KERNEL_CONFIG="SkyHigh_G928P_defconfig";
-		export BOARD="SYSMAGIC000KU";
-	# SM-G928 T/W8
-	elif [ "$TARGET" == "G928T" ] ; then
-		export KERNEL_CONFIG="SkyHigh_G928T_defconfig";
 		export BOARD="SYSMAGIC000KU";
 	fi;
 
@@ -105,7 +85,7 @@
 
 	export AROMA_CONFIG="${KERNELDIR}"/$BK/META-INF/com/google/android/aroma-config;
 
-	# N920* G928*
+	# N920*
 	export PARTITION_SIZE=29360128;
 
 	# omitt timestamp line in generated .config
@@ -348,13 +328,8 @@
 		echo;
 		echo "You need to define your device target!";
 		echo "example: build_kernel.sh N920C";
-		echo "example: build_kernel.sh N920P";
 		echo "example: build_kernel.sh N920T";
-		echo "example: build_kernel.sh N9200";
 		echo "example: build_kernel.sh N9208";
-		echo "example: build_kernel.sh G928F";
-		echo "example: build_kernel.sh G928P";
-		echo "example: build_kernel.sh G928T";
 		echo;
 		exit 1;
 	fi;
@@ -526,10 +501,6 @@
 	backup_file "$EXTRACT"/ramdisk/init.samsungexynos7420.rc;
 
 	# default.prop
-	if [ "$TARGET" == "G928F" ]; then
-		insert_line "$EXTRACT"/ramdisk/default.prop "# SkyHigh KERNEL" after "rild.libpath=/system/lib64/libsec-ril.so" "\n# SM-G9287C dual SIM support";
-		insert_line "$EXTRACT"/ramdisk/default.prop "# SkyHigh KERNEL" after "# SM-G9287C dual SIM support" "rild.libpath2=/system/lib64/libsec-ril-dsds.so\n";
-	fi;
 	if [ "$(grep "persist.security.ams.enforcing=1" "$EXTRACT"/ramdisk/default.prop)" != "" ]; then
 		replace_string "$EXTRACT"/ramdisk/default.prop "persist.security.ams.enforcing=0" "persist.security.ams.enforcing=1" "persist.security.ams.enforcing=0";
 	elif [ "$(grep "persist.security.ams.enforcing=3" "$EXTRACT"/ramdisk/default.prop)" != "" ]; then
@@ -559,10 +530,8 @@
 	remove_line "$EXTRACT"/ramdisk/init.rc "    write /sys/block/sda/queue/scheduler cfq";
 
 	# init.rilcommon.rc
-	if [ "$TARGET" == "N920C" ] ||  [ "$TARGET" == "N9200" ] ||  [ "$TARGET" == "N9208" ] ||  [ "$TARGET" == "G928F" ]; then
+	if [ "$TARGET" == "N920C" ] || [ "$TARGET" == "N9208" ]; then
 		remove_line "$EXTRACT"/ramdisk/init.rilcommon.rc "import /init.rilcarrier.rc";
-		remove_line "$EXTRACT"/ramdisk/init.rilcommon.rc "import /init.rilepdg.rc";
-	elif [ "$TARGET" == "N920P" ] ||  [ "$TARGET" == "G920P" ]; then
 		remove_line "$EXTRACT"/ramdisk/init.rilcommon.rc "import /init.rilepdg.rc";
 	fi;
 
