@@ -9,52 +9,16 @@
 	red=$(tput setaf 1);
 	export grn;                             # green
 	grn=$(tput setaf 2);
-	export blu;                             # blue
-	blu=$(tput setaf 4);
 	export cya;                             # cyan
 	cya=$(tput setaf 6);
 	export txtbld;                          # bold
 	txtbld=$(tput bold);
 	export bldred;                          # bold red
 	bldred=${txtbld}$(tput setaf 1);
-	export bldgrn;                          # bold green
-	bldgrn=${txtbld}$(tput setaf 2);
-	export bldblu;                          # bold blue
-	bldblu=${txtbld}$(tput setaf 4);
 	export bldcya;                          # bold cyan
 	bldcya=${txtbld}$(tput setaf 6);
 	export txtrst;                          # reset
 	txtrst=$(tput sgr0);
-
-
-# LOCATION
-
-	export KERNELDIR;
-	KERNELDIR=$(readlink -f .);
-
-
-# SET BUILD VARIABLES
-
-	export BK=build_kernel;
-
-	export EXTRACT="${KERNELDIR}"/$BK/$TARGET/extract;
-
-	export BOOT="${KERNELDIR}"/$BK/$TARGET/boot.img;
-
-	export DATE;
-	DATE=$(date +[%F]);
-
-	export AROMA_CONFIG="${KERNELDIR}"/$BK/META-INF/com/google/android/aroma-config;
-
-	# N920* G928*
-	export PARTITION_SIZE=29360128;
-
-	# omitt timestamp line in generated .config
-	export KCONFIG_NOTIMESTAMP=true;
-
-	export ARCH=arm64;
-
-	export SUB_ARCH=arm64;
 
 
 # CHECK 'CCACHE' IS INSTALLED
@@ -81,104 +45,9 @@
 	fi;
 
 
-# RESET CURRENT LOCAL BRANCH TO GIT REPO
-
-	function parse_git_branch() {
-		git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/"
-	}
-	BRANCH=$(parse_git_branch);
-
-	echo;
-	read -p "${grn}Reset current local branch to gitHub repo? (y/n) > ${txtrst}";
-
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			git reset --hard origin/"$BRANCH" && git clean -fd;
-			echo;
-			echo "Local branch reset to $BRANCH";
-		else
-			echo "Local branch not reset";
-		fi;
-
-
-# MAKE CLEAN SOURCE
-
-	echo;
-	read -p "${grn}Make clean source? (y/n) > ${txtrst}";
-
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			make clean;
-			make distclean;
-			make mrproper;
-			echo;
-			echo "Source cleaned";
-		else
-			echo "Source not cleaned";
-		fi;
-
-
-# CLEAR CCACHE
-
-	echo;
-	read -p "${grn}Clear ccache but keeping the config file? (y/n) > ${txtrst}";
-
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			ccache -C;
-		else
-			echo "ccache not cleared";
-		fi;
-
-
-# RAMDISK ALGORITHM
-
-	echo;
-	read -p "${grn}Use lzo de/compression algorithm (y/n) > ${txtrst}";
-
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			export COMP="lzop -9";
-			export EXT="lzo";
-			echo "LZO selected";
-		else
-			export COMP="gzip -9";
-			export EXT="gz";
-			echo "GZIP selected";
-		fi;
-
-
-# DT.IMG
-
-	echo;
-	read -p "${grn}Use Stock dt.img? (y/n) > ${txtrst}";
-
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			DT="$EXTRACT";
-			echo "Stock dt.img";
-		else
-			DT="${KERNELDIR}";
-			echo "Custom dt.img";
-		fi;
-
-
 # TARGET VARIANT
 
 	TARGET=$1;
-
-	if [ "$TARGET" != "" ]; then
-		echo;
-		echo "Starting your build for ${red}$TARGET${txtrst}";
-		sleep 2;
-	else
-		echo
-		echo "You need to define your device target!";
-		echo "example: build_kernel.sh N920C";
-		echo "example: build_kernel.sh N920P";
-		echo "example: build_kernel.sh N920T";
-		echo "example: build_kernel.sh N9200";
-		echo "example: build_kernel.sh N9208";
-		echo "example: build_kernel.sh G928F";
-		echo "example: build_kernel.sh G928P";
-		echo "example: build_kernel.sh G928T";
-		exit 1;
-	fi;
 
 	# SM-N920 C/CD/G/I
 	if [ "$TARGET" == "N920C" ] ; then
@@ -215,10 +84,280 @@
 	fi;
 
 
+# LOCATION
+
+	export KERNELDIR;
+	KERNELDIR=$(readlink -f .);
+
+
+# SET BUILD VARIABLES
+
+	export BK;
+	BK=build_kernel;
+
+	export EXTRACT;
+	EXTRACT="${KERNELDIR}"/$BK/$TARGET/extract;
+
+	export BOOT="${KERNELDIR}"/$BK/$TARGET/boot.img;
+
+	export DATE;
+	DATE=$(date +[%F]);
+
+	export AROMA_CONFIG="${KERNELDIR}"/$BK/META-INF/com/google/android/aroma-config;
+
+	# N920* G928*
+	export PARTITION_SIZE=29360128;
+
+	# omitt timestamp line in generated .config
+	export KCONFIG_NOTIMESTAMP=true;
+
+	export ARCH=arm64;
+
+	export SUB_ARCH=arm64;
+
+
+# CPU CORE
+
+	export NUMBEROFCPUS;
+	NUMBEROFCPUS=$(grep -c 'processor' /proc/cpuinfo);
+
+
+# RESET CURRENT LOCAL BRANCH TO GIT REPO
+
+	function parse_git_branch() {
+		git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1/";
+	}
+
+	BRANCH=$(parse_git_branch);
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Reset current local branch to gitHub repo? (y/n) > ${txtrst}" yn;
+
+		case $yn in
+
+			y|Y )
+				git reset --hard origin/"$BRANCH" && git clean -fd;
+				echo "Local branch reset to ${red}$BRANCH${txtrst}";
+				break;
+				;;
+
+			n|N )
+				echo "Local branch not reset";
+				break;
+				;;
+
+			* )
+				echo "Please answer yes or no";
+				;;
+
+		esac;
+	done;
+
+
+# MAKE CLEAN SOURCE
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Make clean source? (y/n) > ${txtrst}" yn;
+
+		case $yn in
+
+			y|Y )
+				make clean && make distclean && make mrproper;
+				echo "Source cleaned";
+				break;
+				;;
+
+			n|N )
+				echo "Source not cleaned";
+				break;
+				;;
+
+			* )
+				echo "Please answer yes or no";
+				;;
+
+		esac;
+	done;
+
+
+# CLEAR CCACHE
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Clear ccache but keeping the config file? (y/n) > ${txtrst}" yn;
+
+		case $yn in
+
+			y|Y )
+				ccache -C;
+				break;
+				;;
+
+			n|N )
+				echo "ccache not cleared";
+				break;
+				;;
+
+			* )
+				echo "Please answer yes or no";
+				;;
+
+		esac;
+	done;
+
+
+# RAMDISK ALGORITHM
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Select ramdisk de/compression algorithm:
+			[1] GZIP
+			[2] LZO
+			> ${txtrst}" algorithm;
+
+		case $algorithm in
+
+			1 )
+				export COMP="gzip -9";
+				export EXT="gz";
+				echo "GZIP selected";
+				break;
+				;;
+
+			2 )
+				export COMP="lzop -9";
+				export EXT="lzo";
+				echo "LZO selected";
+				break;
+				;;
+
+			* )
+				echo "Please select algorithm";
+				;;
+
+		esac;
+	done;
+
+
+# DT.IMG
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Select dt.img:
+			[1] Stock
+			[2] Custom
+			> ${txtrst}" dt;
+
+		case $dt in
+
+			1 )
+				DT="$EXTRACT";
+				echo "Stock dt.img selected";
+				break;
+				;;
+
+			2 )
+				DT="${KERNELDIR}";
+				echo "Custom dt.img selected";
+				break;
+				;;
+
+			* )
+				echo "Please select dt.img";
+				;;
+
+		esac;
+	done;
+
+
+# TOOLCHAIN
+
+	while true; do
+
+		echo;
+		read -rp "${cya}Select toolchain:
+			[1] Linaro	6.2.1
+			[2] Flash	6.3.1
+			> ${txtrst}" tc;
+
+		case $tc in
+
+			1 )
+				# Linaro 6.2.1 http://releases.linaro.org/components/toolchain/binaries/latest-6/arm-eabi
+				export CROSS_COMPILE=~/Toolchains/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-;
+				echo "Linaro 6.2.1 selected (Graphite unimplemented)";
+				sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+				echo "Graphite disabled in config";
+				break;
+				;;
+
+			2 )
+				# Flash 6.3.1 https://gitlab.com/Flash-ROM/aarch64-linux-android-6.x
+				export CROSS_COMPILE=~/Toolchains/aarch64-linux-android-6.x/bin/aarch64-linux-android-;
+				echo "Flash 6.3.1 selected";
+				echo;
+				read -rp "${grn}Enable graphite optimizations? (y/n) > ${txtrst}" yn;
+
+				case $yn in
+
+					y|Y )
+						sed -i "/# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set/c\CONFIG_CC_GRAPHITE_OPTIMIZATION=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+						echo "Graphite enabled in config";
+						break;
+						;;
+
+					n|N )
+						sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+						echo "Graphite disabled in config";
+						break;
+						;;
+
+					* )
+						echo "Please answer yes or no";
+						;;
+
+				esac;
+				break;
+				;;
+
+			* )
+				echo "Please select toolchain";
+				;;
+
+		esac;
+	done;
+
+
 # START BUILD
 
 	export DATE_START;
 	DATE_START=$(date +"%s");
+
+	if [ "$TARGET" != "" ]; then
+		echo;
+		echo "${cya}Starting your build for${txtrst} ${red}$TARGET${txtrst}";
+		sleep 2;
+	else
+		echo;
+		echo "You need to define your device target!";
+		echo "example: build_kernel.sh N920C";
+		echo "example: build_kernel.sh N920P";
+		echo "example: build_kernel.sh N920T";
+		echo "example: build_kernel.sh N9200";
+		echo "example: build_kernel.sh N9208";
+		echo "example: build_kernel.sh G928F";
+		echo "example: build_kernel.sh G928P";
+		echo "example: build_kernel.sh G928T";
+		echo;
+		exit 1;
+	fi;
 
 
 # APPEND BUILD DATE TO CONFIG
@@ -228,18 +367,6 @@
 
 	# Aroma config
 	sed -i "s/\[[^][]*\]/$DATE/g" "$AROMA_CONFIG";
-
-
-# TOOLCHAIN
-
-	# GCC 6.3.1 20170122 https://gitlab.com/Flash-ROM/aarch64-linux-android-6.x
-	export CROSS_COMPILE=~/Toolchains/aarch64-linux-android-6.x/bin/aarch64-linux-android-;
-
-
-# CPU CORE
-
-	export NUMBEROFCPUS;
-	NUMBEROFCPUS=$(grep -c 'processor' /proc/cpuinfo);
 
 
 # MAKE CONFIG
@@ -271,8 +398,8 @@
 		       | parallel --no-notice rm -fv {};
 
 	# cleanup old working & output directories
-	rm -rf "$EXTRACT"
-	rm -rf "${KERNELDIR}"/output/"$TARGET"/*
+	rm -rf "$EXTRACT";
+	rm -rf "${KERNELDIR}"/output/"$TARGET"/*;
 
 	echo "Clean up done";
 
@@ -308,20 +435,35 @@
 		stat "${KERNELDIR}"/arch/arm64/boot/Image || exit 1;
 		mv ./arch/arm64/boot/Image "$EXTRACT";
 		echo;
-		echo "${grn}--- Creating custom dt.img ---${txtrst}";
+		echo "${cya}--- Creating custom dt.img ---${txtrst}";
 		echo;
 		# stock generated tools
 		./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/;
 	else
 		echo "${bldred}Kernel STUCK in BUILD!${txtrst}";
-		echo;
+
 		while true; do
-			read -p "${grn}Do you want to run a Make command to check the error?  (y/n) > ${txtrst}" yn;
+
+			echo;
+			read -rp "${cya}Do you want to run a Make command to check the error?  (y/n) > ${txtrst}" yn;
+
 			case $yn in
-				[Yy]* ) make Image ARCH=arm64; echo ; exit;;
-				[Nn]* ) echo; exit;;
-				* ) echo "Please answer yes or no.";;
-			esac
+
+				y|Y )
+					make Image ARCH=arm64;
+					exit 1;
+					;;
+
+				n|N )
+					echo;
+					exit 1;
+					;;
+
+				* )
+					echo "Please answer yes or no";
+					;;
+
+			esac;
 		done;
 	fi;
 
@@ -333,7 +475,9 @@
 
 	cd "${KERNELDIR}" || exit 1;
 
-	backup_file() { cp "$1" "$1~"; }
+	backup_file() {
+		cp "$1" "$1~";
+	}
 
 	replace_string() {
 		if [ -z "$(grep "$2" "$1")" ]; then
@@ -344,9 +488,13 @@
 	insert_line() {
 		if [ -z "$(grep "$2" "$1")" ]; then
 			case $3 in
-				before) offset=0;;
-				after) offset=1;;
+
+				before)
+					offset=0;;
+				after)
+					offset=1;;
 			esac;
+
 			line=$(($(grep -n "$4" "$1" | cut -d: -f1) + offset));
 			sed -i "${line}s;^;${5}\n;" "$1";
 		fi;
@@ -468,33 +616,35 @@
 	echo "$INITPATCH" >> "$EXTRACT"/ramdisk/init.rc;
 
 	# SuperSU
-	CONTEXTS_PATCH=$(cat ./"$BK"/patch/file_contexts_su_patch);
-	echo "$CONTEXTS_PATCH" >> "$EXTRACT"/ramdisk/file_contexts;
+	if [ "$COMP" != "gzip -9" ] && [ "$EXT" != "gz" ]; then
+		CONTEXTS_PATCH=$(cat ./"$BK"/patch/file_contexts_su_patch);
+		echo "$CONTEXTS_PATCH" >> "$EXTRACT"/ramdisk/file_contexts;
 
-	replace_line "$EXTRACT"/ramdisk/fstab.goldfish "/dev/block/mtdblock0" "/dev/block/mtdblock0                                    /system             ext4      ro,noatime,barrier=1				   wait";
+		replace_line "$EXTRACT"/ramdisk/fstab.goldfish "/dev/block/mtdblock0" "/dev/block/mtdblock0                                    /system             ext4      ro,noatime,barrier=1				   wait";
 
-	replace_line "$EXTRACT"/ramdisk/fstab.samsungexynos7420 "/dev/block/platform/15570000.ufs/by-name/SYSTEM" "/dev/block/platform/15570000.ufs/by-name/SYSTEM		/system	ext4	ro,noatime,errors=panic,noload									wait";
+		replace_line "$EXTRACT"/ramdisk/fstab.samsungexynos7420 "/dev/block/platform/15570000.ufs/by-name/SYSTEM" "/dev/block/platform/15570000.ufs/by-name/SYSTEM		/system	ext4	ro,noatime,errors=panic,noload									wait";
 
-	replace_line "$EXTRACT"/ramdisk/fstab.samsungexynos7420.fwup "/dev/block/platform/15570000.ufs/by-name/SYSTEM" "/dev/block/platform/15570000.ufs/by-name/SYSTEM		/system	ext4	ro,noatime,errors=panic,noload									wait";
+		replace_line "$EXTRACT"/ramdisk/fstab.samsungexynos7420.fwup "/dev/block/platform/15570000.ufs/by-name/SYSTEM" "/dev/block/platform/15570000.ufs/by-name/SYSTEM		/system	ext4	ro,noatime,errors=panic,noload									wait";
 
-	insert_line "$EXTRACT"/ramdisk/init.environ.rc "# SkyHigh KERNEL" before "export ANDROID_BOOTLOGO 1" "    export PATH /su/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/su/xbin:/system/xbin";
+		insert_line "$EXTRACT"/ramdisk/init.environ.rc "# SkyHigh KERNEL" before "export ANDROID_BOOTLOGO 1" "    export PATH /su/bin:/sbin:/vendor/bin:/system/sbin:/system/bin:/su/xbin:/system/xbin";
 
-	insert_line "$EXTRACT"/ramdisk/init.rc "# SkyHigh KERNEL" before "on early-init" "import init.supersu.rc\n";
-	insert_line "$EXTRACT"/ramdisk/init.rc "# SkyHigh KERNEL" before "mkdir /data 0771 system system" "     mkdir /su 0755 root root # create mount point for SuperSU";
+		insert_line "$EXTRACT"/ramdisk/init.rc "# SkyHigh KERNEL" before "on early-init" "import init.supersu.rc\n";
+		insert_line "$EXTRACT"/ramdisk/init.rc "# SkyHigh KERNEL" before "mkdir /data 0771 system system" "     mkdir /su 0755 root root # create mount point for SuperSU";
 
-	SUPATCH=$(cat ./"$BK"/patch/su_patch);
-	echo "$SUPATCH" >> "$EXTRACT"/ramdisk/init.rc;
-	sed -i "/setprop selinux.reload_policy 1/d" "$EXTRACT"/ramdisk/init.rc;
+		SUPATCH=$(cat ./"$BK"/patch/su_patch);
+		echo "$SUPATCH" >> "$EXTRACT"/ramdisk/init.rc;
+		sed -i "/setprop selinux.reload_policy 1/d" "$EXTRACT"/ramdisk/init.rc;
 
-	mkdir -p "$EXTRACT"/ramdisk/su;
+		mkdir -p "$EXTRACT"/ramdisk/su;
 
-	cp -r ./"$BK"/patch/launch_daemonsu.sh "$EXTRACT"/ramdisk/sbin/;
+		cp -r ./"$BK"/patch/launch_daemonsu.sh "$EXTRACT"/ramdisk/sbin/;
 
-	cp -r ./"$BK"/patch/init.supersu.rc "$EXTRACT"/ramdisk/;
+		cp -r ./"$BK"/patch/init.supersu.rc "$EXTRACT"/ramdisk/;
 
-	# replace with patched version
-	rm -rf "$EXTRACT"/ramdisk/sepolicy;
-	cp -r ./$BK/patch/sepolicy "$EXTRACT"/ramdisk/;
+		# replace with patched version
+		rm -rf "$EXTRACT"/ramdisk/sepolicy;
+		cp -r ./$BK/patch/sepolicy "$EXTRACT"/ramdisk/;
+	fi;
 
 	# license agreement
 	cp -r ./"$BK"/patch/LICENSE.md "$EXTRACT"/ramdisk/;
@@ -568,27 +718,38 @@
 
 	# check boot.img less than partition size
 	GENERATED_SIZE=$(stat -c %s "$EXTRACT"/boot.img);
+
 	if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
 		echo;
 		echo "${bldred}$TARGET${txtrst} ${red}boot.img size larger than partition size !!${txtrst}" 1>&2;
 		echo "Please change your de/compression algorithm !!";
+
 		cd "${KERNELDIR}" || exit 1;
 
-		echo;
-		read -p "${grn}Make clean source? (y/n) > ${txtrst}";
-			if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-				make clean;
-				make distclean;
-				make mrproper;
-				echo;
-				echo "Source cleaned";
-				echo;
-				exit 1;
-			else
-				echo "Source not cleaned";
-				echo;
-				exit 1;
-			fi;
+		while true; do
+
+			echo;
+			read -rp "${cya}Make clean source? (y/n) > ${txtrst}" yn;
+
+			case $yn in
+
+				y|Y )
+					make clean && make distclean && make mrproper;
+					echo "Source cleaned";
+					exit 1;
+					;;
+
+				n|N )
+					echo "Source not cleaned";
+					exit 1;
+					;;
+
+				* )
+					echo "Please answer yes or no";
+					;;
+
+			esac;
+		done;
 	fi;
 
 	echo "boot.img done";
@@ -620,7 +781,7 @@
 	echo;
 	echo "${bldred}$TARGET${txtrst} ${red}build completed !!${txtrst}";
 	echo;
-	echo "${bldcya}***** Flashable zip found in /output/$TARGET directory *****${txtrst}";
+	echo "${bldcya}***** Flashable zip found in: /output/$TARGET directory *****${txtrst}";
 
 
 # END BUILD
@@ -629,7 +790,7 @@
 	DIFF=$((DATE_END - DATE_START));
 
 	echo;
-	echo "Build time: $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds.";
+	echo "${cya}Build time:${txtrst} $((DIFF / 60)) minute(s) and $((DIFF % 60)) seconds.";
 
 
 # OPTIONAL SOURCE CLEAN
@@ -639,16 +800,29 @@
 
 	cd "${KERNELDIR}" || exit 1;
 
-	read -p "${grn}Make clean source? (y/n) > ${txtrst}";
+	while true; do
 
-		if [ "$REPLY" == "y" ] || [ "$REPLY" == "Y" ]; then
-			make clean;
-			make distclean;
-			make mrproper;
-			echo;
-			echo "Source cleaned";
-		else
-			echo "Source not cleaned";
-		fi;
+		echo;
+		read -rp "${cya}Make clean source? (y/n) > ${txtrst}" yn;
+
+		case $yn in
+
+			y|Y )
+				make clean && make distclean && make mrproper;
+				echo "Source cleaned";
+				break;
+				;;
+
+			n|N )
+				echo "Source not cleaned";
+				break;
+				;;
+
+			* )
+				echo "Please answer yes or no";
+				;;
+
+		esac;
+	done;
 
 	echo;
