@@ -14,6 +14,7 @@ if [ ! -e /data/crontab/ ]; then
 	$BB mkdir /data/crontab/;
 fi;
 
+
 # Copy Cron files after reset
 if [ ! -e /data/crontab/cron-scripts/ ]; then
 	$BB cp -a /res/crontab/ /data/;
@@ -30,8 +31,10 @@ $BB cp -a /data/crontab/root /var/spool/cron/crontabs/;
 chown 0:0 /var/spool/cron/crontabs/*;
 chmod 777 /var/spool/cron/crontabs/*;
 
+
 # Check device local timezone & set for cron tasks
 timezone=$(date +%z);
+
 if [ "$timezone" == "+1400" ]; then
 	TZ=UCT-14
 elif [ "$timezone" == "+1300" ]; then
@@ -116,9 +119,11 @@ fi;
 
 export TZ
 
+
 #Set Permissions to scripts
 chown 0:0 /data/crontab/cron-scripts/*;
 chmod 777 /data/crontab/cron-scripts/*;
+
 
 # use /var/spool/cron/crontabs/ call the crontab file "root"
 $BB nohup /system/xbin/crond -c /var/spool/cron/crontabs/ > /data/.SkyHigh/cron.txt &

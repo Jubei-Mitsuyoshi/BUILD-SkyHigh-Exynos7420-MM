@@ -474,7 +474,7 @@ cat << CTAG
 			`if [ -f "/sys/module/wacom_i2c/parameters/wl_divide_pen" ]; then
 				PEN=\`$BB cat /sys/module/wacom_i2c/parameters/wl_divide_pen\`
 				$BB echo '{ SPane:{
-					title:"Pen detect",
+					title:"Pen Detect",
 					description:" "
 				}},
 					{ SSeekBar:{

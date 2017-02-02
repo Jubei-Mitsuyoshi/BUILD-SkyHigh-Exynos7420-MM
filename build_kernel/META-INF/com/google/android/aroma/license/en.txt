@@ -16,7 +16,7 @@ The above copyright notice shall be included in all copies or substantial portio
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</q></@>
 
-<b><#selectbg_g>*BUG Reporting</#></b>
+<b><#selectbg_g>* BUG Reporting</#></b>
 
 <@fill><q>I might not have your device variant and or able to reproduce your "issue". With this in mind, please provide as much information as possible, including steps to reproduce or what you have done to help yourself. Without providing this important information, any potential troubleshooting or logs could be meaningless and a waste of my time.</q></@>
 
