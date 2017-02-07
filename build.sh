@@ -193,12 +193,15 @@
 
 # RAMDISK ALGORITHM
 
+	# select algorithm or change compression level to ensure boot.img 'GENERATED_SIZE' < 'PARTITION_SIZE'
 	while true; do
 
 		echo;
 		read -rp "${cya}Select ramdisk de/compression algorithm:
 			[1] GZIP
 			[2] LZO
+			[3] LZ4
+			[4] XZ
 			> ${txtrst}" algorithm;
 
 		case $algorithm in
@@ -206,6 +209,7 @@
 			1 )
 				export COMP="gzip -9";
 				export EXT="gz";
+				sed -i "/# CONFIG_RD_GZIP is not set/c\CONFIG_RD_GZIP=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
 				echo "GZIP selected";
 				break;
 				;;
@@ -213,7 +217,24 @@
 			2 )
 				export COMP="lzop -9";
 				export EXT="lzo";
+				sed -i "/# CONFIG_RD_LZO is not set/c\CONFIG_RD_LZO=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
 				echo "LZO selected";
+				break;
+				;;
+
+			3 )
+				export COMP="lz4c -l -hc";
+				export EXT="lz4";
+				sed -i "/# CONFIG_RD_LZ4 is not set/c\CONFIG_RD_LZ4=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+				echo "LZ4 selected";
+				break;
+				;;
+
+			4 )
+				export COMP="xz -1 -Ccrc32";
+				export EXT="xz";
+				sed -i "/# CONFIG_RD_XZ is not set/c\CONFIG_RD_XZ=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+				echo "XZ selected";
 				break;
 				;;
 
@@ -263,47 +284,87 @@
 
 		echo;
 		read -rp "${cya}Select toolchain:
-			[1] Linaro	6.2.1
-			[2] Flash	6.3.1
+			[1] Linaro-Android	6.3.1
+			[2] Linaro		6.2.1
+			[3] Flash		6.3.1
 			> ${txtrst}" tc;
 
 		case $tc in
 
 			1 )
-				# Linaro 6.2.1 http://releases.linaro.org/components/toolchain/binaries/latest-6/arm-eabi
-				export CROSS_COMPILE=~/Toolchains/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-;
-				echo "Linaro 6.2.1 selected (Graphite unimplemented)";
-				sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
-				echo "Graphite disabled in config";
+				# Linaro-Android 6.3.1 http://snapshots.linaro.org/android/android-gcc-toolchain/latest
+				export CROSS_COMPILE=~/Toolchains/aarch64-linux-android-6.3/bin/aarch64-linux-android-;
+				echo "Linaro-Android 6.3.1 selected";
+
+				while true; do
+
+					echo;
+					read -rp "${grn}Enable graphite optimizations? (y/n) > ${txtrst}" yn;
+
+					case $yn in
+
+						y|Y )
+							sed -i "/# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set/c\CONFIG_CC_GRAPHITE_OPTIMIZATION=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+							echo "Graphite enabled in config";
+							break;
+							;;
+
+						n|N )
+							sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+							echo "Graphite disabled in config";
+							break;
+							;;
+
+						* )
+							echo "Please answer yes or no";
+							;;
+
+					esac;
+				done;
+
 				break;
 				;;
 
 			2 )
+				# Linaro 6.2.1 http://releases.linaro.org/components/toolchain/binaries/latest-6/arm-eabi
+				export CROSS_COMPILE=~/Toolchains/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-;
+				sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+				echo "Linaro 6.2.1 selected";
+				echo "Graphite disabled in config";
+				break;
+				;;
+
+			3 )
 				# Flash 6.3.1 https://gitlab.com/Flash-ROM/aarch64-linux-android-6.x
 				export CROSS_COMPILE=~/Toolchains/aarch64-linux-android-6.x/bin/aarch64-linux-android-;
 				echo "Flash 6.3.1 selected";
-				echo;
-				read -rp "${grn}Enable graphite optimizations? (y/n) > ${txtrst}" yn;
 
-				case $yn in
+				while true; do
 
-					y|Y )
-						sed -i "/# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set/c\CONFIG_CC_GRAPHITE_OPTIMIZATION=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
-						echo "Graphite enabled in config";
-						break;
-						;;
+					echo;
+					read -rp "${grn}Enable graphite optimizations? (y/n) > ${txtrst}" yn;
 
-					n|N )
-						sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
-						echo "Graphite disabled in config";
-						break;
-						;;
+					case $yn in
 
-					* )
-						echo "Please answer yes or no";
-						;;
+						y|Y )
+							sed -i "/# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set/c\CONFIG_CC_GRAPHITE_OPTIMIZATION=y" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+							echo "Graphite enabled in config";
+							break;
+							;;
 
-				esac;
+						n|N )
+							sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
+							echo "Graphite disabled in config";
+							break;
+							;;
+
+						* )
+							echo "Please answer yes or no";
+							;;
+
+					esac;
+				done;
+
 				break;
 				;;
 
@@ -691,7 +752,7 @@
 	if [[ $GENERATED_SIZE -gt $PARTITION_SIZE ]]; then
 		echo;
 		echo "${bldred}$TARGET${txtrst} ${red}boot.img size larger than partition size !!${txtrst}" 1>&2;
-		echo "Please change your de/compression algorithm !!";
+		echo "Please change your de/compression algorithm or compression level !!";
 
 		cd "${KERNELDIR}" || exit 1;
 
