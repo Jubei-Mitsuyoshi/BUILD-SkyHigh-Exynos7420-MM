@@ -400,8 +400,6 @@ if prop("menu.prop","selected") == "1" then
 	ini_set("text_next", "<~text_next>");
 	ini_set("icon_next", "@next");
 
-	alert( "<~freeze.attention>", "<~freeze.attention-desc>");
-
 	install(
 		"<~inst.title>",
 		"\n" +
