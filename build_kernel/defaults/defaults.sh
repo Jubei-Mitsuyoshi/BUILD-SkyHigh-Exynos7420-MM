@@ -5,7 +5,7 @@
 
 # DETECT
 if [ "$1" = "DETECT" ]; then
-	if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
+	if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
 		echo "device.type=compatible" >> /system/device.prop
 	else
 		echo "device.type=incompatible" >> /system/device.prop

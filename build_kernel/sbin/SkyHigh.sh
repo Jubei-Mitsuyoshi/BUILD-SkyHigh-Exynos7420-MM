@@ -12,7 +12,7 @@ fi;
 
 
 # Variant detection for supported devices
-if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N920T" /proc/cmdline)" != "" ] || [ "$(grep "N920W8" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
+if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline)" != "" ] || [ "$(grep "N920G" /proc/cmdline)" != "" ] || [ "$(grep "N920I" /proc/cmdline)" != "" ] || [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
 
 
 	# Set SELinux permissive by default (parse defaults from prop)

@@ -53,10 +53,6 @@
 	if [ "$TARGET" == "N920C" ] ; then
 		export KERNEL_CONFIG="SkyHigh_N920C_defconfig";
 		export BOARD="SYSMAGIC000KU";
-	# SM-N920 T/W8
-	elif [ "$TARGET" == "N920T" ] ; then
-		export KERNEL_CONFIG="SkyHigh_N920T_defconfig";
-		export BOARD="SYSMAGIC000KU";
 	# SM-N9208 SEA
 	elif [ "$TARGET" == "N9208" ] ; then
 		export KERNEL_CONFIG="SkyHigh_N9208_SEA_defconfig";
@@ -389,7 +385,6 @@
 		echo;
 		echo "You need to define your device target!";
 		echo "example: build_kernel.sh N920C";
-		echo "example: build_kernel.sh N920T";
 		echo "example: build_kernel.sh N9208";
 		echo;
 		exit 1;

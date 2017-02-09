@@ -7,10 +7,6 @@ elif [ "$(grep "N920G" /proc/cmdline)" != "" ]; then
 	VARIANT="SM-N920G"
 elif [ "$(grep "N920I" /proc/cmdline)" != "" ]; then
 	VARIANT="SM-N920I"
-elif [ "$(grep "N920T" /proc/cmdline)" != "" ]; then
-	VARIANT="SM-N920T"
-elif [ "$(grep "N920W8" /proc/cmdline)" != "" ]; then
-	VARIANT="SM-N920W8"
 elif [ "$(grep "N9208" /proc/cmdline)" != "" ]; then
 	VARIANT="SM-N9208"
 else
