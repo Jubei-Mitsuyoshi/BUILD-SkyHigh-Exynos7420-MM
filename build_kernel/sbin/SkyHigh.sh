@@ -95,7 +95,7 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 
 	# Allow untrusted apps to read from debugfs (mitigate SELinux denials)
 	if [ -e /su/lib/libsupol.so ]; then
-	/system/xbin/supolicy --live \
+	/su/bin/supolicy --live \
 		"allow untrusted_app debugfs file { open read getattr }" \
 		"allow untrusted_app sysfs_lowmemorykiller file { open read getattr }" \
 		"allow untrusted_app sysfs_devices_system_iosched file { open read getattr }" \
