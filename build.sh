@@ -465,11 +465,14 @@
 
 		stat "${KERNELDIR}"/arch/arm64/boot/Image || exit 1;
 		mv ./arch/arm64/boot/Image "$EXTRACT";
-		echo;
-		echo "${cya}--- Creating custom dt.img ---${txtrst}";
-		echo;
-		# stock generated tools
-		./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/;
+
+		if [ "$dt" == "2" ]; then
+			echo;
+			echo "${cya}--- Creating custom dt.img ---${txtrst}";
+			echo;
+			# stock generated tools
+			./$BK/tools/dtbtool -o dt.img -s 2048 -p ./scripts/dtc/dtc ./arch/arm64/boot/dts/;
+		fi;
 	else
 		echo "${bldred}Kernel STUCK in BUILD!${txtrst}";
 
