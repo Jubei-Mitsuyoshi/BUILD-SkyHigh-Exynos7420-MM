@@ -3,12 +3,17 @@
 # Original by dorimanx for ExTweaks
 # Modified by UpInTheAir for SkyHigh kernels & Synapse
 
-BB=/system/xbin/busybox;
-GOOGLE=$(cat /res/synapse/SkyHigh/cron/google);
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 	$BB mount -o remount,rw /;
 fi;
+
+GOOGLE=$(cat /res/synapse/SkyHigh/cron/google);
 
 if [ "$GOOGLE" == 1 ]; then
 

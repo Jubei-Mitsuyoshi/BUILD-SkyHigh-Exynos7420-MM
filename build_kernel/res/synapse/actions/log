@@ -1,7 +1,11 @@
 # BIG original credits to Dorimanx
 # modified UpInTheAir for SkyHigh kernels
 
-BB=/system/xbin/busybox;
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 TIMESTAMP=$(date +%Y-%m-%d.%H.%M.%S);
 LOGS=/data/media/0/SkyHigh/logs;

@@ -3,12 +3,17 @@
 # OpenRecoveryScript
 # by UpInTheAir for SkyHigh kernels using Synapse & TWRP
 
-BB=/system/xbin/busybox;
-TWRP=$(cat /res/synapse/SkyHigh/cron/twrp_backup);
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 	$BB mount -o remount,rw /;
 fi;
+
+TWRP=$(cat /res/synapse/SkyHigh/cron/twrp_backup);
 
 if [ "$TWRP" == 1 ]; then
 
@@ -122,17 +127,29 @@ if [ "$TWRP" == 1 ]; then
 
 		# fstrim EXT4 partitions after creating free space
 		if grep -q 'system ext4' /proc/mounts ; then
-			/system/xbin/fstrim -v /system
+			if [ -e /su/xbin/fstrim ]; then
+				/su/xbin/fstrim -v /system
+			elif [ -e /system/xbin/fstrim ]; then
+				/system/xbin/fstrim -v /system
+			fi;
 		else
 			exit 0;
 		fi;
 		if grep -q 'data ext4' /proc/mounts ; then
-			/system/xbin/fstrim -v /data
+			if [ -e /su/xbin/fstrim ]; then
+				/su/xbin/fstrim -v /data
+			elif [ -e /system/xbin/fstrim ]; then
+				/system/xbin/fstrim -v /data
+			fi;
 		else
 			exit 0;
 		fi;
 		if grep -q 'cache ext4' /proc/mounts ; then
-			/system/xbin/fstrim -v /cache
+			if [ -e /su/xbin/fstrim ]; then
+				/su/xbin/fstrim -v /cache
+			elif [ -e /system/xbin/fstrim ]; then
+				/system/xbin/fstrim -v /cache
+			fi;
 		else
 			exit 0;
 		fi;

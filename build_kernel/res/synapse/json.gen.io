@@ -1,6 +1,10 @@
 #!/system/bin/sh
 
-BB=/system/xbin/busybox;
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 cat << CTAG
 {

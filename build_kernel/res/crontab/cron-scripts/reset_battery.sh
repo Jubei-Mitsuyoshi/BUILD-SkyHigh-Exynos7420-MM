@@ -3,6 +3,16 @@
 # Fuel guage reset script
 # by UpInTheAir for SkyHigh kernels & Synapse
 
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
+
+if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
+	$BB mount -o remount,rw /;
+fi;
+
 if [ -d "/sys/devices/battery.54" ]; then
 	P=/sys/devices/battery.54
 elif [ -d "/sys/devices/battery.53" ]; then
@@ -13,12 +23,7 @@ elif [ -d "/sys/devices/battery.51" ]; then
 	P=/sys/devices/battery.51
 fi;
 
-BB=/system/xbin/busybox;
 FG_RESET=$(cat /res/synapse/SkyHigh/cron/fg_reset);
-
-if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
-	$BB mount -o remount,rw /;
-fi;
 
 if [ "$FG_RESET" == 1 ]; then
 

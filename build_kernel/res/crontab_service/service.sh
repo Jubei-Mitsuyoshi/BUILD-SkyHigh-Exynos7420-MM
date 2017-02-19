@@ -3,7 +3,11 @@
 # Created By Dorimanx and Dairinin
 # Modified by UpInTheAir for SkyHigh kernel & Synapse
 
-BB=/system/xbin/busybox;
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 ROOTFS_MOUNT=$(mount | grep rootfs | cut -c26-27 | grep -c rw)
 if [ "$ROOTFS_MOUNT" -eq "0" ]; then
@@ -20,7 +24,12 @@ if [ ! -e /data/crontab/cron-scripts/ ]; then
 	$BB cp -a /res/crontab/ /data/;
 fi;
 
-$BB cp -a /res/crontab_service/cron-root /data/crontab/root;
+if [ -e /su/xbin/busybox ]; then
+	$BB cp -a /res/crontab_service/su/cron-root /data/crontab/root;
+elif [ -e /system/xbin/busybox ]; then
+	$BB cp -a /res/crontab_service/system/cron-root /data/crontab/root;
+fi;
+
 chown 0:0 /data/crontab/root;
 chmod 777 /data/crontab/root;
 if [ ! -d /var/spool/cron/crontabs ]; then
@@ -126,7 +135,11 @@ chmod 777 /data/crontab/cron-scripts/*;
 
 
 # use /var/spool/cron/crontabs/ call the crontab file "root"
-$BB nohup /system/xbin/crond -c /var/spool/cron/crontabs/ > /data/.SkyHigh/cron.txt &
+if [ -e /su/xbin/crond ]; then
+	$BB nohup /su/xbin/crond -c /var/spool/cron/crontabs/ > /data/.SkyHigh/cron.txt &
+elif [ -e /system/xbin/crond ]; then
+	$BB nohup /system/xbin/crond -c /var/spool/cron/crontabs/ > /data/.SkyHigh/cron.txt &
+fi;
 sleep 1;
 PIDOFCRON=$(pidof crond);
 echo "-900" > /proc/"$PIDOFCRON"/oom_score_adj;

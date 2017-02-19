@@ -8,7 +8,7 @@
 # Gokhanmoral@xda
 # Johnbeetee
 # halaszk@xda
-# UpInTheAir@xda
+# UpInTheAir
 
 # TAKE NOTE THAT LINES PRECEDED BY A "#" IS COMMENTED OUT.
 # This script must be activated after init start =< 25sec or parameters from /sys/* will not be loaded.
@@ -33,11 +33,16 @@ cortexbrain_power_aware_sched=$(cat /res/synapse/SkyHigh/cortexbrain_power_aware
 cortexbrain_hmp_little_pack=$(cat /res/synapse/SkyHigh/cortexbrain_hmp_little_pack);
 cortexbrain_pewq=$(cat /res/synapse/SkyHigh/cortexbrain_pewq);
 
+
 # ==============================================================
 # GLOBAL VARIABLES || without "local" also a variable in a function is global
 # ==============================================================
 
-BB=/system/xbin/busybox;
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
 	$BB mount -o remount,rw /;
@@ -55,25 +60,26 @@ fi;
 
 READ_CONFIG()
 {
-cortexbrain_background_process=$(cat /res/synapse/SkyHigh/cortexbrain_background_process);
-cortexbrain_kernel=$(cat /res/synapse/SkyHigh/cortexbrain_kernel);
-cortexbrain_system=$(cat /res/synapse/SkyHigh/cortexbrain_system);
-cortexbrain_wifi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto);
-cortexbrain_wifi_auto_scron=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto_scron);
-cortexbrain_wifi_auto_scroff=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto_scroff);
-cortexbrain_wifi_delay_scron_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_enable) * 60 ));
-cortexbrain_wifi_delay_scron_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_disable) * 360 ));
-cortexbrain_wifi_delay_scroff_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable) * 60 ));
-cortexbrain_wifi_delay_scroff_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable) * 360 ));
-cortexbrain_media_manager=$(cat /res/synapse/SkyHigh/cortexbrain_media_manager);
-cortexbrain_nmi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_nmi_auto);
-cortexbrain_doze_auto=$(cat /res/synapse/SkyHigh/cortexbrain_doze_auto);
-cortexbrain_alpm_auto=$(cat /res/synapse/SkyHigh/cortexbrain_alpm_auto);
-cortexbrain_lux=$(cat /res/synapse/SkyHigh/cortexbrain_lux);
-cortexbrain_power_aware_sched=$(cat /res/synapse/SkyHigh/cortexbrain_power_aware_sched);
-cortexbrain_hmp_little_pack=$(cat /res/synapse/SkyHigh/cortexbrain_hmp_little_pack);
-cortexbrain_pewq=$(cat /res/synapse/SkyHigh/cortexbrain_pewq);
-log -p i -t "$FILE_NAME" "*** CONFIG ***: READED";
+	cortexbrain_background_process=$(cat /res/synapse/SkyHigh/cortexbrain_background_process);
+	cortexbrain_kernel=$(cat /res/synapse/SkyHigh/cortexbrain_kernel);
+	cortexbrain_system=$(cat /res/synapse/SkyHigh/cortexbrain_system);
+	cortexbrain_wifi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto);
+	cortexbrain_wifi_auto_scron=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto_scron);
+	cortexbrain_wifi_auto_scroff=$(cat /res/synapse/SkyHigh/cortexbrain_wifi_auto_scroff);
+	cortexbrain_wifi_delay_scron_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_enable) * 60 ));
+	cortexbrain_wifi_delay_scron_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_disable) * 360 ));
+	cortexbrain_wifi_delay_scroff_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable) * 60 ));
+	cortexbrain_wifi_delay_scroff_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable) * 360 ));
+	cortexbrain_media_manager=$(cat /res/synapse/SkyHigh/cortexbrain_media_manager);
+	cortexbrain_nmi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_nmi_auto);
+	cortexbrain_doze_auto=$(cat /res/synapse/SkyHigh/cortexbrain_doze_auto);
+	cortexbrain_alpm_auto=$(cat /res/synapse/SkyHigh/cortexbrain_alpm_auto);
+	cortexbrain_lux=$(cat /res/synapse/SkyHigh/cortexbrain_lux);
+	cortexbrain_power_aware_sched=$(cat /res/synapse/SkyHigh/cortexbrain_power_aware_sched);
+	cortexbrain_hmp_little_pack=$(cat /res/synapse/SkyHigh/cortexbrain_hmp_little_pack);
+	cortexbrain_pewq=$(cat /res/synapse/SkyHigh/cortexbrain_pewq);
+
+	log -p i -t "$FILE_NAME" "*** CONFIG ***: READED";
 }
 
 # Please don't kill "cortexbrain"
@@ -87,9 +93,11 @@ DONT_KILL_CORTEX()
 	log -p i -t "$FILE_NAME" "*** DONT_KILL_CORTEX ***";
 }
 
+
 # ==============================================================
 # KERNEL-TWEAKS
 # ==============================================================
+
 KERNEL_TWEAKS()
 {
 	if [ "$cortexbrain_kernel" == "1" ]; then
@@ -105,9 +113,11 @@ KERNEL_TWEAKS()
 }
 KERNEL_TWEAKS;
 
+
 # ==============================================================
 # SYSTEM-TWEAKS
 # ==============================================================
+
 SYSTEM_TWEAKS()
 {
 	if [ "$cortexbrain_system" == "1" ]; then
@@ -120,9 +130,11 @@ SYSTEM_TWEAKS()
 }
 SYSTEM_TWEAKS;
 
+
 # ==============================================================
 # SCREEN-FUNCTIONS
 # ==============================================================
+
 WIFI_AUTO()
 {
 	if [ "$cortexbrain_wifi_auto" == "1" ]; then
@@ -503,9 +515,11 @@ PEWQ_AUTO()
 	fi;
 }
 
+
 # ==============================================================
 # TWEAKS: if Screen-ON
 # ==============================================================
+
 AWAKE_MODE()
 {
 	READ_CONFIG;
@@ -556,9 +570,11 @@ AWAKE_MODE()
 
 }
 
+
 # ==============================================================
 # TWEAKS: if Screen-OFF
 # ==============================================================
+
 SLEEP_MODE()
 {
 	READ_CONFIG;
@@ -606,6 +622,7 @@ SLEEP_MODE()
 	log -p i -t "$FILE_NAME" "*** SLEEP: Normal-Mode ***";
 
 }
+
 
 # ==============================================================
 # Background process to check screen state

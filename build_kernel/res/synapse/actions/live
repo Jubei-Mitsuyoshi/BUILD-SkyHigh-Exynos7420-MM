@@ -1,4 +1,8 @@
-BB=/system/xbin/busybox;
+if [ -e /su/xbin/busybox ]; then
+	BB=/su/xbin/busybox;
+elif [ -e /system/xbin/busybox ]; then
+	BB=/system/xbin/busybox;
+fi;
 
 if [ -d "/sys/devices/battery.54" ]; then
 	P=/sys/devices/battery.54
@@ -376,7 +380,7 @@ gps)
   ;;
 
 check_cortex)
-  if [[ "$(pgrep -f "/system/xbin/busybox sh /sbin/cortexbrain-tune.sh" | wc -l)" != "0" ]]; then
+  if [[ "$(pgrep -f "$BB sh /sbin/cortexbrain-tune.sh" | wc -l)" != "0" ]]; then
 	echo "SERVICE ONLINE";
   else
 	echo "SERVICE OFFLINE";
