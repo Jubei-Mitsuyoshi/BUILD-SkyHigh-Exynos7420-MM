@@ -15,21 +15,35 @@ case $1 in
 knox_security)
   P=/res/synapse/SkyHigh/knox;
 
+  function wipe_cache-dalvik_reboot() {
+	if [[ "$(cat /sys/kernel/dyn_fsync/Dyn_fsync_active)" != "0" ]]; then
+		echo "0" > /sys/kernel/dyn_fsync/Dyn_fsync_active;
+	fi;
+	$BB rm -rf /cache/*;
+	$BB rm -rf /data/dalvik-cache/*;
+	$BB sync;
+	$BB sleep 1;
+	/system/bin/reboot;
+  }
+
   if [ ! -z "$2" ]; then
 	if [ "$2" == NO_ACTION ]; then
 		echo "0" > $P;
 	elif [ "$2" == Freeze ]; then
 		echo "1" > $P;
 		am force-stop com.policydm 2> /dev/null;
-		am force-stop com.samsung.android.securitylogagent 2> /dev/null;
+		am force-stop com.samsung.android.asksmanager 2> /dev/null;
 		am force-stop com.samsung.android.bbc.bbcagent 2> /dev/null;
 		am force-stop com.samsung.android.dlp.service 2> /dev/null;
+		am force-stop com.samsung.android.securitylogagent 2> /dev/null;
+		am force-stop com.samsung.android.sm.devicesecurity 2> /dev/null;
 		am force-stop com.samsung.klmsagent 2> /dev/null;
 		am force-stop com.samsung.knox.appsupdateagent 2> /dev/null;
 		am force-stop com.samsung.knox.knoxtrustagent 2> /dev/null;
 		am force-stop com.samsung.knox.kss 2> /dev/null;
 		am force-stop com.samsung.knox.rcp.components 2> /dev/null;
 #		am force-stop com.samsung.knox.trustagent 2> /dev/null;
+		am force-stop com.sec.android.service.sm 2> /dev/null;
 		am force-stop com.sec.enterprise.knox.attestation 2> /dev/null;
 		am force-stop com.sec.enterprise.knox.cloudmdm.smdms 2> /dev/null;
 		am force-stop com.sec.enterprise.knox.myknoxsetupwizard 2> /dev/null;
@@ -44,17 +58,21 @@ knox_security)
 		am force-stop com.sec.knox.switcher 2> /dev/null;
 #		am force-stop com.sec.knox.switchknoxI 2> /dev/null;
 #		am force-stop com.sec.knox.switchknoxII 2> /dev/null;
+		am force-stop com.trustonic.tuiservice 2> /dev/null;
 		sleep 1;
 		pm disable com.policydm 2> /dev/null;
-		pm disable com.samsung.android.securitylogagent 2> /dev/null;
+		pm disable com.samsung.android.asksmanager 2> /dev/null;
 		pm disable com.samsung.android.bbc.bbcagent 2> /dev/null;
 		pm disable com.samsung.android.dlp.service 2> /dev/null;
+		pm disable com.samsung.android.securitylogagent 2> /dev/null;
+		pm disable com.samsung.android.sm.devicesecurity 2> /dev/null;
 		pm disable com.samsung.klmsagent 2> /dev/null;
 		pm disable com.samsung.knox.appsupdateagent 2> /dev/null;
 		pm disable com.samsung.knox.knoxtrustagent 2> /dev/null;
 		pm disable com.samsung.knox.kss 2> /dev/null;
 		pm disable com.samsung.knox.rcp.components 2> /dev/null;
 #		pm disable com.samsung.knox.trustagent 2> /dev/null;
+		pm disable com.sec.android.service.sm 2> /dev/null;
 		pm disable com.sec.enterprise.knox.attestation 2> /dev/null;
 		pm disable com.sec.enterprise.knox.cloudmdm.smdms 2> /dev/null;
 		pm disable com.sec.enterprise.knox.myknoxsetupwizard 2> /dev/null;
@@ -69,18 +87,25 @@ knox_security)
 		pm disable com.sec.knox.switcher 2> /dev/null;
 #		pm disable com.sec.knox.switchknoxI 2> /dev/null;
 #		pm disable com.sec.knox.switchknoxII 2> /dev/null;
+		pm disable com.trustonic.tuiservice 2> /dev/null;
+		sleep 1;
+		wipe_cache-dalvik_reboot;
+
 	elif [ "$2" == Enabled ]; then
 		echo "2" > $P;
 		am start -a com.policydm 2> /dev/null;
-		am start -a com.samsung.android.securitylogagent 2> /dev/null;
+		am start -a com.samsung.android.asksmanager 2> /dev/null;
 		am start -a com.samsung.android.bbc.bbcagent 2> /dev/null;
 		am start -a com.samsung.android.dlp.service 2> /dev/null;
+		am start -a com.samsung.android.securitylogagent 2> /dev/null;
+		am start -a com.samsung.android.sm.devicesecurity 2> /dev/null;
 		am start -a com.samsung.klmsagent 2> /dev/null;
 		am start -a com.samsung.knox.appsupdateagent 2> /dev/null;
 		am start -a com.samsung.knox.knoxtrustagent 2> /dev/null;
 		am start -a com.samsung.knox.kss 2> /dev/null;
 		am start -a com.samsung.knox.rcp.components 2> /dev/null;
 #		am start -a com.samsung.knox.trustagent 2> /dev/null;
+		am start -a com.sec.android.service.sm 2> /dev/null;
 		am start -a com.sec.enterprise.knox.attestation 2> /dev/null;
 		am start -a com.sec.enterprise.knox.cloudmdm.smdms 2> /dev/null;
 		am start -a com.sec.enterprise.knox.myknoxsetupwizard 2> /dev/null;
@@ -95,17 +120,21 @@ knox_security)
 		am start -a com.sec.knox.switcher 2> /dev/null;
 #		am start -a com.sec.knox.switchknoxI 2> /dev/null;
 #		am start -a com.sec.knox.switchknoxII 2> /dev/null;
+		am start -a com.trustonic.tuiservice 2> /dev/null;
 		sleep 1;
 		pm enable com.policydm 2> /dev/null;
-		pm enable com.samsung.android.securitylogagent 2> /dev/null;
+		pm enable com.samsung.android.asksmanager 2> /dev/null;
 		pm enable com.samsung.android.bbc.bbcagent 2> /dev/null;
 		pm enable com.samsung.android.dlp.service 2> /dev/null;
+		pm enable com.samsung.android.securitylogagent 2> /dev/null;
+		pm enable com.samsung.android.sm.devicesecurity 2> /dev/null;
 		pm enable com.samsung.klmsagent 2> /dev/null;
 		pm enable com.samsung.knox.appsupdateagent 2> /dev/null;
 		pm enable com.samsung.knox.knoxtrustagent 2> /dev/null;
 		pm enable com.samsung.knox.kss 2> /dev/null;
 		pm enable com.samsung.knox.rcp.components 2> /dev/null;
 #		pm enable com.samsung.knox.trustagent 2> /dev/null;
+		pm enable com.sec.android.service.sm 2> /dev/null;
 		pm enable com.sec.enterprise.knox.attestation 2> /dev/null;
 		pm enable com.sec.enterprise.knox.cloudmdm.smdms 2> /dev/null;
 		pm enable com.sec.enterprise.knox.myknoxsetupwizard 2> /dev/null;
@@ -120,6 +149,9 @@ knox_security)
 		pm enable com.sec.knox.switcher 2> /dev/null;
 #		pm enable com.sec.knox.switchknoxI 2> /dev/null;
 #		pm enable com.sec.knox.switchknoxII 2> /dev/null;
+		pm enable com.trustonic.tuiservice 2> /dev/null;
+		sleep 1;
+		wipe_cache-dalvik_reboot;
 	fi;
   fi;
 

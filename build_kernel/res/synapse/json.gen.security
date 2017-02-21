@@ -12,7 +12,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SDescription:{
-		description:"NOTE: This process can take ~1 minute and device may be UNRESPONSIVE during this time, PLEASE WAIT for the process to finish !"
+		description:"NOTE: This process can take ~1 minute and device may be UNRESPONSIVE during this time, PLEASE WAIT for the process to finish and for device to auto REBOOT!"
 	}},
 	{ SSpacer:{
 		height:1
