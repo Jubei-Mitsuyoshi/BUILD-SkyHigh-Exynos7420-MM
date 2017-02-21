@@ -20,12 +20,16 @@ elif [ "$1" = "ENFORCING" ]; then
 fi;
 
 # BIND
-if [ "$1" = "BIND" ]; then
+if [ "$1" = "BIND_TRUE" ]; then
 	if [ -f /data/.supersu ]; then
 		rm -rf /data/.supersu;
 		echo BINDSYSTEMXBIN=true >> /data/.supersu;
 	elif [ ! -f /data/.supersu ]; then
 		echo BINDSYSTEMXBIN=true >> /data/.supersu;
+	fi;
+elif [ "$1" = "BIND_FALSE" ]; then
+	if [ -f /data/.supersu ]; then
+		rm -rf /data/.supersu;
 	fi;
 fi;
 

@@ -212,7 +212,7 @@ if prop("menu.prop","selected") == "1" then
 			"bind.prop",
 
 			"<~>",				"",							2,
-			"<~bind.option1>",		"<~bind.option1-desc>",					1
+			"<~bind.option1>",		"<~bind.option1-desc>",					0
 
 		);
 

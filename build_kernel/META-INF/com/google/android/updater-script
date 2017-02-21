@@ -64,7 +64,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
 
 			# BINDSYSTEMXBIN
-			run_program("/tmp/defaults.sh", "BIND");
+			run_program("/tmp/defaults.sh", "BIND_FALSE");
 
 			# INVISIBLE CPUSETS
 			run_program("/tmp/defaults.sh", "INVISIBLE");
@@ -153,11 +153,11 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			# BINDSYSTEMXBIN
 			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "1" then
 				ui_print("@  Setting BINDSYSTEMXBIN");
-				run_program("/tmp/defaults.sh", "BIND");
+				run_program("/tmp/defaults.sh", "BIND_TRUE");
 			endif;
 			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "0" then
 				ui_print("@  Removing BINDSYSTEMXBIN");
-				delete("/data/.supersu");
+				run_program("/tmp/defaults.sh", "BIND_FALSE");
 			endif;
 
 			# INVISIBLE CPUSETS
