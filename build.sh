@@ -281,7 +281,7 @@
 		echo;
 		read -rp "${cya}Select toolchain:
 			[1] Linaro-Android	6.3.1
-			[2] Linaro		6.2.1
+			[2] Linaro		6.3.1
 			[3] Flash		6.3.1
 			> ${txtrst}" tc;
 
@@ -322,10 +322,10 @@
 				;;
 
 			2 )
-				# Linaro 6.2.1 http://releases.linaro.org/components/toolchain/binaries/latest-6/arm-eabi
-				export CROSS_COMPILE=~/Toolchains/gcc-linaro-6.2.1-2016.11-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-;
+				# Linaro 6.3.1 http://snapshots.linaro.org/components/toolchain/binaries
+				export CROSS_COMPILE=~/Toolchains/gcc-linaro-6.3.1-2017.02-rc2-x86_64_aarch64-linux-gnu/bin/aarch64-linux-gnu-;
 				sed -i "/CONFIG_CC_GRAPHITE_OPTIMIZATION=y/c\# CONFIG_CC_GRAPHITE_OPTIMIZATION is not set" "${KERNELDIR}"/arch/arm64/configs/"$KERNEL_CONFIG";
-				echo "Linaro 6.2.1 selected";
+				echo "Linaro 6.3.1 selected";
 				echo "Graphite disabled in config";
 				break;
 				;;
