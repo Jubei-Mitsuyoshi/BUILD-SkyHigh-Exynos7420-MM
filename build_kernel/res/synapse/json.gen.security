@@ -28,6 +28,33 @@ cat << CTAG
 		height:2
 	}},
 	{ SPane:{
+		title:"KNOX Warranty Status"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		title:"Status",
+		description:" ",
+		refresh:3000,
+		action:"live warranty_status"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SOptionList:{
+		title:"Warranty Status",
+		description:"Fake userspace status from 'Warranty Void' to 'Warranty Valid'. This does NOT affect Odin Download Mode status !\n",
+		default:$(getprop ro.boot.warranty_bit),
+		action:"devtools warranty_status",
+		values:{
+			0:"Warranty Valid", 1:"Warranty Void"
+		}
+	}},
+	{ SSpacer:{
+		height:2
+	}},
+	{ SPane:{
 		title:"SELinux (Security-Enhanced Linux)"
 	}},
 	{ SSpacer:{

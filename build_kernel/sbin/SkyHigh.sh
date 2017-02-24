@@ -28,6 +28,10 @@ if [ "$(grep "N920C" /proc/cmdline)" != "" ] || [ "$(grep "N920CD" /proc/cmdline
 	fi;
 
 
+	# KNOX warranty status
+	$BB sh /sbin/resetprop.sh > /dev/null;
+
+
 	# Make directory for Cron Task & cpuset
 	if [ ! -d /data/.SkyHigh ]; then
 		$BB mkdir -p /data/.SkyHigh
