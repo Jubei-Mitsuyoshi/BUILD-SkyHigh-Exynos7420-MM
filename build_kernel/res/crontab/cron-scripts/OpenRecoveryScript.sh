@@ -1,12 +1,43 @@
 #!/system/bin/sh
-
+#
 # OpenRecoveryScript
-# by UpInTheAir for SkyHigh kernels using Synapse & TWRP
+#
+# Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
 if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
@@ -30,26 +61,26 @@ if [ "$TWRP" == 1 ]; then
 	KB=$((1024 * 1024));
 
 	# system used (note: insert space after /system so we don't read /system/xbin)
-	SYSTEM_USED=$(df | grep '^/system ' | awk '{print $3}');
-	SYSTEM_USED=$(echo "${SYSTEM_USED%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+	SYSTEM_USED=$(df | grep '^/system ' | $BB awk '{print $3}');
+	SYSTEM_USED=$(echo "${SYSTEM_USED%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
 	# data free
-	DATA_FREE=$(df | grep '^/storage/emulated' | awk '{print $4}');
-	DATA_FREE=$(echo "${DATA_FREE%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+	DATA_FREE=$(df | grep '^/storage/emulated' | $BB awk '{print $4}');
+	DATA_FREE=$(echo "${DATA_FREE%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
 	# data used
-	DATA_USED=$(df | grep '^/storage/emulated' | awk '{print $3}');
-	DATA_USED=$(echo "${DATA_USED%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+	DATA_USED=$(df | grep '^/storage/emulated' | $BB awk '{print $3}');
+	DATA_USED=$(echo "${DATA_USED%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
 	# internal sdcard (storage)
 	MEDIA_USED=$(du -hs /data/media/0);
-	MEDIA_USED=$(echo "${MEDIA_USED%G*} $KB" | awk '{printf "%.0f \n", $1*$2}');
+	MEDIA_USED=$(echo "${MEDIA_USED%G*} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
 	# find oldest twrp_backup & calc size
 	TWRP_BACKUP_DIR=$(ls -d /data/media/0/TWRP/BACKUPS/*);
 	OLDEST_BACKUP_DIR=$(find $TWRP_BACKUP_DIR/ -maxdepth 1 -type d -name 'twrp_backup-*' -print0 | sort -z | tr '\0\n' '\n\0' 2>/dev/null | head -1 | tr '\0\n' '\n\0');
 	OLDEST_BACKUP=$(du -hs $OLDEST_BACKUP_DIR);
-	OLDEST_BACKUP=$(echo "${OLDEST_BACKUP%G*} $KB" | awk '{printf "%.0f \n", $1*$2}');
+	OLDEST_BACKUP=$(echo "${OLDEST_BACKUP%G*} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
 	# boot size in KB for N920* (28MB)
 	BOOT=28672;
@@ -131,6 +162,8 @@ if [ "$TWRP" == 1 ]; then
 				/su/xbin/fstrim -v /system
 			elif [ -e /system/xbin/fstrim ]; then
 				/system/xbin/fstrim -v /system
+			elif [ -e /system/bin/fstrim ]; then
+				/system/bin/fstrim -v /system
 			fi;
 		else
 			exit 0;
@@ -140,6 +173,8 @@ if [ "$TWRP" == 1 ]; then
 				/su/xbin/fstrim -v /data
 			elif [ -e /system/xbin/fstrim ]; then
 				/system/xbin/fstrim -v /data
+			elif [ -e /system/bin/fstrim ]; then
+				/system/bin/fstrim -v /data
 			fi;
 		else
 			exit 0;
@@ -149,6 +184,8 @@ if [ "$TWRP" == 1 ]; then
 				/su/xbin/fstrim -v /cache
 			elif [ -e /system/xbin/fstrim ]; then
 				/system/xbin/fstrim -v /cache
+			elif [ -e /system/bin/fstrim ]; then
+				/system/bin/fstrim -v /cache
 			fi;
 		else
 			exit 0;

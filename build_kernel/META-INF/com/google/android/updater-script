@@ -1,14 +1,45 @@
+# Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
 run_program("/sbin/sleep", "1");
 
 ui_print(" ");
-ui_print("************************************");
-ui_print("*          SkyHigh Kernel           ");
-ui_print("*          Exynos7420 TW            ");
-ui_print("*          by UpInTheAir            ");
-ui_print("************************************");
-ui_print(" ");
+ui_print("@************************************");
+ui_print("@*                                   ");
+ui_print("@* Copyright (c) 2017 UpInTheAir     ");
+ui_print("@*                                   ");
+ui_print("@* SkyHigh Exynos7420 TW Kernel      ");
+ui_print("@*                                   ");
+ui_print("@************************************");
 
-# MOUNT
+# MOUNT SYSTEM & DATA
 ui_print(" ");
 ui_print("@ Mount Partitions :");
 run_program("/sbin/sleep", "1");
@@ -33,20 +64,23 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 
 	if file_getprop("/tmp/aroma-data/menu.prop","selected") == "1" then
 
+	set_progress(0.1);
+
+		# FLASH KERNEL
+		ui_print(" ");
+		ui_print("@ Extracting kernel");
+		package_extract_file("boot.img", "/dev/block/platform/15570000.ufs/by-name/BOOT");
+
+		run_program("/sbin/sleep", "1");
+
 		## START DEFAULT MODE
 		if file_getprop("/tmp/aroma-data/install.prop","selected.1") == "1" then
 
-		set_progress(0.1);
-
-			# FLASH KERNEL
-			ui_print(" ");
-			ui_print("Extracting Kernel files...");
-			package_extract_file("boot.img", "/dev/block/platform/15570000.ufs/by-name/BOOT");
-
-		set_progress(0.25);
+	set_progress(0.25);
 
 			ui_print(" ");
-			ui_print("Setting SkyHigh kernel defaults...");
+			ui_print("@ Setting SkyHigh Kernel defaults :");
+			ui_print(" ");
 
 			# DEFAULTS
 			delete("/system/SkyHigh.prop");
@@ -58,13 +92,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			run_program("/tmp/defaults.sh", "PERMISSIVE");
 
 			# KNOX
-			delete_recursive("/system/app/SecurityLogAgent");
-			delete_recursive("/data/app/com.samsung.android.securitylogagent");
-			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
-			delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
-
-			# BINDSYSTEMXBIN
-			run_program("/tmp/defaults.sh", "BIND_FALSE");
+			delete_recursive("/data/app/com.samsung.android.securitylogagent", "/system/app/SecurityLogAgent", "/system/etc/secure_storage/com.samsung.android.securitylogagent", "/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
 
 			# INVISIBLE CPUSETS
 			run_program("/tmp/defaults.sh", "INVISIBLE");
@@ -76,7 +104,7 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			run_program("/tmp/defaults.sh", "LAZYTIME");
 
 			# INIT.D
-			delete_recursive("/system/etc/init.d");
+			delete_recursive("/system/etc/init.d", "/system/su.d", "/su/su.d");
 
 			# BUILD.PROP
 			run_program("/tmp/defaults.sh", "BUILD_PROP");
@@ -93,12 +121,55 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 			# RESET CRONTAB TASKS
 			delete_recursive("/data/crontab");
 
-		set_progress(0.35);
+	set_progress(0.35);
 
 			# SYNAPSE LAYOUT
 			delete_recursive("/data/aroma");
 			package_extract_dir("aroma", "/data/aroma");
 
+	set_progress(0.45);
+
+			# BUSYBOX CLEANUP
+			package_extract_dir("busybox/clean", "/tmp/bb_clean");
+			run_program("/sbin/busybox", "unzip", "/tmp/bb_clean/BusyBox-Cleaner-YDS.zip", "META-INF/com/google/android/*", "-d", "/tmp/bb_clean");
+			run_program("/sbin/busybox", "sh", "/tmp/bb_clean/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/bb_clean/BusyBox-Cleaner-YDS.zip");
+
+	set_progress(0.55);
+
+			# BINDSYSTEMXBIN
+			run_program("/tmp/defaults.sh", "BIND_FALSE");
+
+			# SUPERSU
+			run_program("/tmp/defaults.sh", "SUPERSU");
+			package_extract_dir("root/SuperSU", "/tmp/root_supersu");
+			run_program("/sbin/busybox", "unzip", "/tmp/root_supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip", "META-INF/com/google/android/*", "-d", "/tmp/root_supersu");
+			run_program("/sbin/busybox", "sh", "/tmp/root_supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/root_supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip");
+
+			# RE-MOUNT SYSTEM
+			run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+
+	set_progress(0.65);
+
+			# BUSYBOX (SUPERSU)
+			package_extract_dir("busybox/supersu", "/su");
+			set_perm(0, 2000, 0755, "/su/xbin/busybox");
+			run_program("/su/xbin/busybox", "--install", "-s", "/su/xbin");
+
+	set_progress(0.80);
+
+			# CLEANUP MODULES, SQLITE3 & ZIP
+			delete_recursive("/system/lib/modules");
+			delete("/system/xbin/sqlite3", "/system/sbin/sqlite3", "/system/bin/sqlite3", "/system/xbin/zip", "/system/sbin/zip", "/system/bin/zip");
+
+	set_progress(0.85);
+
+			# INSTALL MODULES, SQLITE3 & ZIP
+			package_extract_dir("system", "/system");
+			set_perm_recursive(0, 0, 0755, 0755, "/system/lib/modules");
+
+			package_extract_dir("su", "/su");
+			set_perm(0, 0, 0755, "/su/xbin/sqlite3");
+			set_perm(0, 0, 0755, "/su/xbin/zip");
 		endif;
 
 		## END DEFAULT MODE
@@ -106,498 +177,576 @@ if file_getprop("/system/device.prop","device.type") == "compatible" then
 		## START CUSTOM MODE
 		if file_getprop("/tmp/aroma-data/install.prop","selected.1") == "2" then
 
-		set_progress(0.1);
+	set_progress(0.25);
 
-			# FLASH KERNEL
+			if file_getprop("/tmp/aroma-data/root.prop","selected.1") != "1" then
+				# DEFAULTS
+				ui_print(" ");
+				ui_print("@ USER selected Synapse & kernel defaults :");
+				delete("/system/SkyHigh.prop");
+
+				# SYNAPSE
+					if file_getprop("/tmp/aroma-data/reset.prop","item.1.1") == "1" then
+					ui_print("Reset Synapse");
+					delete_recursive("/data/data/com.af.synapse/databases");
+				endif;
+
+				# SELINUX PERMISSIVE
+				if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "1" then
+					ui_print("Setting SELinux Permissive");
+					run_program("/tmp/defaults.sh", "PERMISSIVE");
+				endif;
+
+				# SELINUX ENFORCING
+				if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "2" then
+					ui_print("Setting SELinux Enforcing");
+					run_program("/tmp/defaults.sh", "ENFORCING");
+				endif;
+
+				# KNOX
+				if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "1" then
+					ui_print("Removing SecurityLogAgent.apk");
+					delete_recursive("/data/app/com.samsung.android.securitylogagent", "/system/app/SecurityLogAgent", "/system/etc/secure_storage/com.samsung.android.securitylogagent", "/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
+				endif;
+				if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "0" then
+					ui_print("Permit SecurityLogAgent.apk");
+				endif;
+
+				# INVISIBLE CPUSETS
+				if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "1" then
+					ui_print("Enabling Invisible CPUSETS");
+					run_program("/tmp/defaults.sh", "INVISIBLE");
+				endif;
+				if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "0" then
+					ui_print("Disabling Invisible CPUSETS");
+					delete("/data/.SkyHigh/invisible_cpuset");
+				endif;
+
+				# VNSWAP
+				if file_getprop("/tmp/aroma-data/swaps.prop","item.1.1") == "1" then
+					ui_print("Enabling VNSwap");
+					run_program("/tmp/defaults.sh", "VNSWAP");
+				endif;
+				if file_getprop("/tmp/aroma-data/swaps.prop","item.1.1") == "0" then
+					ui_print("Disabling VNSwap");
+				endif;
+
+				# LAZYTIME MOUNT
+				if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "1" then
+					ui_print("Enabling EXT4 Lazytime Mount");
+					run_program("/tmp/defaults.sh", "LAZYTIME");
+				endif;
+				if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "0" then
+					ui_print("Disabling EXT4 Lazytime Mount");
+					delete("/data/.SkyHigh/lazytime_mount");
+				endif;
+
+				# INIT.D
+				if file_getprop("/tmp/aroma-data/placebo.prop","item.1.1") == "1" then
+					ui_print("Removing init.d Scripts");
+					delete_recursive("/system/etc/init.d", "/system/su.d", "/su/su.d");
+				endif;
+
+				# BUILD.PROP
+				if file_getprop("/tmp/aroma-data/placebo.prop","item.2.1") == "1" then
+					ui_print("Removing build.prop Placebo");
+					run_program("/tmp/defaults.sh", "BUILD_PROP");
+				endif;
+				if file_getprop("/tmp/aroma-data/placebo.prop","item.2.1") == "0" then
+					ui_print("Permit build.prop Placebo");
+				endif;
+
+				set_progress(0.30);
+
+				# INTERACTIVE
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "1" then
+					ui_print("Setting Interactive Governor");
+					run_program("/tmp/defaults.sh", "INTERACTIVE");
+				endif;
+
+				# KTOONSERVATIVE
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "2" then
+					ui_print("Setting Ktoonservative Governor");
+					run_program("/tmp/defaults.sh", "KTOONSERVATIVE");
+				endif;
+
+				# PERFORMANCE
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "3" then
+					ui_print("Setting Performance Governor");
+					run_program("/tmp/defaults.sh", "PERFORMANCE");
+				endif;
+
+				# ONDEMAND
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "4" then
+					ui_print("Setting Ondemand Governor");
+					run_program("/tmp/defaults.sh", "ONDEMAND");
+				endif;
+
+				# CONSERVATIVE
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "5" then
+					ui_print("Setting Conservative Governor");
+					run_program("/tmp/defaults.sh", "CONSERVATIVE");
+				endif;
+
+				# CONSERVATIVEX
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "6" then
+					ui_print("Setting ConservativeX Governor");
+					run_program("/tmp/defaults.sh", "CONSERVATIVEX");
+				endif;
+
+				# CHILL
+				if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "7" then
+					ui_print("Setting Chill Governor");
+					run_program("/tmp/defaults.sh", "CHILL");
+				endif;
+
+				# ROW
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
+					ui_print("Setting ROW Scheduler");
+					run_program("/tmp/defaults.sh", "ROW");
+				endif;
+
+				# CFQ
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "2" then
+					ui_print("Setting CFQ Scheduler");
+					run_program("/tmp/defaults.sh", "CFQ");
+				endif;
+
+				# FIOPS
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "3" then
+					ui_print("Setting FIOPS Scheduler");
+					run_program("/tmp/defaults.sh", "FIOPS");
+				endif;
+
+				# NOOP
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "4" then
+					ui_print("Setting NOOP Scheduler");
+					run_program("/tmp/defaults.sh", "NOOP");
+				endif;
+
+				# BFQ
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "5" then
+					ui_print("Setting BFQ Scheduler");
+					run_program("/tmp/defaults.sh", "BFQ");
+				endif;
+
+				# SIOPLUS
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "6" then
+					ui_print("Setting SIOPlus Scheduler");
+					run_program("/tmp/defaults.sh", "SIOPLUS");
+				endif;
+
+				# DEADLINE
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "7" then
+					ui_print("Setting Deadline Scheduler");
+					run_program("/tmp/defaults.sh", "DEADLINE");
+				endif;
+
+				# ZEN
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "8" then
+					ui_print("Setting Zen Scheduler");
+					run_program("/tmp/defaults.sh", "ZEN");
+				endif;
+
+				# MAPLE
+				if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "9" then
+					ui_print("Setting Maple Scheduler");
+					run_program("/tmp/defaults.sh", "MAPLE");
+				endif;
+
+				# CORTEX
+				if file_getprop("/tmp/aroma-data/default.prop","item.1.1") == "1" then
+					ui_print("Enabling CortexBrain");
+					run_program("/tmp/defaults.sh", "CORTEX_ENABLED");
+				endif;
+
+				# CRONTAB
+				if file_getprop("/tmp/aroma-data/default.prop","item.2.1") == "1" then
+					ui_print("Enabling Crontab");
+					run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
+				endif;
+
+				# RESET CRONTAB TASKS
+				delete_recursive("/data/crontab");
+
+	set_progress(0.35);
+
+				# SYNAPSE LAYOUT
+				ui_print(" ");
+				ui_print("@ Removal of selected Synapse sections :");
+				delete_recursive("/data/aroma");
+				package_extract_dir("aroma", "/data/aroma");
+
+				# A57 CPU
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.1") == "1" then
+					ui_print("Removing A57 CPU");
+					delete("/data/aroma/A57");
+				endif;
+
+				# A57 VOLT
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.2") == "1" then
+					ui_print("Removing A57 Volt");
+					delete("/data/aroma/A57_volt");
+				endif;
+
+				# A53 CPU
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.3") == "1" then
+					ui_print("Removing A53 CPU");
+					delete("/data/aroma/A53");
+				endif;
+
+				# A53 VOLT
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.4") == "1" then
+					ui_print("Removing A53 Volt");
+					delete("/data/aroma/A53_volt");
+				endif;
+
+				# CPU GOV
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.5") == "1" then
+					ui_print("Removing CPU Gov");
+					delete("/data/aroma/cpu_gov");
+				endif;
+
+				# A57 GOV
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.6") == "1" then
+					ui_print("Removing A57 Gov");
+					delete("/data/aroma/A57_gov");
+				endif;
+
+				# A53 GOV
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.7") == "1" then
+					ui_print("Removing A53 Gov");
+					delete("/data/aroma/A53_gov");
+				endif;
+
+				# MULTICORE
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.8") == "1" then
+					ui_print("Removing Multicore");
+					delete("/data/aroma/hmp");
+				endif;
+
+				# CPU STATS
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.9") == "1" then
+					ui_print("Removing CPU Stats");
+					delete("/data/aroma/cpu_stats");
+				endif;
+
+				# BOOST
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.10") == "1" then
+					ui_print("Removing Boost");
+					delete("/data/aroma/boost");
+				endif;
+
+				# GPU
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.11") == "1" then
+					ui_print("Removing GPU");
+					delete("/data/aroma/gpu");
+				endif;
+
+				# GPU VOLT
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.12") == "1" then
+					ui_print("Removing GPU Volt");
+					delete("/data/aroma/gpu_volt");
+				endif;
+
+				# THERMAL
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.13") == "1" then
+					ui_print("Removing Thermal");
+					delete("/data/aroma/tmu");
+				endif;
+
+				# BUS
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.14") == "1" then
+					ui_print("Removing Bus");
+					delete("/data/aroma/bus");
+				endif;
+
+				# IO
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.15") == "1" then
+					ui_print("Removing IO");
+					delete("/data/aroma/io");
+				endif;
+
+				# MEMORY
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.16") == "1" then
+					ui_print("Removing Memory");
+					delete("/data/aroma/memory");
+				endif;
+
+				# ADVANCED
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.17") == "1" then
+					ui_print("Removing Advanced");
+					delete("/data/aroma/advanced");
+				endif;
+
+				# POWER SUSPEND
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.18") == "1" then
+					ui_print("Removing Power Suspend");
+					delete("/data/aroma/powersuspend");
+				endif;
+
+				# DOZE
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.19") == "1" then
+					ui_print("Removing Doze");
+					delete("/data/aroma/doze");
+				endif;
+
+				# WAKELOCKS
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.20") == "1" then
+					ui_print("Removing Wakelocks");
+					delete("/data/aroma/wakelocks");
+				endif;
+
+				# AUDIO
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.21") == "1" then
+					ui_print("Removing Audio");
+					delete("/data/aroma/audio");
+				endif;
+
+				# BATTERY
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.22") == "1" then
+					ui_print("Removing Battery");
+					delete("/data/aroma/battery");
+				endif;
+
+				# LED
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.23") == "1" then
+					ui_print("Removing LED");
+					delete("/data/aroma/led");
+				endif;
+
+				# SCREEN
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.24") == "1" then
+					ui_print("Removing Screen");
+					delete("/data/aroma/screen");
+				endif;
+
+				# NETWORK
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.25") == "1" then
+					ui_print("Removing Network");
+					delete("/data/aroma/network");
+				endif;
+
+				# SECURITY
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.26") == "1" then
+					ui_print("Removing Security");
+					delete("/data/aroma/security");
+				endif;
+
+				# FILE SYSTEM
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.27") == "1" then
+					ui_print("Removing File System");
+					delete("/data/aroma/fs");
+				endif;
+
+				# CORTEX
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.28") == "1" then
+					ui_print("Removing CortexBrain");
+					delete("/data/aroma/cortex");
+				endif;
+
+				# CRONTAB
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.29") == "1" then
+					ui_print("Removing Crontab");
+					delete("/data/aroma/crontab");
+				endif;
+
+				# STORAGE
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.30") == "1" then
+					ui_print("Removing Storage");
+					delete("/data/aroma/storage");
+				endif;
+
+				# MODULES
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.31") == "1" then
+					ui_print("Removing Modules");
+					delete("/data/aroma/modules");
+				endif;
+
+				# BACKUP & RESTORE
+				if file_getprop("/tmp/aroma-data/synapse.prop","item.1.32") == "1" then
+					ui_print("Removing Backup & Restore");
+					delete("/data/aroma/backup-restore");
+				endif;
+			endif;
+
+	set_progress(0.45);
+
+			# BUSYBOX CLEANUP
 			ui_print(" ");
-			ui_print("Extracting Kernel files...");
-			package_extract_file("boot.img", "/dev/block/platform/15570000.ufs/by-name/BOOT");
+			ui_print("@ Clean up Busybox & Applets :");
+			package_extract_dir("busybox/clean", "/tmp/bb_clean");
+			run_program("/sbin/busybox", "unzip", "/tmp/bb_clean/BusyBox-Cleaner-YDS.zip", "META-INF/com/google/android/*", "-d", "/tmp/bb_clean");
+			run_program("/sbin/busybox", "sh", "/tmp/bb_clean/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/bb_clean/BusyBox-Cleaner-YDS.zip");
 
-		set_progress(0.25);
+			run_program("/sbin/sleep", "1");
 
-			# DEFAULTS
-			ui_print(" ");
-			ui_print("@ USER selected Synapse & Kernel defaults :");
-			delete("/system/SkyHigh.prop");
+	set_progress(0.55);
 
-			# SYNAPSE
-			if file_getprop("/tmp/aroma-data/reset.prop","item.1.1") == "1" then
-				ui_print("@  Reset Synapse");
-				delete_recursive("/data/data/com.af.synapse/databases");
-			endif;
+			# NO ROOT
+			if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "1" then
+				ui_print(" ");
+				ui_print("@ No Root !!");
+				run_program("/tmp/defaults.sh", "NO_ROOT");
 
-			# SELINUX PERMISSIVE
-			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "1" then
-				ui_print("@  Setting SELinux Permissive");
-				run_program("/tmp/defaults.sh", "PERMISSIVE");
-			endif;
+				# INVISIBLE CPUSETS
+				run_program("/tmp/defaults.sh", "INVISIBLE");
 
-			# SELINUX ENFORCING
-			if file_getprop("/tmp/aroma-data/selinux.prop","selected.1") == "2" then
-				ui_print("@  Setting SELinux Enforcing");
-				run_program("/tmp/defaults.sh", "ENFORCING");
-			endif;
+				# LAZYTIME MOUNT
+				run_program("/tmp/defaults.sh", "LAZYTIME");
 
-			# KNOX
-			if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "1" then
-				ui_print("@  Removing SecurityLogAgent.apk");
-				delete_recursive("/system/app/SecurityLogAgent");
-				delete_recursive("/data/app/com.samsung.android.securitylogagent");
-				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent");
-				delete_recursive("/system/etc/secure_storage/com.samsung.android.securitylogagent!dex");
-			endif;
-			if file_getprop("/tmp/aroma-data/knox.prop","item.1.1") == "0" then
-				ui_print("@  Permit SecurityLogAgent.apk");
-			endif;
-
-			# BINDSYSTEMXBIN
-			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "1" then
-				ui_print("@  Setting BINDSYSTEMXBIN");
-				run_program("/tmp/defaults.sh", "BIND_TRUE");
-			endif;
-			if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "0" then
-				ui_print("@  Removing BINDSYSTEMXBIN");
+				# BINDSYSTEMXBIN
 				run_program("/tmp/defaults.sh", "BIND_FALSE");
 			endif;
 
-			# INVISIBLE CPUSETS
-			if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "1" then
-				ui_print("@  Enabling Invisible CPUSETS");
-				run_program("/tmp/defaults.sh", "INVISIBLE");
-			endif;
-			if file_getprop("/tmp/aroma-data/cpusets.prop","item.1.1") == "0" then
-				ui_print("@  Disabling Invisible CPUSETS");
-				delete("/data/.SkyHigh/invisible_cpuset");
+			# SUPERSU
+			if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "2" then
+				ui_print(" ");
+				ui_print("@ Rooting with SuperSU :");
+
+				# BINDSYSTEMXBIN
+				if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "1" then
+					ui_print("Setting BINDSYSTEMXBIN");
+					run_program("/tmp/defaults.sh", "BIND_TRUE");
+				endif;
+				if file_getprop("/tmp/aroma-data/bind.prop","item.1.1") == "0" then
+					ui_print("Removing BINDSYSTEMXBIN");
+					run_program("/tmp/defaults.sh", "BIND_FALSE");
+				endif;
+
+				run_program("/tmp/defaults.sh", "SUPERSU");
+				package_extract_dir("root/SuperSU", "/tmp/root_supersu");
+				run_program("/sbin/busybox", "unzip", "/tmp/root_supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip", "META-INF/com/google/android/*", "-d", "/tmp/root_supersu");
+				run_program("/sbin/busybox", "sh", "/tmp/root_supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/root_supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip");
+
+	set_progress(0.65);
+
+				# BUSYBOX (SUPERSU)
+				if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "2" then
+					# RE-MOUNT SYSTEM
+					ui_print(" ");
+					ui_print("@ Re-mounting System");
+					run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+					ui_print("System mounted...");
+
+					run_program("/sbin/sleep", "1");
+
+					ui_print(" ");
+					ui_print("@ Installing Busybox (Synapse compatible)");
+					package_extract_dir("busybox/supersu", "/su");
+					set_perm(0, 2000, 0755, "/su/xbin/busybox");
+					run_program("/su/xbin/busybox", "--install", "-s", "/su/xbin");
+
+					run_program("/sbin/sleep", "1");
+				endif;
 			endif;
 
-			# VNSWAP
-			if file_getprop("/tmp/aroma-data/swaps.prop","item.1.1") == "1" then
-				ui_print("@  Enabling VNSwap");
-				run_program("/tmp/defaults.sh", "VNSWAP");
-			endif;
-			if file_getprop("/tmp/aroma-data/swaps.prop","item.1.1") == "0" then
-				ui_print("@  Disabling VNSwap");
-			endif;
+			# MAGISK
+			if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "3" then
+				ui_print(" ");
+				ui_print("@ Rooting with Magisk :");
+				run_program("/tmp/defaults.sh", "MAGISK");
+				package_extract_dir("root/MagiskSU", "/tmp/root_magisk");
+				run_program("/sbin/busybox", "unzip", "/tmp/root_magisk/Magisk-v11.1.zip", "META-INF/com/google/android/update-binary", "-d", "/tmp/root_magisk");
+				run_program("/sbin/busybox", "sh", "/tmp/root_magisk/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/root_magisk/Magisk-v11.1.zip");
 
-			# LAZYTIME MOUNT
-			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "1" then
-				ui_print("@  Enabling EXT4 Lazytime Mount");
-				run_program("/tmp/defaults.sh", "LAZYTIME");
-			endif;
-			if file_getprop("/tmp/aroma-data/mounts.prop","item.1.1") == "0" then
-				ui_print("@  Disabling EXT4 Lazytime Mount");
-				delete("/data/.SkyHigh/lazytime_mount");
-			endif;
+				run_program("/sbin/sleep", "1");
 
-			# INIT.D
-			if file_getprop("/tmp/aroma-data/placebo.prop","item.1.1") == "1" then
-				ui_print("@  Removing init.d Scripts");
-				delete_recursive("/system/etc/init.d");
-			endif;
+				# MAGISK MANAGER
+				if file_getprop("/tmp/aroma-data/magisk_manager.prop","item.1.1") == "1" then
+					ui_print(" ");
+					ui_print("@ Installing Magisk Manager app");
+					delete_recursive("/data/app/com.topjohnwu.magisk-1", "/data/app/com.topjohnwu.magisk-2");
+					package_extract_dir("root/su_app", "/data/app");
+					set_metadata_recursive("/data/app/com.topjohnwu.magisk-1", "uid", 1000, "gid", 1000, "dmode", 0755, "fmode", 0755, "capabilities", 0x0, "selabel", "u:object_r:apk_data_file:s0");
+					set_metadata("/data/app/com.topjohnwu.magisk-1/base.apk", "uid", 1000 , "gid", 1000, "mode", 0644, "capabilities", 0x0, "selabel", "u:object_r:apk_data_file:s0");
 
-			# BUILD.PROP
-			if file_getprop("/tmp/aroma-data/placebo.prop","item.2.1") == "1" then
-				ui_print("@  Removing build.prop Placebo");
-				run_program("/tmp/defaults.sh", "BUILD_PROP");
-			endif;
-			if file_getprop("/tmp/aroma-data/placebo.prop","item.2.1") == "0" then
-				ui_print("@  Permit build.prop Placebo");
-			endif;
+					run_program("/sbin/sleep", "1");
 
-			set_progress(0.30);
+				endif;
 
-			# INTERACTIVE
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "1" then
-				ui_print("@  Setting Interactive Governor");
-				run_program("/tmp/defaults.sh", "INTERACTIVE");
+	set_progress(0.65);
+
+				# BUSYBOX (MAGISK)
+				if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "3" then
+					ui_print(" ");
+					ui_print("@ Installing Busybox (Magisk compatible) :");
+					package_extract_dir("busybox/magisk", "/tmp/bb_magisk");
+					run_program("/sbin/busybox", "unzip", "/tmp/bb_magisk/UPDATE-Busybox.Installer.v1.26.2-ALL-signed.zip", "META-INF/com/google/android/*", "-d", "/tmp/bb_magisk");
+					run_program("/sbin/busybox", "sh", "/tmp/bb_magisk/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/bb_magisk/UPDATE-Busybox.Installer.v1.26.2-ALL-signed.zip");
+
+					run_program("/sbin/sleep", "1");
+				endif;
 			endif;
 
-			# KTOONSERVATIVE
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "2" then
-				ui_print("@  Setting Ktoonservative Governor");
-				run_program("/tmp/defaults.sh", "KTOONSERVATIVE");
-			endif;
+	set_progress(0.75);
 
-			# PERFORMANCE
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "3" then
-				ui_print("@  Setting Performance Governor");
-				run_program("/tmp/defaults.sh", "PERFORMANCE");
-			endif;
-
-			# ONDEMAND
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "4" then
-				ui_print("@  Setting Ondemand Governor");
-				run_program("/tmp/defaults.sh", "ONDEMAND");
-			endif;
-
-			# CONSERVATIVE
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "5" then
-				ui_print("@  Setting Conservative Governor");
-				run_program("/tmp/defaults.sh", "CONSERVATIVE");
-			endif;
-
-			# CONSERVATIVEX
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "6" then
-				ui_print("@  Setting ConservativeX Governor");
-				run_program("/tmp/defaults.sh", "CONSERVATIVEX");
-			endif;
-
-			# CHILL
-			if file_getprop("/tmp/aroma-data/gov.prop","selected.1") == "7" then
-				ui_print("@  Setting Chill Governor");
-				run_program("/tmp/defaults.sh", "CHILL");
-			endif;
-
-			# ROW
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "1" then
-				ui_print("@  Setting ROW Scheduler");
-				run_program("/tmp/defaults.sh", "ROW");
-			endif;
-
-			# CFQ
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "2" then
-				ui_print("@  Setting CFQ Scheduler");
-				run_program("/tmp/defaults.sh", "CFQ");
-			endif;
-
-			# FIOPS
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "3" then
-				ui_print("@  Setting FIOPS Scheduler");
-				run_program("/tmp/defaults.sh", "FIOPS");
-			endif;
-
-			# NOOP
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "4" then
-				ui_print("@  Setting NOOP Scheduler");
-				run_program("/tmp/defaults.sh", "NOOP");
-			endif;
-
-			# BFQ
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "5" then
-				ui_print("@  Setting BFQ Scheduler");
-				run_program("/tmp/defaults.sh", "BFQ");
-			endif;
-
-			# SIOPLUS
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "6" then
-				ui_print("@  Setting SIOPlus Scheduler");
-				run_program("/tmp/defaults.sh", "SIOPLUS");
-			endif;
-
-			# DEADLINE
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "7" then
-				ui_print("@  Setting Deadline Scheduler");
-				run_program("/tmp/defaults.sh", "DEADLINE");
-			endif;
-
-			# ZEN
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "8" then
-				ui_print("@  Setting Zen Scheduler");
-				run_program("/tmp/defaults.sh", "ZEN");
-			endif;
-
-			# MAPLE
-			if file_getprop("/tmp/aroma-data/sched.prop","selected.1") == "9" then
-				ui_print("@  Setting Maple Scheduler");
-				run_program("/tmp/defaults.sh", "MAPLE");
-			endif;
-
-			# CORTEX
-			if file_getprop("/tmp/aroma-data/default.prop","item.1.1") == "1" then
-				ui_print("@  Enabling CortexBrain");
-				run_program("/tmp/defaults.sh", "CORTEX_ENABLED");
-			endif;
-
-			# CRONTAB
-			if file_getprop("/tmp/aroma-data/default.prop","item.2.1") == "1" then
-				ui_print("@  Enabling Crontab");
-				run_program("/tmp/defaults.sh", "CRONTAB_ENABLED");
-			endif;
-
-			# RESET CRONTAB TASKS
-			delete_recursive("/data/crontab");
-
-		set_progress(0.35);
-
-			# SYNAPSE LAYOUT
+			# RE-MOUNT SYSTEM
 			ui_print(" ");
-			ui_print("@ Removal of selected Synapse sections :");
-			delete_recursive("/data/aroma");
-			package_extract_dir("aroma", "/data/aroma");
+			ui_print("@ Re-mounting System");
+			run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
+			ui_print("System mounted...");
 
-			# A57 CPU
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.1") == "1" then
-				ui_print("@  Removing A57 CPU");
-				delete("/data/aroma/A57");
+			run_program("/sbin/sleep", "1");
+
+	set_progress(0.80);
+
+			# CLEANUP MODULES, SQLITE3 & ZIP
+			ui_print(" ");
+			ui_print("@ Remove modules, sqlite3 & zip");
+			delete_recursive("/system/lib/modules");
+			delete("/system/xbin/sqlite3", "/system/sbin/sqlite3", "/system/bin/sqlite3", "/system/xbin/zip", "/system/sbin/zip", "/system/bin/zip");
+
+			run_program("/sbin/sleep", "1");
+
+	set_progress(0.85);
+
+			# INSTALL MODULES, SQLITE3 & ZIP
+			if file_getprop("/tmp/aroma-data/root.prop","selected.1") != "1" then
+				ui_print(" ");
+				ui_print("@ Extracting modules, sqlite3 & zip");
+				package_extract_dir("system", "/system");
+				set_perm_recursive(0, 0, 0755, 0755, "/system/lib/modules");
+
+				if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "2" then
+					package_extract_dir("su", "/su");
+					set_perm(0, 0, 0755, "/su/xbin/sqlite3");
+					set_perm(0, 0, 0755, "/su/xbin/zip");
+				endif;
+
+				if file_getprop("/tmp/aroma-data/root.prop","selected.1") == "3" then
+					package_extract_dir("su/xbin", "/magisk/busybox-ndk/system/bin");
+					set_perm(0, 0, 0755, "/magisk/busybox-ndk/system/bin/sqlite3");
+					set_perm(0, 0, 0755, "/magisk/busybox-ndk/system/bin/zip");
+				endif;
+
+				run_program("/sbin/sleep", "1");
 			endif;
-
-			# A57 VOLT
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.2") == "1" then
-				ui_print("@  Removing A57 Volt");
-				delete("/data/aroma/A57_volt");
-			endif;
-
-			# A53 CPU
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.3") == "1" then
-				ui_print("@  Removing A53 CPU");
-				delete("/data/aroma/A53");
-			endif;
-
-			# A53 VOLT
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.4") == "1" then
-				ui_print("@  Removing A53 Volt");
-				delete("/data/aroma/A53_volt");
-			endif;
-
-			# CPU GOV
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.5") == "1" then
-				ui_print("@  Removing CPU Gov");
-				delete("/data/aroma/cpu_gov");
-			endif;
-
-			# A57 GOV
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.6") == "1" then
-				ui_print("@  Removing A57 Gov");
-				delete("/data/aroma/A57_gov");
-			endif;
-
-			# A53 GOV
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.7") == "1" then
-				ui_print("@  Removing A53 Gov");
-				delete("/data/aroma/A53_gov");
-			endif;
-
-			# MULTICORE
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.8") == "1" then
-				ui_print("@  Removing Multicore");
-				delete("/data/aroma/hmp");
-			endif;
-
-			# CPU STATS
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.9") == "1" then
-				ui_print("@  Removing CPU Stats");
-				delete("/data/aroma/cpu_stats");
-			endif;
-
-			# BOOST
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.10") == "1" then
-				ui_print("@  Removing Boost");
-				delete("/data/aroma/boost");
-			endif;
-
-			# GPU
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.11") == "1" then
-				ui_print("@  Removing GPU");
-				delete("/data/aroma/gpu");
-			endif;
-
-			# GPU VOLT
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.12") == "1" then
-				ui_print("@  Removing GPU Volt");
-				delete("/data/aroma/gpu_volt");
-			endif;
-
-			# THERMAL
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.13") == "1" then
-				ui_print("@  Removing Thermal");
-				delete("/data/aroma/tmu");
-			endif;
-
-			# BUS
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.14") == "1" then
-				ui_print("@  Removing Bus");
-				delete("/data/aroma/bus");
-			endif;
-
-			# IO
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.15") == "1" then
-				ui_print("@  Removing IO");
-				delete("/data/aroma/io");
-			endif;
-
-			# MEMORY
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.16") == "1" then
-				ui_print("@  Removing Memory");
-				delete("/data/aroma/memory");
-			endif;
-
-			# ADVANCED
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.17") == "1" then
-				ui_print("@  Removing Advanced");
-				delete("/data/aroma/advanced");
-			endif;
-
-			# POWER SUSPEND
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.18") == "1" then
-				ui_print("@  Removing Power Suspend");
-				delete("/data/aroma/powersuspend");
-			endif;
-
-			# DOZE
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.19") == "1" then
-				ui_print("@  Removing Doze");
-				delete("/data/aroma/doze");
-			endif;
-
-			# WAKELOCKS
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.20") == "1" then
-				ui_print("@  Removing Wakelocks");
-				delete("/data/aroma/wakelocks");
-			endif;
-
-			# AUDIO
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.21") == "1" then
-				ui_print("@  Removing Audio");
-				delete("/data/aroma/audio");
-			endif;
-
-			# BATTERY
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.22") == "1" then
-				ui_print("@  Removing Battery");
-				delete("/data/aroma/battery");
-			endif;
-
-			# LED
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.23") == "1" then
-				ui_print("@  Removing LED");
-				delete("/data/aroma/led");
-			endif;
-
-			# SCREEN
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.24") == "1" then
-				ui_print("@  Removing Screen");
-				delete("/data/aroma/screen");
-			endif;
-
-			# NETWORK
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.25") == "1" then
-				ui_print("@  Removing Network");
-				delete("/data/aroma/network");
-			endif;
-
-			# SECURITY
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.26") == "1" then
-				ui_print("@  Removing Security");
-				delete("/data/aroma/security");
-			endif;
-
-			# FILE SYSTEM
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.27") == "1" then
-				ui_print("@  Removing File System");
-				delete("/data/aroma/fs");
-			endif;
-
-			# CORTEX
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.28") == "1" then
-				ui_print("@  Removing CortexBrain");
-				delete("/data/aroma/cortex");
-			endif;
-
-			# CRONTAB
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.29") == "1" then
-				ui_print("@  Removing Crontab");
-				delete("/data/aroma/crontab");
-			endif;
-
-			# STORAGE
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.30") == "1" then
-				ui_print("@  Removing Storage");
-				delete("/data/aroma/storage");
-			endif;
-
-			# MODULES
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.31") == "1" then
-				ui_print("@  Removing Modules");
-				delete("/data/aroma/modules");
-			endif;
-
-			# BACKUP & RESTORE
-			if file_getprop("/tmp/aroma-data/synapse.prop","item.1.32") == "1" then
-				ui_print("@  Removing Backup & Restore");
-				delete("/data/aroma/backup-restore");
-			endif;
-
 		endif;
 
 		## END CUSTOM MODE
 
-		run_program("/sbin/sleep", "1");
-
-	set_progress(0.45);
-
-		# BUSYBOX CLEANUP
-		ui_print(" ");
-		ui_print("Clean up busybox & applets...");
-		package_extract_dir("busybox", "/tmp/busybox");
-		run_program("/sbin/busybox", "unzip", "/tmp/busybox/BusyBox-Cleaner-YDS.zip", "META-INF/com/google/android/*", "-d", "/tmp/busybox");
-		run_program("/sbin/busybox", "sh", "/tmp/busybox/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/busybox/BusyBox-Cleaner-YDS.zip");
-
-		run_program("/sbin/sleep", "1");
-
-	set_progress(0.65);
-
-		# ROOT
-		ui_print(" ");
-		package_extract_dir("supersu", "/tmp/supersu");
-		run_program("/sbin/busybox", "unzip", "/tmp/supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip", "META-INF/com/google/android/*", "-d", "/tmp/supersu");
-		run_program("/sbin/busybox", "sh", "/tmp/supersu/META-INF/com/google/android/update-binary", "dummy", "1", "/tmp/supersu/SR3-SuperSU-v2.79-SR3-20170114223742.zip");
-
-		run_program("/sbin/sleep", "1");
-
-	set_progress(0.8);
-
-		# RE-MOUNT
-		ui_print(" ");
-		ui_print("Re-mounting System...");
-		run_program("/sbin/mount", "/dev/block/platform/15570000.ufs/by-name/SYSTEM", "/system");
-
-		run_program("/sbin/sleep", "1");
-
-	set_progress(0.85);
-
-		# CLEANUP MODULES & SQLITE3
-		ui_print(" ");
-		ui_print("Remove modules & sqlite3...");
-		delete_recursive("/system/lib/modules");
-		delete("/system/xbin/sqlite3", "/system/bin/sqlite3");
-
-		run_program("/sbin/sleep", "1");
-
-	set_progress(0.9);
-
-		# FLASH MODULES, BUSYBOX & SQLITE3
-		ui_print(" ");
-		ui_print("Extracting modules, busybox & sqlite3...");
-		package_extract_dir("system", "/system");
-		set_perm_recursive(0, 0, 0755, 0755, "/system/lib/modules");
-		set_perm(0, 2000, 0755, "/system/xbin/busybox");
-		run_program("/system/xbin/busybox", "--install", "-s", "/system/xbin");
-		set_perm(0, 0, 0755, "/system/xbin/sqlite3");
-		set_perm(0, 0, 0755, "/system/xbin/zip");
-
 	set_progress(0.95);
 
 		ui_print(" ");
-		ui_print(" ");
-		ui_print("************************************");
-		ui_print("*          SkyHigh Kernel           ");
-		ui_print("*     Installation Completed!       ");
-		ui_print("************************************");
+		ui_print("@************************************");
+		ui_print("@*                                   ");
+		ui_print("@* Installation Completed !          ");
+		ui_print("@*                                   ");
+		ui_print("@************************************");
 
 	endif;
-
-	set_progress(1.0);
-
 endif;
 
 if file_getprop("/system/device.prop","device.type") == "incompatible" then
 	ui_print("@  UNSUPPORTED Device Detected == ABORT !!");
-
 endif;
 
 # CLEANUP TEMP
 delete("/system/device.prop");
 delete_recursive("/tmp");
+
+set_progress(1.0);
 
 # UNMOUNT
 ui_print(" ");
@@ -605,7 +754,5 @@ ui_print("@ Unmount Partitions :");
 run_program("/sbin/sleep", "1");
 run_program("/sbin/busybox", "umount", "/system");
 ui_print("System unmounted...");
-run_program("/sbin/sleep", "1");
-run_program("/sbin/busybox", "umount", "/data");
-ui_print("Data unmounted...");
+ui_print(" ");
 run_program("/sbin/sleep", "1");

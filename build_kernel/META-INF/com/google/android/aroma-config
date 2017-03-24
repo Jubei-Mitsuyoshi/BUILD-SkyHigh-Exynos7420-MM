@@ -1,4 +1,37 @@
-################################# Aroma config for SkyHigh kernels by UpInTheAir ##################################
+##################################################### LICENSE #####################################################
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	Ahmad Amarullah
+#		UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+###################################################################################################################
 
 ini_set("rom_name",		"SkyHigh-MM Kernel");
 ini_set("rom_version",		"[DATE]");
@@ -64,7 +97,6 @@ menubox(
 	"<~main.sysinfo>",		"<~main.sysinfo-desc>",					"@info",
 	"<~main.changelog>",		"<~main.changelog-desc>",				"@agreement",
 	"<~main.quit>",			"<~main.quit-desc>",					"@alert"
-
 );
 
 ###################################################################################################################
@@ -155,231 +187,250 @@ if prop("menu.prop","selected") == "1" then
 		"install.prop",
 
 		"<~install.option>",		"",							2,
-		"<~install.option1>",		"<~install.option1-desc>",				1,
-		"<~install.option2>",		"<~install.option2-desc>",				0
+		"<~install.option1>",		"<~install.option1-desc>",				0,
+		"<~install.option2>",		"<~install.option2-desc>",				1
 	);
 
 ################################################### Custom Mode ###################################################
 
 	if prop("install.prop","selected.1") == "2" then
 
-		checkbox(
-			"<~reset.title>",
-			"<~reset.subtitle>",
-
-			"icons/customize",
-
-			"reset.prop",
-
-			"<~>",				"",							2,
-			"<~reset.option1>",		"<~reset.option1-desc>",				1
-
-		);
-
 		selectbox(
-			"<~selinux.title>",
-			"<~selinux.subtitle>",
+			"<~root.title>",
+			"<~root.subtitle>",
 
 			"icons/customize",
 
-			"selinux.prop",
+			"root.prop",
 
 			"<~>",				"",							2,
-			"<~selinux.option1>",		"<~selinux.option1-desc>",				1,
-			"<~selinux.option2>",		"<~selinux.option2-desc>",				0
-
+			"<~root.option1>",		"<~root.option1-desc>",					0,
+			"<~root.option2>",		"<~root.option2-desc>",					1,
+			"<~root.option3>",		"<~root.option3-desc>",					0
 		);
 
-		checkbox(
-			"<~knox.title>",
-			"<~knox.subtitle>",
+		if prop("root.prop","selected.1") == "2" then
 
-			"icons/customize",
+			checkbox(
+				"<~bind.title>",
+				"<~bind.subtitle>",
 
-			"knox.prop",
+				"icons/customize",
 
-			"<~>",				"",							2,
-			"<~knox.option1>",		"<~knox.option1-desc>",					1
+				"bind.prop",
 
-		);
+				"<~>",				"",							2,
+				"<~bind.option1>",		"<~bind.option1-desc>",					0
+			);
 
-		checkbox(
-			"<~bind.title>",
-			"<~bind.subtitle>",
+		endif;
 
-			"icons/customize",
+		if prop("root.prop","selected.1") == "3" then
 
-			"bind.prop",
+			checkbox(
+				"<~magisk_manager.title>",
+				"<~magisk_manager.subtitle>",
 
-			"<~>",				"",							2,
-			"<~bind.option1>",		"<~bind.option1-desc>",					0
+				"icons/customize",
 
-		);
+				"magisk_manager.prop",
 
-		checkbox(
-			"<~cpusets.title>",
-			"<~cpusets.subtitle>",
+				"<~>",				"",							2,
+				"<~magisk_manager.option1>",	"<~magisk_manager.option1-desc>",			1
+			);
 
-			"icons/customize",
+		endif;
 
-			"cpusets.prop",
+		if prop("root.prop","selected.1") != "1" then
 
-			"<~>",				"",							2,
-			"<~cpusets.option1>",		"<~cpusets.option1-desc>",				1
+			checkbox(
+				"<~reset.title>",
+				"<~reset.subtitle>",
 
-		);
+				"icons/customize",
 
-		checkbox(
-			"<~swaps.title>",
-			"<~swaps.subtitle>",
+				"reset.prop",
 
-			"icons/customize",
+				"<~>",				"",							2,
+				"<~reset.option1>",		"<~reset.option1-desc>",				1
+			);
 
-			"swaps.prop",
+			selectbox(
+				"<~selinux.title>",
+				"<~selinux.subtitle>",
 
-			"<~>",				"",							2,
-			"<~swaps.option1>",		"<~swaps.option1-desc>",				1
+				"icons/customize",
 
-		);
+				"selinux.prop",
 
-		checkbox(
-			"<~mounts.title>",
-			"<~mounts.subtitle>",
+				"<~>",				"",							2,
+				"<~selinux.option1>",		"<~selinux.option1-desc>",				1,
+				"<~selinux.option2>",		"<~selinux.option2-desc>",				0
+			);
 
-			"icons/customize",
+			checkbox(
+				"<~knox.title>",
+				"<~knox.subtitle>",
 
-			"mounts.prop",
+				"icons/customize",
 
-			"<~>",				"",							2,
-			"<~mounts.option1>",		"<~mounts.option1-desc>",				1
+				"knox.prop",
 
-		);
+				"<~>",				"",							2,
+				"<~knox.option1>",		"<~knox.option1-desc>",					1
+			);
 
-		checkbox(
-			"<~placebo.title>",
-			"<~placebo.subtitle>",
+			checkbox(
+				"<~cpusets.title>",
+				"<~cpusets.subtitle>",
 
-			"icons/customize",
+				"icons/customize",
 
-			"placebo.prop",
+				"cpusets.prop",
 
-			"<~>",				"",							2,
-			"<~placebo.option1>",		"<~placebo.option1-desc>",				1,
+				"<~>",				"",							2,
+				"<~cpusets.option1>",		"<~cpusets.option1-desc>",				1
+			);
 
-			"<~>",				"",							2,
-			"<~placebo.option2>",		"<~placebo.option2-desc>",				1
+			checkbox(
+				"<~swaps.title>",
+				"<~swaps.subtitle>",
 
-		);
+				"icons/customize",
 
-		selectbox(
-			"<~gov.title>",
-			"<~gov.subtitle>",
+				"swaps.prop",
 
-			"icons/customize",
+				"<~>",				"",							2,
+				"<~swaps.option1>",		"<~swaps.option1-desc>",				1
+			);
 
-			"gov.prop",
+			checkbox(
+				"<~mounts.title>",
+				"<~mounts.subtitle>",
 
-			"<~>",				"",							2,
-			"<~gov.option1>",		"<~gov.option1-desc>",					1,
-			"<~gov.option2>",		"<~gov.option2-desc>",					0,
-			"<~gov.option3>",		"<~gov.option3-desc>",					0,
-			"<~gov.option4>",		"<~gov.option4-desc>",					0,
-			"<~gov.option5>",		"<~gov.option5-desc>",					0,
-			"<~gov.option6>",		"<~gov.option6-desc>",					0,
-			"<~gov.option7>",		"<~gov.option7-desc>",					0
+				"icons/customize",
 
-		);
+				"mounts.prop",
 
-		selectbox(
-			"<~sched.title>",
-			"<~sched.subtitle>",
+				"<~>",				"",							2,
+				"<~mounts.option1>",		"<~mounts.option1-desc>",				1
+			);
 
-			"icons/customize",
+			checkbox(
+				"<~placebo.title>",
+				"<~placebo.subtitle>",
 
-			"sched.prop",
+				"icons/customize",
 
-			"<~>",				"",							2,
-			"<~sched.option1>",		"<~sched.option1-desc>",				1,
-			"<~sched.option2>",		"<~sched.option2-desc>",				0,
-			"<~sched.option3>",		"<~sched.option3-desc>",				0,
-			"<~sched.option4>",		"<~sched.option4-desc>",				0,
-			"<~sched.option5>",		"<~sched.option5-desc>",				0,
-			"<~sched.option6>",		"<~sched.option6-desc>",				0,
-			"<~sched.option7>",		"<~sched.option7-desc>",				0,
-			"<~sched.option8>",		"<~sched.option8-desc>",				0,
-			"<~sched.option9>",		"<~sched.option9-desc>",				0
+				"placebo.prop",
 
-		);
+				"<~>",				"",							2,
+				"<~placebo.option1>",		"<~placebo.option1-desc>",				1,
 
-		checkbox(
-			"<~default.title>",
-			"<~default.subtitle>",
+				"<~>",				"",							2,
+				"<~placebo.option2>",		"<~placebo.option2-desc>",				1
+			);
 
-			"icons/customize",
+			selectbox(
+				"<~gov.title>",
+				"<~gov.subtitle>",
 
-			"default.prop",
+				"icons/customize",
 
-			"<~>",				"",							2,
-			"<~default.option1>",		"<~default.option1-desc>",				0,
+				"gov.prop",
 
-			"<~>",				"",							2,
-			"<~default.option2>",		"<~default.option2-desc>",				1
+				"<~>",				"",							2,
+				"<~gov.option1>",		"<~gov.option1-desc>",					1,
+				"<~gov.option2>",		"<~gov.option2-desc>",					0,
+				"<~gov.option3>",		"<~gov.option3-desc>",					0,
+				"<~gov.option4>",		"<~gov.option4-desc>",					0,
+				"<~gov.option5>",		"<~gov.option5-desc>",					0,
+				"<~gov.option6>",		"<~gov.option6-desc>",					0,
+				"<~gov.option7>",		"<~gov.option7-desc>",					0
+			);
 
-		);
+			selectbox(
+				"<~sched.title>",
+				"<~sched.subtitle>",
 
-		checkbox(
-			"<~synapse.title>",
-			"<~synapse.subtitle>",
+				"icons/customize",
 
-			"icons/customize",
+				"sched.prop",
 
-			"synapse.prop",
+				"<~>",				"",							2,
+				"<~sched.option1>",		"<~sched.option1-desc>",				1,
+				"<~sched.option2>",		"<~sched.option2-desc>",				0,
+				"<~sched.option3>",		"<~sched.option3-desc>",				0,
+				"<~sched.option4>",		"<~sched.option4-desc>",				0,
+				"<~sched.option5>",		"<~sched.option5-desc>",				0,
+				"<~sched.option6>",		"<~sched.option6-desc>",				0,
+				"<~sched.option7>",		"<~sched.option7-desc>",				0,
+				"<~sched.option8>",		"<~sched.option8-desc>",				0,
+				"<~sched.option9>",		"<~sched.option9-desc>",				0
+			);
 
-			"<~>",				"",							2,
-			"<~synapse.option1>",		"<~synapse.option1-desc>",				0,
-			"<~synapse.option2>",		"<~synapse.option2-desc>",				0,
-			"<~synapse.option3>",		"<~synapse.option3-desc>",				0,
-			"<~synapse.option4>",		"<~synapse.option4-desc>",				0,
-			"<~synapse.option5>",		"<~synapse.option5-desc>",				0,
-			"<~synapse.option6>",		"<~synapse.option6-desc>",				0,
-			"<~synapse.option7>",		"<~synapse.option7-desc>",				0,
-			"<~synapse.option8>",		"<~synapse.option8-desc>",				0,
-			"<~synapse.option9>",		"<~synapse.option9-desc>",				0,
-			"<~synapse.option10>",		"<~synapse.option10-desc>",				0,
-			"<~synapse.option11>",		"<~synapse.option11-desc>",				0,
-			"<~synapse.option12>",		"<~synapse.option12-desc>",				0,
-			"<~synapse.option13>",		"<~synapse.option13-desc>",				0,
-			"<~synapse.option14>",		"<~synapse.option14-desc>",				0,
-			"<~synapse.option15>",		"<~synapse.option15-desc>",				0,
-			"<~synapse.option16>",		"<~synapse.option16-desc>",				0,
-			"<~synapse.option17>",		"<~synapse.option17-desc>",				0,
-			"<~synapse.option18>",		"<~synapse.option18-desc>",				0,
-			"<~synapse.option19>",		"<~synapse.option19-desc>",				0,
-			"<~synapse.option20>",		"<~synapse.option20-desc>",				0,
-			"<~synapse.option21>",		"<~synapse.option21-desc>",				0,
-			"<~synapse.option22>",		"<~synapse.option22-desc>",				0,
-			"<~synapse.option23>",		"<~synapse.option23-desc>",				0,
-			"<~synapse.option24>",		"<~synapse.option24-desc>",				0,
-			"<~synapse.option25>",		"<~synapse.option25-desc>",				0,
-			"<~synapse.option26>",		"<~synapse.option26-desc>",				0,
-			"<~synapse.option27>",		"<~synapse.option27-desc>",				0,
-			"<~synapse.option28>",		"<~synapse.option28-desc>",				0,
-			"<~synapse.option29>",		"<~synapse.option29-desc>",				0,
-			"<~synapse.option30>",		"<~synapse.option30-desc>",				0,
-			"<~synapse.option31>",		"<~synapse.option31-desc>",				0,
-			"<~synapse.option32>",		"<~synapse.option32-desc>",				0
+			checkbox(
+				"<~default.title>",
+				"<~default.subtitle>",
 
-		);
+				"icons/customize",
 
+				"default.prop",
+
+				"<~>",				"",							2,
+				"<~default.option1>",		"<~default.option1-desc>",				0,
+
+				"<~>",				"",							2,
+				"<~default.option2>",		"<~default.option2-desc>",				1
+			);
+
+			checkbox(
+				"<~synapse.title>",
+				"<~synapse.subtitle>",
+
+				"icons/customize",
+
+				"synapse.prop",
+
+				"<~>",				"",							2,
+				"<~synapse.option1>",		"<~synapse.option1-desc>",				0,
+				"<~synapse.option2>",		"<~synapse.option2-desc>",				0,
+				"<~synapse.option3>",		"<~synapse.option3-desc>",				0,
+				"<~synapse.option4>",		"<~synapse.option4-desc>",				0,
+				"<~synapse.option5>",		"<~synapse.option5-desc>",				0,
+				"<~synapse.option6>",		"<~synapse.option6-desc>",				0,
+				"<~synapse.option7>",		"<~synapse.option7-desc>",				0,
+				"<~synapse.option8>",		"<~synapse.option8-desc>",				0,
+				"<~synapse.option9>",		"<~synapse.option9-desc>",				0,
+				"<~synapse.option10>",		"<~synapse.option10-desc>",				0,
+				"<~synapse.option11>",		"<~synapse.option11-desc>",				0,
+				"<~synapse.option12>",		"<~synapse.option12-desc>",				0,
+				"<~synapse.option13>",		"<~synapse.option13-desc>",				0,
+				"<~synapse.option14>",		"<~synapse.option14-desc>",				0,
+				"<~synapse.option15>",		"<~synapse.option15-desc>",				0,
+				"<~synapse.option16>",		"<~synapse.option16-desc>",				0,
+				"<~synapse.option17>",		"<~synapse.option17-desc>",				0,
+				"<~synapse.option18>",		"<~synapse.option18-desc>",				0,
+				"<~synapse.option19>",		"<~synapse.option19-desc>",				0,
+				"<~synapse.option20>",		"<~synapse.option20-desc>",				0,
+				"<~synapse.option21>",		"<~synapse.option21-desc>",				0,
+				"<~synapse.option22>",		"<~synapse.option22-desc>",				0,
+				"<~synapse.option23>",		"<~synapse.option23-desc>",				0,
+				"<~synapse.option24>",		"<~synapse.option24-desc>",				0,
+				"<~synapse.option25>",		"<~synapse.option25-desc>",				0,
+				"<~synapse.option26>",		"<~synapse.option26-desc>",				0,
+				"<~synapse.option27>",		"<~synapse.option27-desc>",				0,
+				"<~synapse.option28>",		"<~synapse.option28-desc>",				0,
+				"<~synapse.option29>",		"<~synapse.option29-desc>",				0,
+				"<~synapse.option30>",		"<~synapse.option30-desc>",				0,
+				"<~synapse.option31>",		"<~synapse.option31-desc>",				0,
+				"<~synapse.option32>",		"<~synapse.option32-desc>",				0
+			);
+
+		endif;
 	endif;
 
 ###################################################################################################################
-
-endif;
-
-###################################################################################################################
-
-if prop("menu.prop","selected") == "1" then
 
 	ini_set("text_next", "<~ini_set.next>");
 	ini_set("icon_next", "@installbutton");
@@ -394,17 +445,19 @@ if prop("menu.prop","selected") == "1" then
 		"<~ini_set.text4>",
 
 		"@install"
-
 	);
 
 	ini_set("text_next", "<~text_next>");
 	ini_set("icon_next", "@next");
+
+	alert( "<~donate.attention>", "<~donate.attention-desc>");
 
 	install(
 		"<~inst.title>",
 		"\n" +
 		"<~inst.text>" +
 		"",
+
 		"@install"
 	);
 
@@ -419,7 +472,6 @@ if prop("menu.prop","selected") == "1" then
 		"<~inst.finish>",
 
 		"@welcome"
-
 	);
 
 endif;

@@ -1,7 +1,5 @@
-﻿<@center><b><#selectbg_g>SkyHigh ChangeLog</#></b>
+﻿<@center><b><#selectbg_g>SkyHigh Change-Log</#></b></@>
 
-<@fill><q>I'm not going to bother with a ChangeLog.
+Forget the Change-Log. Just enjoy the result of my hard work and dedication to try improve what is just a HOBBY !!
 
-Keep those kanging half-wits guessing, or at least make them work for it when they try clone SkyHigh. You know who you are, and a lot of others can see your kanging ways too ! Nice innovation & thanks for your "originality"........ yeah right, ha ha
-
-BIG thanks to those that encourage, support & contrbute to a release with an element of originality. I try :)</q></@>
+BIG thanks to those that encourage, support & contrbute to a release with an element of originality. I try :)

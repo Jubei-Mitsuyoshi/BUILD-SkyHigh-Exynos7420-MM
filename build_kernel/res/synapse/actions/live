@@ -1,7 +1,39 @@
+# Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
 if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 if [ -d "/sys/devices/battery.54" ]; then
@@ -17,35 +49,35 @@ fi;
 case $1 in
 
 susp)
-  $BB echo "$(cat /sys/kernel/power_suspend/power_suspend_version)"
+  $BB echo "$(cat /sys/kernel/power_suspend/power_suspend_version)";
   ;;
 
 gpu)
-  echo "Clock: $(cat /sys/devices/platform/gpusysfs/gpu_clock) MHz"
+  echo "Clock: $(cat /sys/devices/platform/gpusysfs/gpu_clock) MHz";
   ;;
 
 gpu_load)
-   echo "Load: $(cat /sys/class/misc/mali0/device/utilization) %"
+   echo "Load: $(cat /sys/class/misc/mali0/device/utilization) %";
   ;;
 
 entropy)
-  echo "$(cat /proc/sys/kernel/random/entropy_avail)"
+  echo "$(cat /proc/sys/kernel/random/entropy_avail)";
   ;;
 
 batttype)
-  echo "Charge Type: $(cat $P/power_supply/battery/charge_type)"
+  echo "Charge Type: $(cat $P/power_supply/battery/charge_type)";
   ;;
 
 battcurrav)
-  echo "Current Average: $(cat $P/power_supply/battery/current_avg) mA"
+  echo "Current Average: $(cat $P/power_supply/battery/current_avg) mA";
   ;;
 
 battcurrnow)
-  echo "Current Now: $(cat $P/power_supply/battery/current_now) mA"
+  echo "Current Now: $(cat $P/power_supply/battery/current_now) mA";
   ;;
 
 battvoltnow)
-  echo "Voltage Now: $(($(cat $P/power_supply/battery/voltage_now) /1000)) mV"
+  echo "Voltage Now: $(($(cat $P/power_supply/battery/voltage_now) /1000)) mV";
   ;;
 
 batttemp)
@@ -57,7 +89,7 @@ batttemp)
   ;;
 
 battcapa)
-  echo "Capacity: $(cat $P/power_supply/battery/capacity) %"
+  echo "Capacity: $(cat $P/power_supply/battery/capacity) %";
   ;;
 
 battstatus)
@@ -79,18 +111,18 @@ battstatus)
   ;;
 
 batthealth)
-  echo "Health: $(cat $P/power_supply/battery/health)"
+  echo "Health: $(cat $P/power_supply/battery/health)";
   ;;
 
 lux)
-  LUX=$(dumpsys display | awk '/mAmbientLux/ {print $1}' | cut -d"=" -f2);
+  LUX=$(dumpsys display | $BB awk '/mAmbientLux/ {print $1}' | cut -d"=" -f2);
   LUX="$($BB printf "%.0f" $LUX)";
 
   $BB echo "$LUX"
   ;;
 
 actual_brightness)
-  echo "$(cat /sys/class/backlight/panel/actual_brightness)"
+  echo "$(cat /sys/class/backlight/panel/actual_brightness)";
   ;;
 
 Live_A57_Time)
@@ -396,7 +428,7 @@ check_cortex)
   ;;
 
 Live_modules)
-  for i in $(lsmod | awk '{print $1}'); do
+  for i in $(lsmod | $BB awk '{print $1}'); do
 	echo "$i@n";
   done;
   ;;
@@ -406,20 +438,20 @@ Live_storage)
   KB=$((1024 * 1024));
 
   # system used (note: insert space after /system so we don't read /system/xbin)
-  SYSTEM_USED=$(df | grep '^/system ' | awk '{print $3}');
-  SYSTEM_USED=$(echo "${SYSTEM_USED%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+  SYSTEM_USED=$(df | grep '^/system ' | $BB awk '{print $3}');
+  SYSTEM_USED=$(echo "${SYSTEM_USED%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
   # data free
-  DATA_FREE=$(df | grep '^/storage/emulated' | awk '{print $4}');
-  DATA_FREE=$(echo "${DATA_FREE%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+  DATA_FREE=$(df | grep '^/storage/emulated' | $BB awk '{print $4}');
+  DATA_FREE=$(echo "${DATA_FREE%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
   # data used
-  DATA_USED=$(df | grep '^/storage/emulated' | awk '{print $3}');
-  DATA_USED=$(echo "${DATA_USED%?} $KB" | awk '{printf "%.0f \n", $1*$2}');
+  DATA_USED=$(df | grep '^/storage/emulated' | $BB awk '{print $3}');
+  DATA_USED=$(echo "${DATA_USED%?} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
   # internal sdcard (storage)
   MEDIA_USED=$(du -hs /data/media/0);
-  MEDIA_USED=$(echo "${MEDIA_USED%G*} $KB" | awk '{printf "%.0f \n", $1*$2}');
+  MEDIA_USED=$(echo "${MEDIA_USED%G*} $KB" | $BB awk '{printf "%.0f \n", $1*$2}');
 
   # boot size in KB for N920* (28MB)
   BOOT=28672;

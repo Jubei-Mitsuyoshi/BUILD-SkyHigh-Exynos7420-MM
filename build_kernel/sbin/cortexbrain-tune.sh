@@ -1,14 +1,42 @@
 #!/sbin/busybox sh
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	Zacharias.maladroit
+#		Voku1987
+#		Collin_ph@xda
+#		Dorimanx@xda
+#		Gokhanmoral@xda
+#		Johnbeetee
+#		halaszk@xda
+#		UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
-# Credits:
-# Zacharias.maladroit
-# Voku1987
-# Collin_ph@xda
-# Dorimanx@xda
-# Gokhanmoral@xda
-# Johnbeetee
-# halaszk@xda
-# UpInTheAir
 
 # TAKE NOTE THAT LINES PRECEDED BY A "#" IS COMMENTED OUT.
 # This script must be activated after init start =< 25sec or parameters from /sys/* will not be loaded.
@@ -25,7 +53,6 @@ cortexbrain_wifi_delay_scron_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_w
 cortexbrain_wifi_delay_scroff_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable) * 60 ));
 cortexbrain_wifi_delay_scroff_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable) * 360 ));
 cortexbrain_media_manager=$(cat /res/synapse/SkyHigh/cortexbrain_media_manager);
-cortexbrain_nmi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_nmi_auto);
 cortexbrain_doze_auto=$(cat /res/synapse/SkyHigh/cortexbrain_doze_auto);
 cortexbrain_alpm_auto=$(cat /res/synapse/SkyHigh/cortexbrain_alpm_auto);
 cortexbrain_lux=$(cat /res/synapse/SkyHigh/cortexbrain_lux);
@@ -42,6 +69,8 @@ if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 if [ "$($BB mount | grep rootfs | cut -c 26-27 | grep -c ro)" -eq "1" ]; then
@@ -71,7 +100,6 @@ READ_CONFIG()
 	cortexbrain_wifi_delay_scroff_enable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable) * 60 ));
 	cortexbrain_wifi_delay_scroff_disable=$(($(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable) * 360 ));
 	cortexbrain_media_manager=$(cat /res/synapse/SkyHigh/cortexbrain_media_manager);
-	cortexbrain_nmi_auto=$(cat /res/synapse/SkyHigh/cortexbrain_nmi_auto);
 	cortexbrain_doze_auto=$(cat /res/synapse/SkyHigh/cortexbrain_doze_auto);
 	cortexbrain_alpm_auto=$(cat /res/synapse/SkyHigh/cortexbrain_alpm_auto);
 	cortexbrain_lux=$(cat /res/synapse/SkyHigh/cortexbrain_lux);
@@ -144,7 +172,7 @@ WIFI_AUTO()
 		if [ "${state}" == "awake" ]; then
 
 			# Check WIFI state
-			WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+			WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 			if [ "$WIFI_STATE" == "disabled" ]; then
 				svc wifi enable 2> /dev/null;
@@ -153,7 +181,7 @@ WIFI_AUTO()
 		elif [ "${state}" == "sleep" ]; then
 
 			# Check WIFI state
-			WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+			WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 			if [ "$WIFI_STATE" == "enabled" ]; then
 				svc wifi disable 2> /dev/null;
@@ -194,7 +222,7 @@ WIFI_AUTO_SCREEN_ON()
 			if [ "$INTERVAL" -gt "$cortexbrain_wifi_delay_scron_disable" ]; then
 
 				# Check WIFI state
-				WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+				WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 				if [ "$WIFI_STATE" == "disabled" ]; then
 
@@ -223,7 +251,7 @@ WIFI_AUTO_SCREEN_ON()
 			if [ "$INTERVAL" -gt "$cortexbrain_wifi_delay_scron_enable" ]; then
 
 				# Check WIFI state
-				WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+				WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 				if [ "$WIFI_STATE" == "enabled" ]; then
 
@@ -271,7 +299,7 @@ WIFI_AUTO_SCREEN_OFF()
 			if [ "$INTERVAL" -gt "$cortexbrain_wifi_delay_scroff_disable" ]; then
 
 				# Check WIFI state
-				WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+				WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 				if [ "$WIFI_STATE" == "disabled" ]; then
 
@@ -300,7 +328,7 @@ WIFI_AUTO_SCREEN_OFF()
 			if [ "$INTERVAL" -gt "$cortexbrain_wifi_delay_scroff_enable" ]; then
 
 				# Check WIFI state
-				WIFI_STATE=$(dumpsys wifi | awk '/Wi-Fi is/ {print $3}');
+				WIFI_STATE=$(dumpsys wifi | $BB awk '/Wi-Fi is/ {print $3}');
 
 				if [ "$WIFI_STATE" == "enabled" ]; then
 
@@ -338,24 +366,6 @@ MEDIA_MANAGER()
 	fi;
 }
 
-NMI_AUTO()
-{
-	if [ "$cortexbrain_nmi_auto" == "2" ]; then
-
-		local state="$1";
-
-		if [ "${state}" == "awake" ]; then
-			echo "1" > /proc/sys/kernel/nmi_watchdog;
-		elif [ "${state}" == "sleep" ]; then
-			echo "0" > /proc/sys/kernel/nmi_watchdog;
-		fi;
-
-		log -p i -t "$FILE_NAME" "*** NMI_AUTO ***: $state ***: done";
-	else
-		log -p i -t "$FILE_NAME" "*** NMI_AUTO: Disabled ***";
-	fi;
-}
-
 DOZE_AUTO()
 {
 	if [ "$cortexbrain_doze_auto" == "2" ]; then
@@ -384,7 +394,7 @@ ALPM_AUTO()
 
 		if [ "${state}" == "awake" ]; then
 			# Check if edge panel or Always on Display are active
-			EDGE_STATUS=$(dumpsys window windows | awk '/mCurrentFocus/ {print $4}');
+			EDGE_STATUS=$(dumpsys window windows | $BB awk '/mCurrentFocus/ {print $4}');
 			if [ "$EDGE_STATUS" != "StatusBar}" ]; then
 				ALPM_STATE=$(cat /sys/class/lcd/panel/alpm);
 				if [ "$ALPM_STATE" != "0" ]; then
@@ -393,9 +403,9 @@ ALPM_AUTO()
 			fi;
 		elif [ "${state}" == "sleep" ]; then
 			# Check if edge panel or Always on Display are active
-			EDGE_STATUS=$(dumpsys window windows | awk '/mCurrentFocus/ {print $4}');
+			EDGE_STATUS=$(dumpsys window windows | $BB awk '/mCurrentFocus/ {print $4}');
 			# Read light sensor (lux) value.
-			LUX=$(dumpsys display | awk '/mAmbientLux/ {print $1}' | cut -d"=" -f2);
+			LUX=$(dumpsys display | $BB awk '/mAmbientLux/ {print $1}' | cut -d"=" -f2);
 			# Round lux value to a whole number so it is readable
 			LUX="$($BB printf "%.0f" $LUX)";
 
@@ -528,8 +538,6 @@ AWAKE_MODE()
 
 	MEDIA_MANAGER "awake";
 
-	NMI_AUTO "awake";
-
 	DOZE_AUTO "awake";
 
 	ALPM_AUTO "awake";
@@ -542,7 +550,7 @@ AWAKE_MODE()
 
 	if [ "$DUMPSYS" == 1 ]; then
 	# Check the data state, DATA_DISABLED = 0, DATA_ENABLED = 2
-	DATA_STATE=$(dumpsys telephony.registry | awk '/mDataConnectionState/ {print $1}');
+	DATA_STATE=$(dumpsys telephony.registry | $BB awk '/mDataConnectionState/ {print $1}');
 		if [ "$DATA_STATE" == "mDataConnectionState=2" ]; then
 			DATA_STATE=2;
 		else
@@ -581,11 +589,9 @@ SLEEP_MODE()
 
 	MEDIA_MANAGER "sleep";
 
-	NMI_AUTO "sleep";
-
 	if [ "$DUMPSYS" == 1 ]; then
 		# Check the call state, CALL_STATE_IDLE (not on call) = 0, CALL_STATE_RINGING = 1, CALL_STATE_OFFHOOK (on call) = 2
-		CALL_STATE=$(dumpsys telephony.registry | awk '/mCallState/ {print $1}');
+		CALL_STATE=$(dumpsys telephony.registry | $BB awk '/mCallState/ {print $1}');
 		if [ "$CALL_STATE" == "mCallState=0" ]; then
 			CALL_STATE=0;
 		else

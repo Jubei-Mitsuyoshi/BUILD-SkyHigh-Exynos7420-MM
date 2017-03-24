@@ -1,9 +1,42 @@
 #!/system/bin/sh
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#		halaszk (Exynos core contol interface)
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
 if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 cat << CTAG
@@ -58,7 +91,7 @@ cat << CTAG
 				title:"Move Invisible Apps to A53",
 				description:"Selecting A53 Cores will improve battery life by prohibiting all background applications from using big (A57) cores. Background applications such as music may cause weird behaviors.\n",
 				default:'$INVISIBLE',
-				action:"hmp dev/cpuset/invisible/cpus",
+				action:"generic /dev/cpuset/invisible/cpus",
 				values:{
 					0-3:"A53 Cores", 0-7:"All Cores"
 				}
@@ -85,8 +118,8 @@ cat << CTAG
 				on:APPLY,
 				do:[ REFRESH, APPLY ],
 				to:[
-					"hmp /sys/kernel/hmp/up_threshold",
-					"hmp /sys/kernel/hmp/down_threshold"
+					"generic /sys/kernel/hmp/up_threshold",
+					"generic /sys/kernel/hmp/down_threshold"
 				],
 			}
 		]
@@ -99,7 +132,7 @@ cat << CTAG
 		description:"Min load required for migrating tasks to the faster A57 big cores.\n",
 		min:1, max:1000, unit:"", step:1,
 		default:$(cat /sys/kernel/hmp/up_threshold),
-		action:"hmp /sys/kernel/hmp/up_threshold"
+		action:"generic /sys/kernel/hmp/up_threshold"
 	}},
 	{ SSpacer:{
 		height:1
@@ -109,7 +142,7 @@ cat << CTAG
 		description:"Max load allowed for tasks migrating to the slower A53 little cores.\n",
 		min:1, max:512, unit:"", step:1,
 		default:$(cat /sys/kernel/hmp/down_threshold),
-		action:"hmp /sys/kernel/hmp/down_threshold"
+		action:"generic /sys/kernel/hmp/down_threshold"
 	}},
 	{ SSpacer:{
 		height:2

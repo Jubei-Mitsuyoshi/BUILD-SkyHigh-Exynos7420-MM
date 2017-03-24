@@ -1,9 +1,42 @@
 #!/system/bin/sh
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	halaszk
+#		UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
 if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 cat << CTAG
@@ -60,7 +93,7 @@ cat << CTAG
 		description:"Duration WIFI is enabled.\n",
 		min:1, max:10, unit:" min", step:1,
 		default:$(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_enable),
-		action:"hmp /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_enable"
+		action:"generic_root_rw /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_enable"
 	}},
 	{ SSpacer:{
 		height:1
@@ -70,7 +103,7 @@ cat << CTAG
 		description:"Duration WIFI is disabled.\n",
 		min:5, max:100, unit:" hr", step:5, weight:0.1,
 		default:$(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_disable),
-		action:"hmp /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_disable"
+		action:"generic_root_rw /res/synapse/SkyHigh/cortexbrain_wifi_delay_scron_disable"
 	}},
 	{ SSpacer:{
 		height:2
@@ -90,7 +123,7 @@ cat << CTAG
 		description:"Duration WIFI is enabled.\n",
 		min:1, max:10, unit:" min", step:1,
 		default:$(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable),
-		action:"hmp /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable"
+		action:"generic_root_rw /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_enable"
 	}},
 	{ SSpacer:{
 		height:1
@@ -100,7 +133,7 @@ cat << CTAG
 		description:"Duration WIFI is disabled.\n",
 		min:5, max:100, unit:" hr", step:5, weight:0.1,
 		default:$(cat /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable),
-		action:"hmp /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable"
+		action:"generic_root_rw /res/synapse/SkyHigh/cortexbrain_wifi_delay_scroff_disable"
 	}},
 	{ SSpacer:{
 		height:2
@@ -131,16 +164,6 @@ cat << CTAG
 		default:$(echo "$(/res/synapse/actions/cortex cortexbrain_kernel)"),
 		action:"cortex cortexbrain_kernel",
 		values:[Disabled, Enabled,]
-	}},
-	{ SSpacer:{
-		height:2
-	}},
-	{ SOptionList:{
-		title:"NMI Watchdog",
-		description:"The NMI Watchdog is a debugging feature to catch hardware hangs that cause a kernel panic. On some systems it can generate a lot of interrupts, causing a noticeable increase in power usage. Setting to 'Auto' will disable nmi_watchdog when the screen is OFF & auto enable when the screen is ON. WARNING: may cause instability on some devices if set to anything other than Enabled.\n",
-		default:$(echo "$(/res/synapse/actions/cortex cortexbrain_nmi_auto)"),
-		action:"cortex cortexbrain_nmi_auto",
-		values:[Disabled, Enabled, Auto,]
 	}},
 	{ SSpacer:{
 		height:2

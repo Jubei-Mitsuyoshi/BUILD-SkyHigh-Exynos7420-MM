@@ -1,22 +1,29 @@
 /*
+    Copyright (c) 2017 UpInTheAir. All rights reserved.
 
-© Copyright (c) 2015-2017 UpInTheAir <upintheair.skyhigh@gmail.com>
+    This software and associated documentation files (the "Software")
+    is proprietary of UpInTheAir. No part of this Software, either
+    material or conceptual may be copied or distributed, transmitted,
+    transcribed, stored in a retrieval system or translated into any
+    human or computer language in any form by any means, electronic,
+    mechanical, manual or otherwise, or disclosed to third parties
+    without the express written permission of UpInTheAir.
 
-All rights reserved. The alterations from O.E.M. of associated script 
-files and coding packed within this ramdisk & installation package 
-(the "Software"), may not be reproduced, displayed, modified or 
-distributed without the express prior written permission of the 
-copyright holder. For permission, contact upintheair.skyhigh@gmail.com.
+    Alternatively, this program is free software in case of open
+    source project:
 
-The above copyright notice shall be included in all copies or 
-substantial portions of the Software.
+    Permission is hereby granted, free of charge, to any person
+    obtaining a copy of this Software, to redistribute the Software
+    and/or modify it under the terms of the GNU General Public
+    License as published by the Free Software Foundation; either
+    version 3 of the License, or (at your option) any later version,
+    subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
-IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
-TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
-SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+    The above copyright notice and this permission notice shall be
+    included in all copies or substantial portions of the Software.
 
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+    GNU General Public License for more details.
 */

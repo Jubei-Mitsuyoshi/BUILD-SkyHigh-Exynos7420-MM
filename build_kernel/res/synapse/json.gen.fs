@@ -1,28 +1,60 @@
 #!/system/bin/sh
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#
+# Contributors:	halaszk (initial FS mount controls & display)
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
 if [ -e /su/xbin/busybox ]; then
 	BB=/su/xbin/busybox;
 elif [ -e /system/xbin/busybox ]; then
 	BB=/system/xbin/busybox;
+elif [ -e /system/bin/busybox ]; then
+	BB=/system/bin/busybox;
 fi;
 
 cat << CTAG
 {
     name:FS,
     elements:[
-	{ SDescription:{
-		description:"For now, this just displays the status of the three main partitions.",
-		background:0
+	{ SPane:{
+		title:"Partition Mount Status"
 	}},
 	{ SSpacer:{
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"System",
 		refresh:10000000,
-		title:"Filesystem of /cache Partition",
-		style:"normal",
 		action:"
-			if grep -q 'cache f2fs' /proc/mounts ; then
+			if grep -q 'system f2fs' /proc/mounts ; then
 				echo F2FS;
 			else
 				echo EXT4;
@@ -32,9 +64,8 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"Data",
 		refresh:10000000,
-		title:"Filesystem of /data Partition",
-		style:"normal",
 		action:"
 			if grep -q 'data f2fs' /proc/mounts ; then
 				echo F2FS;
@@ -46,11 +77,10 @@ cat << CTAG
 		height:1
 	}},
 	{ SLiveLabel:{
+		title:"Cache",
 		refresh:10000000,
-		title:"Filesystem of /system Partition",
-		style:"normal",
 		action:"
-			if grep -q 'system f2fs' /proc/mounts ; then
+			if grep -q 'cache f2fs' /proc/mounts ; then
 				echo F2FS;
 			else
 				echo EXT4;
@@ -60,31 +90,15 @@ cat << CTAG
 		height:2
 	}},
 	{ SPane:{
-		title:"Filesystem Controls"
+		title:"File System Mount Control"
 	}},
 	{ SSpacer:{
 		height:1
 	}},
 	{ SButton:{
-		label:"Remount /system as Writeable",
-		action:"mount -o remount,rw \/system;
-		echo Remounted \/system as Writable!;"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Remount /system as Read-Only",
-		action:"mount -o remount,ro \/system;
-		echo Remounted \/system as Read-Only!;"
-	}},
-	{ SSpacer:{
-		height:1
-	}},
-	{ SButton:{
-		label:"Remount RootFS as Writeable",
+		label:"Remount RootFS as Read-Write",
 		action:"$BB mount -t rootfs -o remount,rw rootfs;
-		echo Remounted RootFS as Writable!;"
+		echo Remounted RootFS as Read-Write!;"
 	}},
 	{ SSpacer:{
 		height:1
@@ -93,6 +107,22 @@ cat << CTAG
 		label:"Remount RootFS as Read-Only",
 		action:"$BB mount -t rootfs -o remount,ro rootfs;
 		echo Remounted RootFS as Read-Only!;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Remount System as Read-Write",
+		action:"mount -o remount,rw \/system;
+		echo Remounted \/system as Read-Write!;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SButton:{
+		label:"Remount System as Read-Only",
+		action:"mount -o remount,ro \/system;
+		echo Remounted \/system as Read-Only!;"
 	}},
 	{ SSpacer:{
 		height:2
@@ -135,8 +165,32 @@ cat << CTAG
 		height:2
 	}},
 	{ SPane:{
-		title:"File System Trim",
-		description:"Android 4.4.2+ have a feature that auto trims EXT4 partitions during suspend and only when certain condtions are met. FSTrim is more of a maintenance binary, where Android file systems are prone to lag over time and prevalent as your internal storage is used up. Manually trimming may help retain consistant IO throughput with user control. If you wish to manually trim System, Data and Cache EXT4 partitions, then press the button below."
+		title:"File System Trim"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SLiveLabel:{
+		title:"Last Auto FSTrim",
+		refresh:10000,
+		action:"
+			if [ -f /data/system/last-fstrim ] ; then
+				echo $(date -r /data/system/last-fstrim);
+			else
+				echo No Info Available;
+			fi;"
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:"Android 4.4.2+ introduced a feature that auto trims EXT4 partitions during suspend and only when certain condtions are met. As Android file systems are prone to lag over time and prevalent as your internal storage is used up, manually trimming may help retain consistant IO throughput with user control."
+	}},
+	{ SSpacer:{
+		height:1
+	}},
+	{ SDescription:{
+		description:"If you wish to manually trim /system, /data and /cache EXT4 partitions, then press the button below."
 	}},
 	{ SSpacer:{
 		height:1
@@ -148,7 +202,7 @@ cat << CTAG
 		height:1
 	}},
 	{ SButton:{
-		label:"FSTrim",
+		label:"Manual FSTrim",
 		action:"devtools fstrim"
 	}},
 	{ SSpacer:{

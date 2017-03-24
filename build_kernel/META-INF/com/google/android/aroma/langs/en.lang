@@ -13,16 +13,46 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
 #
-### LANGUAGE STRING RESOURCE FILE
+# Authors:	Ahmad Amarullah
+#		UpInTheAir
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+
+### LANGUAGE STRING RESOURCE FILE:
+
 #
 #	Language	: English
 #	By		: UpInTheAir
 #
 
-#
-#--- COMMON SYSTEM STRING RESOURCE
-#
 text_ok=OK
 text_next=Next >
 text_back=< Back
@@ -34,12 +64,12 @@ text_quit=Quit Installation
 text_quit_msg=Are you sure to quit the installer?
 
 welcome.title=Welcome
-welcome.text1=Now proceed with SkyHigh 7420 Kernel installation
+welcome.text1=Proceed with SkyHigh 7420 Kernel installation
 welcome.text2= SkyHigh Kernel Version Info:
 welcome.version=VERSION
 welcome.author=AUTHOR
 welcome.device=DEVICE
-welcome.next=Press Next to Proceed ...
+welcome.next=Press 'Next' to Proceed ...
 
 terms.title=Terms & Conditions
 terms.desc=Please read carefully the Terms & Conditions below
@@ -52,7 +82,7 @@ main.inst=Install SkyHigh kernel
 main.inst-desc=Skip and continue with kernel installation
 main.sysinfo=System Info
 main.sysinfo-desc=Show device/partition information
-main.changelog=ChangeLog
+main.changelog=Change-Log
 main.changelog-desc=Changes since last release
 main.quit=Quit Install
 main.quit-desc=Quit to the Recovery menu
@@ -68,22 +98,44 @@ sysinfo.data=Data Size
 sysinfo.alert.title=Finished
 sysinfo.alert.text=Back to Menu
 
-changelog.title=SkyHigh Kernel ChangeLog
+changelog.title=Change-Log
 changelog.exit=Close
 
 quit.title=Exit
 quit.text=Are you sure want to exit the Installer?
 
-changelog.title=Changelog
-changelog.desc=Changelog
-
 install.title=Installation Mode
 install.subtitle=Select installation method:
 install.option=Mode
 install.option1=Default Mode
-install.option1-desc=Recommend: Install with stable default settings & full Synapse layout
+install.option1-desc=Recommend: Install with stable default settings & full Synapse layout with SuperSU
 install.option2=Custom Mode
 install.option2-desc=Customize settings & Synapse layout before installation
+
+root.title=Custom Mode
+root.subtitle=Select ROOT method:
+root.option=
+root.option1=No Root
+root.option1-desc=NO root or Synapse UCI support
+root.option2=SuperSU (Chainfire)
+root.option2-desc=Closed-source System-less Root
+root.option3=Magisk (topjohnwu)
+root.option3-desc=Open-source System-less Root\
+\
+NOTE: The installed Magisk compatible busybox does not support all Synapse functions (ie. Crontab, CortexBrain, FSTrim)
+
+bind.title=Custom Mode
+bind.subtitle=Select to set System-less SuperSU compatibility-mode:
+bind.option=
+bind.option1=BINDSYSTEMXBIN
+bind.option1-desc=System-less SuperSU compatibility-mode for unsupported apps (ie. ES File Explorer)
+
+magisk_manager.title=Custom Mode
+magisk_manager.subtitle=Select to set System-less SuperSU compatibility-mode:
+magisk_manager.option=
+magisk_manager.option1=Magisk Manager
+magisk_manager.option1-desc=The root manager for MagiskSU.\
+Install, upgrade or configure Magisk
 
 reset.title=Custom Mode
 reset.subtitle=Select to RESET Synapse app:
@@ -104,12 +156,6 @@ knox.subtitle=Select to REMOVE KNOX warning:
 knox.option=
 knox.option1=Remove SecurityLogAgent.apk
 knox.option1-desc=Stop annoying warning about modified device 'Unauthorized actions have been detected...'
-
-bind.title=Custom Mode
-bind.subtitle=Select to set System-less SuperSU compatibility-mode:
-bind.option=
-bind.option1=BINDSYSTEMXBIN
-bind.option1-desc=System-less SuperSU compatibility-mode for unsupported apps (ie. ES File Explorer)
 
 cpusets.title=Custom Mode
 cpusets.subtitle=Select to move invisible apps to A53 LITTLE cores:
@@ -249,11 +295,14 @@ synapse.option28-desc=Manipulate many kernel settings based on screen state (ON 
 synapse.option29=Crontab
 synapse.option29-desc=Auto run maintenance scripts in the background at a specified time or interval
 synapse.option30=Storage
-synapse.option30-desc=USB modes: MTP, CD_ROM (drivedroid) or USB_keyboard-mouse
+synapse.option30-desc=USB modes: MTP, CD_ROM (DriveDroid) or USB_keyboard-mouse
 synapse.option31=Modules
-synapse.option31-desc=CIFS, NTFS, ISO9660_FS, UDF & XPAD
+synapse.option31-desc=CIFS, NFS, NTFS, ISO9660_FS, UDF & XPAD
 synapse.option32=Backup & Restore
 synapse.option32-desc=Name, Backup & restore Synapse profiles & boot.img
+
+donate.attention=DONATION
+donate.attention-desc=If you appreciate my time and efforts, then a small PayPal donation to buy me a cup of coffee or beer would be a real nice gesture. THANKS!
 
 ini_set.next=Install Now
 ini_set.title=Ready to Install
@@ -267,4 +316,4 @@ inst.text=Please wait until it finishes ...
 inst.finish.title=Installation Complete
 inst.finish=Press '<b>Finish</b>' to reboot into TWRP
 inst.finish.button=Finish
-inst.info= is now installed onto your device
+inst.info= is now installed

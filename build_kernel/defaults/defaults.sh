@@ -1,7 +1,38 @@
 #!/sbin/sh
-
-# Some elements & ideas from g.lewarne
-# by UpInTheAir for SkyHigh kernels
+#
+# Modified work Copyright (c) 2017 UpInTheAir. All rights reserved.
+#
+# Authors:	UpInTheAir
+#
+# Contributors:	g.lewarne (parse defaults to prop)
+#		lyapota (root cleanup)
+#		arter97 (build.prop: SELinux & KNOX related)
+#
+# This software and associated documentation files (the "Software")
+# is proprietary of UpInTheAir. No part of this Software, either
+# material or conceptual may be copied or distributed, transmitted,
+# transcribed, stored in a retrieval system or translated into any
+# human or computer language in any form by any means, electronic,
+# mechanical, manual or otherwise, or disclosed to third parties
+# without the express written permission of UpInTheAir.
+#
+# Alternatively, this program is free software in case of open
+# source project:
+#
+# Permission is hereby granted, free of charge, to any person
+# obtaining a copy of this Software, to redistribute the Software
+# and/or modify it under the terms of the GNU General Public
+# License as published by the Free Software Foundation; either
+# version 3 of the License, or (at your option) any later version,
+# subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be
+# included in all copies or substantial portions of the Software.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 
 # DETECT
 if [ "$1" = "DETECT" ]; then
@@ -12,12 +43,14 @@ if [ "$1" = "DETECT" ]; then
 	fi;
 fi;
 
+
 # SELINUX
 if [ "$1" = "PERMISSIVE" ]; then
 	echo "selinux_permissive" >> /system/SkyHigh.prop
 elif [ "$1" = "ENFORCING" ]; then
 	echo "selinux_enforcing" >> /system/SkyHigh.prop
 fi;
+
 
 # BIND
 if [ "$1" = "BIND_TRUE" ]; then
@@ -33,6 +66,7 @@ elif [ "$1" = "BIND_FALSE" ]; then
 	fi;
 fi;
 
+
 # INVISIBLE CPUSETS
 if [ "$1" = "INVISIBLE" ]; then
 	if [ -f /data/.SkyHigh/invisible_cpuset ]; then
@@ -41,10 +75,12 @@ if [ "$1" = "INVISIBLE" ]; then
 	echo 1 >> /data/.SkyHigh/invisible_cpuset;
 fi;
 
+
 # VNSWAP
 if [ "$1" = "VNSWAP" ]; then
 	echo "vnswap_enabled" >> /system/SkyHigh.prop
 fi;
+
 
 # LAZYTIME MOUNT
 if [ "$1" = "LAZYTIME" ]; then
@@ -53,6 +89,7 @@ if [ "$1" = "LAZYTIME" ]; then
 	fi;
 	echo 1 >> /data/.SkyHigh/lazytime_mount;
 fi;
+
 
 # BUILD.PROP
 if [ "$1" = "BUILD_PROP" ]; then
@@ -94,9 +131,20 @@ if [ "$1" = "BUILD_PROP" ]; then
 
 	# stock kernel
 	echo "#" >> /system/build.prop
+	echo "# SELinux & KNOX related" >> /system/build.prop
+	echo "persist.cne.feature=0" >> /system/build.prop
+	echo "androidboot.selinux=0" >> /system/build.prop
+	echo "ro.securestorage.knox=false" >> /system/build.prop
+	echo "ro.security.mdpp.ux=Disabled" >> /system/build.prop
+	echo "ro.config.tima=0" >> /system/build.prop
+	echo "ro.config.dmverity=false" >> /system/build.prop
+	echo "ro.config.rkp=false" >> /system/build.prop
+	echo "ro.config.kap_default_on=false" >> /system/build.prop
+	echo "ro.config.kap=false" >> /system/build.prop
+	echo "#" >> /system/build.prop
 	echo "# Keep WIFI settings on flash/reboot" >> /system/build.prop
 	echo "ro.securestorage.support=false" >> /system/build.prop
-	echo "# Screen mirroring / AllShare Cast fix" >> /system/build.prop
+	echo "# Screen Mirroring & AllShare Cast fix" >> /system/build.prop
 	echo "wlan.wfd.hdcp=disable" >> /system/build.prop
 	echo "#" >> /system/build.prop
 
@@ -131,6 +179,7 @@ if [ "$1" = "BUILD_PROP" ]; then
 	chmod 644 /system/build.prop;
 fi;
 
+
 # CPU GOVERNOR
 if [ "$1" = "INTERACTIVE" ]; then
 	echo "cpugov_interactive" >> /system/SkyHigh.prop
@@ -147,6 +196,7 @@ elif [ "$1" = "CONSERVATIVEX" ]; then
 elif [ "$1" = "CHILL" ]; then
 	echo "cpugov_chill" >> /system/SkyHigh.prop
 fi;
+
 
 # IO SCHEDULER
 if [ "$1" = "ROW" ]; then
@@ -169,12 +219,38 @@ elif [ "$1" = "MAPLE" ]; then
 	echo "sched_maple" >> /system/SkyHigh.prop
 fi;
 
+
 # CORTEX
 if [ "$1" = "CORTEX_ENABLED" ]; then
 	echo "cortex_enabled" >> /system/SkyHigh.prop
 fi;
 
+
 # CRONTAB
 if [ "$1" = "CRONTAB_ENABLED" ]; then
 	echo "crontab_enabled" >> /system/SkyHigh.prop
+fi;
+
+
+# ROOT
+if [ "$1" = "NO_ROOT" ] || [ "$1" = "MAGISK" ]; then
+	# supersu
+	rm -rf /data/app/eu.chainfire.supersu-*;
+	rm -rf /data/data/eu.chainfire.supersu;
+	rm -f /data/SuperSU.apk;
+	rm -rf /data/su.img /data/stock_boot*.gz /data/supersu /supersu;
+fi;
+
+if [ "$1" = "NO_ROOT" ] || [ "$1" = "SUPERSU" ]; then
+	# phh superuser
+	rm -rf /data/app/me.phh.superuser-*;
+	rm -rf /data/data/me.phh.superuser;
+	# magisk
+	rm -rf /data/app/com.topjohnwu.magisk-*;
+	rm -rf /data/data/com.topjohnwu.magisk;
+	rm -rf /data/Magisk.apk;
+	rm -rf /cache/magisk.log /cache/last_magisk.log /cache/magiskhide.log \
+	       /cache/magisk /cache/magisk_merge /cache/magisk_mount /cache/unblock \
+	       /data/magisk.img /data/magisk_merge.img /data/stock_boot.img \
+	       /data/busybox /data/magisk /data/custom_ramdisk_patch.sh 2>/dev/null;
 fi;
